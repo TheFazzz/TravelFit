@@ -1,4 +1,6 @@
 /run
+env
+.env
 venv
 .venv
 .vscode
