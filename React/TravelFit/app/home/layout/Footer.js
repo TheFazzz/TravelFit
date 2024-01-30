@@ -8,6 +8,7 @@ export default function Footer() {
     <View style={styles.footer}>
         <Link href={'/home'}>Home</Link>
         <Link href={'/home/profile'}>Profile</Link>
+        <Link href={'/home/map'}>Map</Link>
     </View>
   )
 }

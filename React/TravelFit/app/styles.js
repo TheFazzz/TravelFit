@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
         height: '8%',
     },
     footer: {
+        paddingLeft: '5px',
         display: 'flex',
         flex: 1,
         flexDirection: 'row',
