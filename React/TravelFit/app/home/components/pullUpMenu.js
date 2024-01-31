@@ -3,9 +3,10 @@ import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 
+const screenHeight = (Dimensions.get('window').height / 1.19);
+const translateY = useSharedValue(screenHeight);
+
 export default function PullUpMenu(props) {
-  const screenHeight = (Dimensions.get('window').height / 1.235);
-  const translateY = useSharedValue(screenHeight);
 
   // const gestureHandler = useAnimatedGestureHandler({
   //   onStart: (_, context) => {
@@ -35,7 +36,7 @@ export default function PullUpMenu(props) {
     .onFinalize((e) => {
       //console.log('onfinalize', e)
       if (translateY.value > screenHeight / 1.2) {
-        translateY.value = withSpring(screenHeight, { damping: 10 });
+        translateY.value = withSpring(screenHeight , { damping: 10 });
       } else if (translateY.value > 190 && translateY.value < screenHeight / 1.2) {
         translateY.value = withSpring(screenHeight / 2, { damping: 10 });
       } else  {
@@ -45,7 +46,6 @@ export default function PullUpMenu(props) {
 
 
   const animatedStyle = useAnimatedStyle(() => {
-    console.log(translateY.value)
     return {
       transform: [{ translateY: translateY.value }],
     };
@@ -54,7 +54,7 @@ export default function PullUpMenu(props) {
   return (
     <>
       <GestureHandlerRootView>
-        <Animated.View style={animatedStyle}>
+        <Animated.View style={[animatedStyle, styles.all]}>
           <GestureDetector gesture={pan}>
             <View style={styles.dragblock}></View>
           </GestureDetector>
@@ -71,18 +71,22 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: '100%',
+    height: `${screenHeight * 0.6}px`,
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    // Add other styling as needed
   },
   dragblock: {
     position: 'relative',
     left: '46%',
     width: '13%',
-    height: '12%',
+    height: `${screenHeight * 0.05}px`,
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  all: {
+    height: `${screenHeight * 1.1}px`,
   }
+
 });

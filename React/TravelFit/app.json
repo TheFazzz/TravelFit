@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "TravelFit",
-    "slug": "TravelFit",
+    "slug": "travelfit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,12 +15,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.phera.travelfit",
+      "config": {
+        "googleMapsApiKey": "AIzaSyCxMQEBsj8-dfRXKdbAaNM2fV-mPxZvLEk"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.phera.travelfit",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD3G2cNCeur4gjDXFf7oKaMqtSakeFGNCE"
+        }
       }
     },
     "web": {
@@ -28,6 +38,15 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0afcd4fb-8726-4c76-8d66-0f7d3b229d15"
+      }
+    },
+    "owner": "phera"
   }
 }

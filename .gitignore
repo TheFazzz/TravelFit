@@ -5,3 +5,4 @@ venv
 .venv
 .vscode
 __pyca
+/react/android

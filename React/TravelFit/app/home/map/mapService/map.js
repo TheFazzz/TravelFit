@@ -1,11 +1,24 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native';
-import Mapimage from './mapimage';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import MapDisplay from './mapdisplay';
 
 export default function Map() {
     return (
-        <View>
-            <Mapimage/>
+        <View style={styles.container}>
+            {/* <MapDisplay/> */}
         </View>
     )
 }
+
+const { width, height } = Dimensions.get('window')
+
+const styles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        width: width,
+        height: height,
+        zIndex: -1
+    }
+})

@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+
+const screenHeight = (Dimensions.get('window').height / 1.235);
 
 export default function Location({ data }) {
 
-    console.log(data)
     const hours = data.hours
 
     return (
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '98%',
-        height: '25%',
+        height: `${screenHeight* 0.09}%`,
         backgroundColor: 'red',
         border: 'black solid 2px',
         padding: '5px',
