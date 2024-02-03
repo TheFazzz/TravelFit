@@ -6,11 +6,10 @@ import { styles } from './styles';
 export default function index() {
     return (
         <View style={styles.container}>
-            <Text>This is the index page, please click 'home'</Text>
-            <StatusBar style="auto" />
-            <Link href='/home'>
-                Home
-            </Link>
+            <Text>This is the index page</Text>
+            <StatusBar style="auto"/>
+            <Link href='/home'>Home</Link>
+            <Link href='/auth'>Authentication</Link>
         </View>
     );
 }

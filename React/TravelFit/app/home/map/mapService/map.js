@@ -5,7 +5,7 @@ import MapDisplay from './mapdisplay';
 export default function Map() {
     return (
         <View style={styles.container}>
-            {/* <MapDisplay/> */}
+            <MapDisplay/>
         </View>
     )
 }
