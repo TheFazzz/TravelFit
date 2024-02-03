@@ -5,6 +5,7 @@ class UserConstructor {
         this.email = email
         this.password = password
         this.id = id
+        
     }
 
     updateEmail(email){
