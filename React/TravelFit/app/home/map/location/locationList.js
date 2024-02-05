@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'orange',
     },
     scrollView: {
-        height: '100%'
+        height: 100
     }
 })
 

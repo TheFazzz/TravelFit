@@ -1,13 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+let screenHeight = (Dimensions.get('window').height / 1);
+
+let paddingleftandright = 15
 
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        height: screenHeight * 1.2,
+        backgroundColor: 'silver',
         alignItems: 'center',
         justifyContent: 'center',
     },
     body: {
+        paddingLeft: paddingleftandright,
+        paddingRight: paddingleftandright,
         flex: 1,
         backgroundColor: 'lightgrey',
         width: '100%',
@@ -16,22 +22,25 @@ export const styles = StyleSheet.create({
         marginBottom: '8%'
     },
     header: {
+        paddingLeft: paddingleftandright,
+        paddingRight: paddingleftandright,
         position: 'absolute',
-        top: 0,
+        bottom: screenHeight * 0.85,
         backgroundColor: 'grey',
         width: '100%',
-        height: '8%',
+        height: '13%',
     },
     footer: {
+        paddingLeft: paddingleftandright,
+        paddingRight: paddingleftandright,
         position: 'absolute',
-        bottom: 0,
-        paddingLeft: '5px',
+        top: screenHeight * 0.85,
         display: 'flex',
         flex: 1,
         flexDirection: 'row',
         gap: '20px',
         backgroundColor: 'grey',
         width: '100%',
-        height: '8%',
+        height: '10%',
     }
 });
