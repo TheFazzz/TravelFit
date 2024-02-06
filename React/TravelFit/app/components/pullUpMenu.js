@@ -3,13 +3,16 @@ import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 
-let screenHeight = (Dimensions.get('window').height / 1.19);
-let translateY = useSharedValue(screenHeight);
+let screenHeight = (Dimensions.get('window').height * 0.77)
+let screenWidth = Dimensions.get('window').width
 
 export default function PullUpMenu(props) {
-
+	
+	let translateY = useSharedValue(screenHeight);
 	let change = false
 	let direction = 'top'
+
+	console.log(screenHeight)
 
 	const pan = Gesture.Pan()
 		.onChange((e) => {
@@ -17,7 +20,7 @@ export default function PullUpMenu(props) {
 			translateY.value = Math.min(Math.max(0, translateY.value + e.changeY), screenHeight)
 		})
 		.onFinalize((e) => {
-			if (change) {				 
+			if (change) {
 				if (translateY.value > screenHeight / 1.2) {
 					menuPosition('bottom')
 					direction = 'top'
@@ -30,7 +33,7 @@ export default function PullUpMenu(props) {
 			}
 			change = false
 		})
-					   
+
 
 	const tap = Gesture.Tap()
 		.onEnd(() => {
@@ -51,13 +54,13 @@ export default function PullUpMenu(props) {
 	function menuPosition(position) {
 		switch (position) {
 			case 'top':
-				translateY.value = withSpring(screenHeight / 20, {panning: 10});
+				translateY.value = withSpring(screenHeight / 20, { panning: 10 });
 				break;
 			case 'middle':
-				translateY.value = withSpring(screenHeight / 2, {panning: 10});
+				translateY.value = withSpring(screenHeight / 2, { panning: 10 });
 				break;
 			case 'bottom':
-				translateY.value = withSpring(screenHeight, {panning: 10});
+				translateY.value = withSpring(screenHeight, { panning: 10 });
 				break;
 			default:
 				break;
@@ -65,7 +68,6 @@ export default function PullUpMenu(props) {
 	}
 
 	const composed = Gesture.Simultaneous(tap, pan)
-
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
 			transform: [{ translateY: translateY.value }],
@@ -73,17 +75,17 @@ export default function PullUpMenu(props) {
 	});
 
 	return (
-		<>
 			<GestureHandlerRootView>
 				<Animated.View style={[animatedStyle, styles.all]}>
 					<GestureDetector gesture={composed}>
 						<View style={styles.dragblock}></View>
 					</GestureDetector>
-					<props.Content style={styles.menuContainer} />
+					<View style={styles.menuContainer}>
+						<props.Content/>
+					</View>
 				</Animated.View>
 			</GestureHandlerRootView>
-		</>
-	);
+	)
 };
 
 const styles = StyleSheet.create({
@@ -91,23 +93,25 @@ const styles = StyleSheet.create({
 		position: 'relative',
 		left: 0,
 		right: 0,
-		width: '100%',
-		height: `${screenHeight * 0.5}px`,
-		backgroundColor: 'white',
+		width: screenWidth,
+		height: screenHeight * 1.3,
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
 	},
 	dragblock: {
 		position: 'relative',
-		left: '46%',
-		width: '13%',
-		height: `${screenHeight * 0.05}px`,
+		top: 0,
+		left: screenWidth * .49,
+		width: screenWidth * .1,
+		height: screenHeight * 0.05,
 		backgroundColor: 'silver',
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
 	},
 	all: {
-		height: `${screenHeight * 1.1}px`,
+		position: 'relative',
+		left: 0,
+		top: 0,
+		height: screenHeight * 2
 	}
-
-});
+})
