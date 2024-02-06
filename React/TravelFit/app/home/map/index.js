@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
-// import Map from './mapService/map';
+import Map from './mapService/map';
 import LocationList from './location/locationList';
 import PullUpMenu from '../../components/pullUpMenu';
 
@@ -8,8 +8,7 @@ export default function map() {
     return (
         <View style={styles.body}>
             <PullUpMenu Content={LocationList}/>
-            {/* <LocationList/> */}
-            {/* <Map/> */}
+            <Map/>
         </View>
     )
 }

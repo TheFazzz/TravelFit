@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 
-let screenHeight = (Dimensions.get('window').height * 0.77)
+let screenHeight = (Dimensions.get('window').height * 0.78)
 let screenWidth = Dimensions.get('window').width
 
 export default function PullUpMenu(props) {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
 	dragblock: {
 		position: 'relative',
 		top: 0,
-		left: screenWidth * .49,
+		left: screenWidth * .47,
 		width: screenWidth * .1,
 		height: screenHeight * 0.05,
 		backgroundColor: 'silver',

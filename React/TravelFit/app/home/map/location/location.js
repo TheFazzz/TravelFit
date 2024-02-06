@@ -6,13 +6,15 @@ const screenHeight = (Dimensions.get('window').height / 1.235);
 export default function Location({ data }) {
 
     const hours = data.hours
-
+    
     return (
         <View style={styles.container}>
+
             <View>
                 <Text>{data.gymName}</Text>
                 <Text>{data.city}, {data.state}</Text>
             </View>
+
             <View>
                 <Text>Monday: {hours.monday.open} - {hours.monday.close}</Text>
                 <Text>Tuesday: {hours.tuesday.open} - {hours.tuesday.close}</Text>
@@ -22,6 +24,7 @@ export default function Location({ data }) {
                 <Text>Saturday: {hours.saturday.open} - {hours.saturday.close}</Text>
                 <Text>Sunday: {hours.sunday.open} - {hours.sunday.close}</Text>
             </View>
+
         </View>
     )
 }
@@ -34,7 +37,8 @@ const styles = StyleSheet.create({
         width: '98%',
         height: `${screenHeight* 0.09}%`,
         backgroundColor: 'red',
-        border: 'black solid 2px',
+        borderColor: 'black',
+        border: '1',
         padding: '5px',
         margin: '3px'
     }
