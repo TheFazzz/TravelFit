@@ -1,15 +1,15 @@
-from contextlib import contextmanager
 import psycopg2
+import os
 
 
 def get_db_connection():
     try:
-        database_name = "postgres"
-        user = "phera"
-        password = "realtrapshit1!"
-        host = "travelfit.postgres.database.azure.com"
-        port = 5432
-        ssl = 'require'
+        database_name = os.getenv("DATABASE_NAME")
+        user = os.getenv("DB_USER")
+        password = os.getenv("DB_PASSWORD")
+        host = os.getenv("DB_HOST")
+        port = os.getenv("DB_PORT")
+        ssl = os.getenv("DB_SSL")
 
         connection = psycopg2.connect(
             database=database_name, user=user, password=password, host=host, port=port, sslmode=ssl
