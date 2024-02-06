@@ -1,9 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-// import locationData from '../../../../contexts/LocationContext';
+import locationData from './locationData';
 import Location from './location';
-
-// console.log(locationData)
 
 const LocationList = () => {
     return (
@@ -12,9 +10,9 @@ const LocationList = () => {
                 <Text>
                     This is our locations:
                 </Text>
-                {/* {locationData.map((data, index) => (
+                {locationData.map((data, index) => (
                     <Location data={data} key={index} />
-                ))} */}
+                ))}
             </ScrollView>
         </View>
     );
