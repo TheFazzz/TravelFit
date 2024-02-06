@@ -6,7 +6,7 @@ import { Link } from 'expo-router';
 export default function index() {
   return (
     <View>
-        You are now signed up!
+        <Text>You are now signed up!</Text>
     </View>
   )
 }
