@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
 	},
 	dragblock: {
 		position: 'relative',
-		top: 0,
+		bottom: 0,
 		left: screenWidth * .47,
 		width: screenWidth * .1,
 		height: screenHeight * 0.05,
@@ -109,9 +109,10 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 20,
 	},
 	all: {
-		position: 'relative',
+		position: 'absolute',
 		left: 0,
 		top: 0,
-		height: screenHeight * 2
+		height: screenHeight * 2, 
+		zIndex: 0,
 	}
 })

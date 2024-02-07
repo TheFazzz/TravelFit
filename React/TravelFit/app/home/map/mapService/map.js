@@ -1,10 +1,13 @@
 import React from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import MapDisplay from './mapdisplay';
+import PullUpMenu from '../../../components/pullUpMenu';
+import LocationList from '../location/locationList';
 
 export default function Map() {
     return (
         <View style={styles.container}>
+            {/* <PullUpMenu Content={LocationList}/> */}
             <MapDisplay/>
         </View>
     )
@@ -19,6 +22,5 @@ const styles = StyleSheet.create({
         right: 0,
         width: width,
         height: height,
-        zIndex: -1
     }
 })

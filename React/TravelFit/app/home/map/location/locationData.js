@@ -1,7 +1,7 @@
 
 export default locationData = [{
     id: 1,
-    gymName: 'Studen Recreation Center',
+    gymName: 'Student Recreation Center',
     city: 'Fullerton',
     state: 'California',
     hours: {

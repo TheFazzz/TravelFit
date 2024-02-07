@@ -7,8 +7,8 @@ import PullUpMenu from '../../components/pullUpMenu';
 export default function map() {
     return (
         <View style={styles.body}>
-            <PullUpMenu Content={LocationList}/>
             <Map/>
+            {/* <PullUpMenu Content={LocationList}/> */}
         </View>
     )
 }
