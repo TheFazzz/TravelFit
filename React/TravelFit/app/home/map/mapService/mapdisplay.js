@@ -4,6 +4,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import locationData from '../location/locationData';
 import PullUpMenu from '../../../components/pullUpMenu';
 import LocationList from '../location/locationList';
+import MapSearch from './mapsearch'
 
 class MapDisplay extends Component {
 
@@ -44,6 +45,7 @@ class MapDisplay extends Component {
             scrollEnabled={true}
             customMapStyle={mapstyle}
           >
+            <MapSearch/>
             {locationData.map((marker, index) => (
               <Marker
                 key={marker.id}

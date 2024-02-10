@@ -1,5 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Button } from 'react-native';
+import { router } from 'expo-router'
 
 const screenHeight = (Dimensions.get('window').height / 1.235);
 
@@ -13,6 +14,16 @@ export default function Location({ data }) {
             <View>
                 <Text>{data.gymName}</Text>
                 <Text>{data.city}, {data.state}</Text>
+                <Button 
+                    title="More Info"
+                    onPress={() => {router.navigate({
+                        pathname: '/home/gymPage/[id]',
+                        params: {
+                            id: data.id
+                        }
+                    })}}
+                >
+                </Button>
             </View>
 
             <View>

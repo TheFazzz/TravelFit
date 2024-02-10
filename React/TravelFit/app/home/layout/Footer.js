@@ -9,7 +9,10 @@ export default function Footer() {
         <Link href={'/home'}>Home</Link>
         <Link href={'/home/profile'}>Profile</Link>
         <Link href={'/home/map'}>Map</Link>
-        <Link href={'/home/test'}>Test</Link>
+        <Link href={{
+          pathname: '/home/gymPage/[id]',
+          params: { id: 1 }
+          }}>Gym Page</Link>
     </View>
   )
 }

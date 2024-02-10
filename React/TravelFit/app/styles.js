@@ -5,8 +5,9 @@ let paddingleftandright = 15
 
 export const styles = StyleSheet.create({
     container: {
+        display: 'flex',
+        flexDirection: 'column',
         flex: 1,
-        height: screenHeight * 1.2,
         backgroundColor: 'silver',
         alignItems: 'center',
         justifyContent: 'center',
@@ -17,30 +18,25 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'lightgrey',
         width: '100%',
-        height: '86%',
-        marginTop: '8%',
-        marginBottom: '8%'
+        height: screenHeight * 2 * 2,
     },
     header: {
         paddingLeft: paddingleftandright,
         paddingRight: paddingleftandright,
-        position: 'absolute',
-        bottom: screenHeight * 0.85,
+        top: 0,
         backgroundColor: 'grey',
         width: '100%',
-        height: '13%',
+        height: '11%',
     },
     footer: {
         paddingLeft: paddingleftandright,
         paddingRight: paddingleftandright,
-        position: 'absolute',
-        top: screenHeight * 0.85,
+        bottom: 0,
         display: 'flex',
-        flex: 1,
         flexDirection: 'row',
         gap: '20px',
         backgroundColor: 'grey',
         width: '100%',
-        height: '10%',
+        height: '8%',
     }
 });

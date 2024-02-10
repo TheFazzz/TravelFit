@@ -5,7 +5,7 @@ import { styles } from '../../styles';
 
 export default function profile() {
     return (
-        <View style={styles.body}>
+        <View>
             <Text>
                 this is profile pag
             </Text>
