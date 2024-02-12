@@ -1,4 +1,3 @@
-
 CREATE TABLE Users (
   id SERIAL PRIMARY KEY,
   firstName TEXT NOT NULL,
@@ -18,7 +17,7 @@ CREATE TABLE Gyms (
   zipcode TEXT NOT NULL,
   longitude NUMERIC NOT NULL,
   latitude NUMERIC NOT NULL,
-  location POINT NOT NULL,
+  location GEOGRAPHY(Point, 4326) NOT NULL,
   amenities TEXT[],
   hours_of_operation JSONB
 );
@@ -31,15 +30,6 @@ CREATE TABLE GymPhotos (
   picture TEXT NOT NULL
 );
 
-CREATE TABLE GuestPassPurchases (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES Users(id) ON DELETE CASCADE,
-  gym_id INTEGER REFERENCES Gyms(id) ON DELETE CASCADE,
-  option_id INTEGER REFERENCES PassOptions(id) ON DELETE CASCADE,
-  payment_method TEXT NOT NULL,
-  purchase_date DATE NOT NULL,
-  expiration_date DATE NOT NULL
-);
 
 CREATE TABLE PassOptions (
   id SERIAL PRIMARY KEY,

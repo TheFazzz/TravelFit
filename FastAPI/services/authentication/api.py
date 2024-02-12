@@ -92,7 +92,7 @@ async def register(
         
         user_row = get_user(id, db) 
 
-        return RegisterResponse(id=id)
+        return ReturnIdResponse(id=id)
 
     finally:
         if cursor:
