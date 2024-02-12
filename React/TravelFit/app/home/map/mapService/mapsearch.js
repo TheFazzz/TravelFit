@@ -12,7 +12,6 @@ export default function MapSearch(){
 
 const styles = StyleSheet.create({
     search: {
-        position: 'absolute',
-        
+        position: 'absolute',  
     }
 })

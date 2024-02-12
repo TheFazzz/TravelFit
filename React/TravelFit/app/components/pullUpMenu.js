@@ -75,7 +75,7 @@ export default function PullUpMenu(props) {
 	});
 
 	return (
-			<GestureHandlerRootView>
+			<GestureHandlerRootView style={{position:'absolute'}}>
 				<Animated.View style={[animatedStyle, styles.all]}>
 					<GestureDetector gesture={composed}>
 						<View style={styles.dragblock}></View>
