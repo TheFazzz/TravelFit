@@ -1,18 +1,23 @@
 import { Box, Input } from "native-base";
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { View, Text, StyleSheet } from 'react-native'
-import { context } from "../../_layout";
+import { View, Text, StyleSheet, Keyboard } from 'react-native'
+import { context } from "../../../_layout";
+import SearchOptions from "./searchoptions";
+
 
 export default function MapSearch(props) {
     const {searchFocus, setSearchFocus} = useContext(context)
+    const [searchView, setSearchView] = useState(styles.searchScreenOff)
     const inputRef = useRef(null)
 
     useEffect(() => {
         if (inputRef.current) {
             if (searchFocus == false) {
-                inputRef.current.Blur()
+                Keyboard.dismiss()
             }
         }
+        if (searchFocus) setSearchView(styles.searchScreenOn) 
+        else setSearchView(styles.searchScreenOff)
     },[searchFocus])
 
     function handleFocus(e) {
@@ -21,6 +26,10 @@ export default function MapSearch(props) {
     }
 
     function handleBlur(e) {
+        console.log(e)
+    }
+
+    function handleChange(e) {
         console.log(e)
     }
 
@@ -35,14 +44,12 @@ export default function MapSearch(props) {
                     ref={inputRef}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                // onChange={handleChange} 
+                    onChange={handleChange} 
                 />
             </Box>
-            {searchFocus ? 
-            <View>
-
+            <View style={searchView}>
+                <SearchOptions style={searchView}/>
             </View> 
-            : <></>}
         </>
     )
 }
@@ -63,5 +70,14 @@ const styles = StyleSheet.create({
         paddingLeft: padding,
         paddingRight: padding,
         paddingTop: padding,
+        zIndex: 3
+    },
+    searchScreenOn: {
+
+        zIndex: 2
+    },
+    searchScreenOff: {
+        display: 'none'
     }
+
 })

@@ -4,6 +4,7 @@ import MapDisplay from './mapdisplay';
 import PullUpMenu from '../../../components/pullUpMenu';
 import LocationList from '../location/locationList';
 
+
 export default function Map() {
     return (
         <View style={styles.container}>
