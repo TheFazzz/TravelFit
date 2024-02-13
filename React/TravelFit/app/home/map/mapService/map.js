@@ -7,7 +7,6 @@ import LocationList from '../location/locationList';
 export default function Map() {
     return (
         <View style={styles.container}>
-            {/* <PullUpMenu Content={LocationList}/> */}
             <MapDisplay/>
         </View>
     )
