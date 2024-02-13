@@ -52,7 +52,7 @@ class MapDisplay extends Component {
                 title={marker.gymName}
               />
             ))}
-            <MapSearch />
+            <MapSearch/>
           </MapView>
         </View>
       </View>

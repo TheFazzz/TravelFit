@@ -8,6 +8,7 @@ import SearchOptions from "./searchoptions";
 export default function MapSearch(props) {
     const {searchFocus, setSearchFocus} = useContext(context)
     const [searchView, setSearchView] = useState(styles.searchScreenOff)
+    const [searchInput, setSearchInput] = useState('')
     const inputRef = useRef(null)
 
     useEffect(() => {
@@ -21,16 +22,14 @@ export default function MapSearch(props) {
     },[searchFocus])
 
     function handleFocus(e) {
-        console.log(e)
         setSearchFocus(true)
     }
 
     function handleBlur(e) {
-        console.log(e)
     }
 
     function handleChange(e) {
-        console.log(e)
+        setSearchInput(e)
     }
 
     return (
@@ -44,11 +43,11 @@ export default function MapSearch(props) {
                     ref={inputRef}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    onChange={handleChange} 
+                    onChangeText={handleChange} 
                 />
             </Box>
             <View style={searchView}>
-                <SearchOptions style={searchView}/>
+                <SearchOptions style={searchView} searchInput={searchInput}/>
             </View> 
         </>
     )
@@ -73,7 +72,6 @@ const styles = StyleSheet.create({
         zIndex: 3
     },
     searchScreenOn: {
-
         zIndex: 2
     },
     searchScreenOff: {
