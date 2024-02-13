@@ -46,11 +46,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '98%',
-        height: `${screenHeight* 0.09}%`,
+        height: screenHeight* 0.09,
         backgroundColor: 'red',
         borderColor: 'black',
-        border: '1',
-        padding: '5px',
-        margin: '3px'
+        border: 1,
+        padding: 5,
+        margin: 3,
     }
 })

@@ -34,8 +34,8 @@ class MapDisplay extends Component {
   render() {
     return (
       <View>
-        <PullUpMenu Content={LocationList} />
-        <View style={{zIndex: -1}}>
+          <PullUpMenu Content={LocationList} />
+        <View style={{ zIndex: -1 }}>
           <MapView
             provider={PROVIDER_GOOGLE}
             onRegionChange={this.onRegionChange}
@@ -45,14 +45,14 @@ class MapDisplay extends Component {
             scrollEnabled={true}
             customMapStyle={mapstyle}
           >
-            <MapSearch/>
             {locationData.map((marker, index) => (
               <Marker
-                key={marker.id}
+                key={index}
                 coordinate={marker.coordinate}
                 title={marker.gymName}
               />
             ))}
+            <MapSearch />
           </MapView>
         </View>
       </View>
