@@ -21,7 +21,7 @@ const LocationList = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        gap: '1px',
+        gap: 1,
         backgroundColor: 'orange',
         padding: 5,
         gap: 1

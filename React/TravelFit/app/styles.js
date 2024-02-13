@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
         bottom: 0,
         display: 'flex',
         flexDirection: 'row',
-        gap: '20px',
+        gap: 20,
         backgroundColor: 'grey',
         width: '100%',
         height: '8%',
