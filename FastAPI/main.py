@@ -136,4 +136,39 @@ def delete_gym_photos(
     req: RegisterRequest,
     db: tuple = Depends(get_db_connection)
 ):
+
+
+
+////////////////////////////Whole lotta gang///////////////////////////////////
+# Get gym listings 
+@app.get("/gym-listings/{gym_id}
+")
+def get_gym_listings(
+    req: RegisterRequest,
+    db: tuple = Depends(get_db_connection)
+):
+
+# Post purchase guest passes 
+@app.post("/guest-purchase-pass
+")
+def guest_purcahse_pass(
+    req: RegisterRequest,
+    db: tuple = Depends(get_db_connection)
+):
+
+# Get user location
+@app.get("/user-location
+")
+def get_user-location(
+    req: RegisterRequest,
+    db: tuple = Depends(get_db_connection)
+):
+
+# Get gym listings 
+@app.get("/gym-listings/local-gyms
+")
+def get_local-gyms(
+    req: RegisterRequest,
+    db: tuple = Depends(get_db_connection)
+):
 """
