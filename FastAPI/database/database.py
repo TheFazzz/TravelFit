@@ -49,6 +49,7 @@ async def get_user_by_email(email: str, db):
                 "firstName": user_data[1],
                 "lastName": user_data[2],
                 "email": user_data[3],
+                "password_hash": user_data[4],
             }
         else:
             return None

@@ -39,3 +39,20 @@ CREATE TABLE PassOptions (
   duration TEXT NOT NULL,
   description TEXT
 );
+
+CREATE TABLE GuestPassPurchases (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES Users(id) ON DELETE CASCADE,
+  gym_id INTEGER REFERENCES Gyms(id) ON DELETE CASCADE,
+  pass_option_id INTEGER REFERENCES PassOptions(id) ON DELETE CASCADE,
+  purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Payments (
+  id SERIAL PRIMARY KEY,
+  purchase_id INTEGER REFERENCES GuestPassPurchases(id) ON DELETE CASCADE,
+  payment_method VARCHAR(50) NOT NULL,
+  amount NUMERIC NOT NULL,
+  transaction_id VARCHAR(100),
+  payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
