@@ -4,7 +4,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import locationData from '../location/locationData';
 import PullUpMenu from '../../../components/pullUpMenu';
 import LocationList from '../location/locationList';
-import MapSearch from './mapsearch'
+import MapSearch from './mapSearch/mapsearch'
 
 class MapDisplay extends Component {
 
@@ -52,7 +52,7 @@ class MapDisplay extends Component {
                 title={marker.gymName}
               />
             ))}
-            <MapSearch />
+            <MapSearch/>
           </MapView>
         </View>
       </View>

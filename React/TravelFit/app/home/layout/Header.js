@@ -18,6 +18,7 @@ export default function Header() {
         {searchFocus? <Button
           onPress={() => {setSearchFocus(false)}}
           size='sm'
+          color='red.100'
           style={styles.exit}
         >
           X
