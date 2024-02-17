@@ -9,7 +9,6 @@ import { context } from '../_layout';
 export default function Header() {
 
   const {searchFocus, setSearchFocus} = useContext(context)
-  console.log(searchFocus, setSearchFocus)
 
   return (
     <View style={styles.header}>

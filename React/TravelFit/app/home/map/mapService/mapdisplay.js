@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react'
+import React, { Component, useRef, useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import locationData from '../location/locationData';
@@ -18,8 +18,12 @@ class MapDisplay extends Component {
         longitudeDelta: 0.01,
 
       },
+      focusedMarker: null,
     };
+    this.mapRef = React.createRef()
+    this.markerRefs = {};
     this.onRegionChange = this.onRegionChange.bind(this);
+    this.animateToRegion = this.animateToRegion.bind(this);
   }
 
   onRegionChange(region) {
@@ -30,29 +34,41 @@ class MapDisplay extends Component {
 
   }
 
+  animateToRegion(region, markerId) {
+    this.mapRef.current.animateToRegion({
+      latitude: region.latitude,
+      longitude: region.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    }, 1000);
+    this.setState({ focusedMarker: markerId })
+  }
+
   //TODO: use 'showsUserLocation' once we figure out geolocation stuff
   render() {
     return (
       <View>
-          <PullUpMenu Content={LocationList} />
+        <PullUpMenu Content={LocationList} />
         <View style={{ zIndex: -1 }}>
           <MapView
+            ref={this.mapRef}
             provider={PROVIDER_GOOGLE}
-            onRegionChange={this.onRegionChange}
             style={styles.map}
             onPanDrag={this.onPanDrag}
             initialRegion={this.state.region}
             scrollEnabled={true}
             customMapStyle={mapstyle}
+            region={this.state.region}
           >
             {locationData.map((marker, index) => (
               <Marker
-                key={index}
+                key={marker.id}
                 coordinate={marker.coordinate}
                 title={marker.gymName}
+                ref={(ref) => { this.markerRefs[index] = ref; }}
               />
             ))}
-            <MapSearch/>
+            <MapSearch animateToRegion={this.animateToRegion} />
           </MapView>
         </View>
       </View>

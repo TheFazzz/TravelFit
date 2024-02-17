@@ -5,8 +5,10 @@ import { context } from "../../../_layout";
 import SearchOptions from "./searchoptions";
 
 
-export default function MapSearch(props) {
+export default function MapSearch({animateToRegion}) {
+
     const {searchFocus, setSearchFocus} = useContext(context)
+
     const [searchView, setSearchView] = useState(styles.searchScreenOff)
     const [searchInput, setSearchInput] = useState('')
     const inputRef = useRef(null)
@@ -32,6 +34,10 @@ export default function MapSearch(props) {
         setSearchInput(e)
     }
 
+    function handleSearchPress(e) {
+        animateToRegion(e.coordinate, e.id)
+    }
+
     return (
         <>
             <Box alignItems='center' style={styles.search} h='15%'>
@@ -47,7 +53,7 @@ export default function MapSearch(props) {
                 />
             </Box>
             <View style={searchView}>
-                <SearchOptions style={searchView} searchInput={searchInput}/>
+                <SearchOptions style={searchView} searchInput={searchInput} handleSearchPress={handleSearchPress}/>
             </View> 
         </>
     )

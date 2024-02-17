@@ -6,6 +6,7 @@ import { useRef } from 'react'
 
 export default function index() {
 
+    
     return (
         <View style={styles.container}>
             <Text>This is the index page</Text>
