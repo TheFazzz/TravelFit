@@ -6,6 +6,7 @@ venv
 .vscode
 __pycache__
 *.py[cod]
+*.pyc
 /react/android
 
 .idea

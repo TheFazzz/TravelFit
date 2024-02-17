@@ -370,7 +370,7 @@ def delete_gym(
 def purchase_guest_pass(
     gym_id: int,
     pass_option_id: int,  # ID of the guest pass option being purchased
-    user: dict = Depends(get_current_user),  # Dependency to get the current user
+    user: dict = Depends(get_current_user),  # get the current user
     db: tuple = Depends(get_db_connection)
 ):
     connection, cursor = db
@@ -423,41 +423,6 @@ def add_gym_photos(
 @app.patch("/gym-photos/{gym_id}/{photo_id}/
 ")
 def delete_gym_photos(
-    req: RegisterRequest,
-    db: tuple = Depends(get_db_connection)
-):
-
-
-
-////////////////////////////Whole lotta gang///////////////////////////////////
-# Get gym listings 
-@app.get("/gym-listings/{gym_id}
-")
-def get_gym_listings(
-    req: RegisterRequest,
-    db: tuple = Depends(get_db_connection)
-):
-
-# Post purchase guest passes 
-@app.post("/guest-purchase-pass
-")
-def guest_purcahse_pass(
-    req: RegisterRequest,
-    db: tuple = Depends(get_db_connection)
-):
-
-# Get user location
-@app.get("/user-location
-")
-def get_user-location(
-    req: RegisterRequest,
-    db: tuple = Depends(get_db_connection)
-):
-
-# Get gym listings 
-@app.get("/gym-listings/local-gyms
-")
-def get_local-gyms(
     req: RegisterRequest,
     db: tuple = Depends(get_db_connection)
 ):
