@@ -24,9 +24,9 @@ async def root():
     return {"message": "TravelFitAPI"}
 
 
-@app.get("/gyms/{city}")
+@app.get("/gyms/city/{city_name}")
 def get_gyms_in_city(
-    city: str,
+    city_name: str,
     db: tuple = Depends(get_db_connection)
 ):
     connection, cursor = db
@@ -38,7 +38,7 @@ def get_gyms_in_city(
             FROM gyms
             WHERE city = %s
             """,
-            (city,)
+            (city_name,)
         )
         gyms = cursor.fetchall()
 
