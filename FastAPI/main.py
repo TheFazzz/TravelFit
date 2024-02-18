@@ -23,6 +23,56 @@ app.include_router(services.authentication.api.router)
 async def root():
     return {"message": "TravelFitAPI"}
 
+
+@app.get("/gyms/{city}")
+def get_gyms_in_city(
+    city: str,
+    db: tuple = Depends(get_db_connection)
+):
+    connection, cursor = db
+    
+    try:
+        cursor.execute(
+            """
+            SELECT id, gym_name, description, address1, address2, city, state, zipcode, longitude, latitude, location, amenities, hours_of_operation
+            FROM gyms
+            WHERE city = %s
+            """,
+            (city,)
+        )
+        gyms = cursor.fetchall()
+
+        if not gyms:
+            raise HTTPException(status_code=404, detail=f"No gyms found in {city}")
+
+        gyms_info = []
+        for gym in gyms:
+            gym_info = {
+                "id": gym[0],
+                "gym_name": gym[1],
+                "description": gym[2],
+                "address1": gym[3],
+                "address2": gym[4] if gym[4] is not None else None,
+                "city": gym[5],
+                "state": gym[6],
+                "zipcode": gym[7],
+                "longitude": gym[8],
+                "latitude": gym[9],
+                "location": gym[10],
+                "amenities": gym[11] if gym[11] is not None else [],
+                "hours_of_operation": gym[12] if gym[12] is not None else {}
+            }
+            gyms_info.append(gym_info)
+
+        return gyms_info
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to fetch gym information")
+    finally:
+        cursor.close()
+        connection.close()
+
+
 # post gym listing
 @app.post("/gyms")
 def add_gym_listing(
@@ -42,8 +92,6 @@ def add_gym_listing(
     if geocode_result:
         latitude = geocode_result[0]['geometry']['location']['lat']
         longitude = geocode_result[0]['geometry']['location']['lng']
-        print(latitude)
-        print(longitude)
     else:
         return None
     
@@ -56,7 +104,7 @@ def add_gym_listing(
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, ST_GeographyFromText(%s))
             RETURNING id
             """,
-            (gym.gym_name, gym.gym_description, gym.address, gym.city, gym.state, gym.zipcode, longitude, latitude, point),
+            (gym.gym_name, gym.gym_description, gym.address1, gym.city, gym.state, gym.zipcode, longitude, latitude, point),
         )
         connection.commit()  # Commit the transaction
         gym_row = cursor.fetchone()
@@ -82,7 +130,7 @@ def get_gym_by_id(
     try:
         cursor.execute(
             """
-            SELECT id, gym_name, description, address1, address2, city, state, zipcode, longitude, latitude, amenities, hours_of_operation
+            SELECT id, gym_name, description, address1, address2, city, state, zipcode, longitude, latitude, location, amenities, hours_of_operation
             FROM gyms
             WHERE id = %s
             """,
@@ -105,8 +153,9 @@ def get_gym_by_id(
             "zipcode": gym[7],
             "longitude": gym[8],
             "latitude": gym[9],
-            "amenities": gym[10] if gym[10] is not None else [],
-            "hours_of_operation": gym[11] if gym[11] is not None else {}
+            "location": gym[10],
+            "amenities": gym[11] if gym[11] is not None else [],
+            "hours_of_operation": gym[12] if gym[12] is not None else {}
         }
 
         # Optionally, fetch and include gym photos here, still deciding
@@ -374,7 +423,10 @@ def purchase_guest_pass(
     db: tuple = Depends(get_db_connection)
 ):
     connection, cursor = db
+    
     try:
+        
+        user_id = int(user["sub"])
         # Insert the guest pass purchase into the database
         cursor.execute(
             """
@@ -382,7 +434,7 @@ def purchase_guest_pass(
             VALUES (%s, %s, %s)
             RETURNING id
             """,
-            (user["id"], gym_id, pass_option_id)
+            (user_id, gym_id, pass_option_id)
         )
         purchase_id = cursor.fetchone()[0]
         connection.commit()
