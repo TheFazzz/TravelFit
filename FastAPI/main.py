@@ -81,7 +81,7 @@ def add_gym_listing(
 ):
     connection, cursor = db
         # Construct the address string
-    address = f"{gym.address}, {gym.city}, {gym.state}, {gym.zipcode}"
+    address = f"{gym.address1}, {gym.city}, {gym.state}, {gym.zipcode}"
 
     # Call Google Maps API to geocode the address
     api_key = os.getenv("GOOGLE_API_KEY")
