@@ -1,12 +1,13 @@
 import uvicorn
 import googlemaps
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, APIRouter, UploadFile, File
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from typing import List
 from pydantic import BaseModel
 from psycopg2.extensions import AsIs
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 
 from database.database import *
 from models.models import *
@@ -17,6 +18,9 @@ import os
 
 app = FastAPI()
 app.include_router(services.authentication.api.router)
+
+# Load environment variables
+blob_connection_string = os.getenv("BLOB_CONNECTION_STRING")
 
 # API endPoints
 @app.get("/")
@@ -445,37 +449,106 @@ def purchase_guest_pass(
     finally:
         cursor.close()
         connection.close()
-""" 
-# user purchase guest pass (user_id needs to be inlcude?)
-@app.post("/gyms/{gym_id}/guest-pass-options/{option_id}/purchase
-")
-def purchase_guest_passes(
-    req: RegisterRequest,
+
+# add gym photos
+@app.post("/gyms/{gym_id}/photos/add")
+async def upload_photos(
+    gym_id: int, 
+    files: List[UploadFile] = File(...)
+    ):
+    container_name = f"gym-photos"
+    blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Define the virtual directory
+    virtual_directory_name = f"gym-{gym_id}"
+
+    # Check if the container exists, create if not
+    if not container_client.exists():
+        container_client.create_container()
+
+    for file in files:
+        try:
+            blob_name = f"{virtual_directory_name}/{file.filename}"
+            blob_client = container_client.get_blob_client(blob_name)
+            blob_client.upload_blob(file.file)
+
+            db = get_db_connection()
+
+            # Insert the photo path into the database
+            photo_url = f"https://travelfitstorage.blob.core.windows.net/{container_name}/{blob_name}"
+            insert_gym_photo_into_database(gym_id, photo_url, db)
+
+        except Exception as e:
+            print(f"Error uploading photo or inserting into database: {e}")
+
+    return {"message": "Photos uploaded successfully"}
+
+from fastapi import HTTPException
+
+# delete gym photos
+@app.delete("/gyms/{gym_id}/photos/{photo_id}")
+async def delete_photo(
+    gym_id: int,
+    photo_id: int
+):
+    try:
+        db = get_db_connection()
+        # Check if the photo exists in the database
+        photo = get_photo_by_id(photo_id, db)
+        if not photo:
+            raise HTTPException(status_code=404, detail="Photo not found in database")
+
+        file_name = photo[2].split("/")[-1]
+        # Construct the blob name for the photo to be deleted
+        blob_name = f"gym-{gym_id}/{file_name}"
+
+        # Get the container client
+        container_name = "gym-photos"
+        blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
+        container_client = blob_service_client.get_container_client(container_name)
+
+        # Check if the blob exists in Azure Blob Storage
+        blob_client = container_client.get_blob_client(blob_name)
+        if not blob_client.exists():
+            raise HTTPException(status_code=404, detail="Photo not found in blob storage")
+
+        # Delete the photo from Azure Blob Storage
+        blob_client.delete_blob()
+
+        db = get_db_connection()
+        # Delete the photo from the database
+        delete_gym_photo(photo_id, db)
+
+        return {"message": "Photo deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete photo: {e}")
+    
+# get gym photos for gym by gym_id
+@app.get("/gyms/{gym_id}/photos", response_model=List[dict])
+async def get_gym_photos(
+    gym_id: int, 
     db: tuple = Depends(get_db_connection)
 ):
+    connection, cursor = db    
+    try:
+        cursor.execute(
+            """
+            SELECT id, photo_url
+            FROM GymPhotos
+            WHERE gym_id = %s
+            """,
+            (gym_id,)
+        )
+        photos = cursor.fetchall()
+
+        return [{"id": photo[0], "photo_url": photo[1]} for photo in photos]
+        
+    except psycopg2.Error as e:
+        raise HTTPException(status_code=500, detail="Failed to fetch photos for the gym")
+    finally:
+        cursor.close()
+        connection.close()
+    
 
 
-# gyms get photos
-@app.get("/gym-photos/{gym_id}
-")
-def get_gym_photos(
-    req: RegisterRequest,
-    db: tuple = Depends(get_db_connection)
-):
-
-# gyms post photos
-@app.post("/gym-photos
-")
-def add_gym_photos(
-    req: RegisterRequest,
-    db: tuple = Depends(get_db_connection)
-):
-
-# gyms delete photos
-@app.patch("/gym-photos/{gym_id}/{photo_id}/
-")
-def delete_gym_photos(
-    req: RegisterRequest,
-    db: tuple = Depends(get_db_connection)
-):
-"""

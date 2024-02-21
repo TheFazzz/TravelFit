@@ -1,3 +1,4 @@
+from fastapi import Depends
 import psycopg2
 import os
 
@@ -59,3 +60,49 @@ async def get_user_by_email(email: str, db):
            cursor.close()
        if connection:
            connection.close()
+
+def insert_gym_photo_into_database(gym_id: int, photo_url: str, db):
+    
+    connection, cursor = db
+
+    try:
+        cursor.execute(
+            """
+            INSERT INTO GymPhotos (gym_id, photo_url)
+            VALUES (%s, %s)
+            RETURNING id
+            """,
+            (gym_id, photo_url)
+        )
+        photo_id = cursor.fetchone()[0]
+        connection.commit()
+        return photo_id
+    except psycopg2.Error as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()
+
+def get_photo_by_id(photo_id: int, db):
+    connection, cursor = db
+    try:
+        cursor.execute("SELECT * FROM GymPhotos WHERE id = %s", (photo_id,))
+        return cursor.fetchone()
+    except Exception as e:
+        raise e
+    finally:
+        cursor.close()
+        connection.close()
+
+def delete_gym_photo(photo_id: int, db):
+    connection, cursor = db
+    try:
+        cursor.execute("DELETE FROM GymPhotos WHERE id = %s", (photo_id,))
+        connection.commit()
+    except Exception as e:
+        connection.rollback()
+        raise e
+    finally:
+        cursor.close()
+        connection.close()

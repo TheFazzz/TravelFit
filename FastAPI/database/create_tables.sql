@@ -27,7 +27,7 @@ CREATE TABLE Gyms (
 CREATE TABLE GymPhotos (
   id SERIAL PRIMARY KEY,
   gym_id INTEGER REFERENCES Gyms(id) ON DELETE CASCADE,
-  picture TEXT NOT NULL
+  photo_url TEXT NOT NULL
 );
 
 
