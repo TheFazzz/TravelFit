@@ -47,7 +47,7 @@ def get_gyms_in_city(
         gyms = cursor.fetchall()
 
         if not gyms:
-            raise HTTPException(status_code=404, detail=f"No gyms found in {city}")
+            raise HTTPException(status_code=404, detail=f"No gyms found in {city_name}")
 
         gyms_info = []
         for gym in gyms:
@@ -104,11 +104,11 @@ def add_gym_listing(
     try:
         cursor.execute(
             """
-            INSERT INTO gyms (gym_name, description, address1, city, state, zipcode, longitude, latitude, location)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, ST_GeographyFromText(%s))
+            INSERT INTO gyms (gym_name, description, address1, city, state, zipcode, longitude, latitude, location, amenities, hours_of_operation)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, ST_GeographyFromText(%s), %s, %s)
             RETURNING id
             """,
-            (gym.gym_name, gym.gym_description, gym.address1, gym.city, gym.state, gym.zipcode, longitude, latitude, point),
+            (gym.gym_name, gym.gym_description, gym.address1, gym.city, gym.state, gym.zipcode, longitude, latitude, point, gym.amenities, gym.hours_of_operation),
         )
         connection.commit()  # Commit the transaction
         gym_row = cursor.fetchone()
