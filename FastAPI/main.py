@@ -14,6 +14,7 @@ from models.models import *
 from services.authentication.api import get_current_user
 import services.authentication.api
 import os
+import json
 
 
 app = FastAPI()
@@ -101,6 +102,8 @@ def add_gym_listing(
     
     point = f"POINT({longitude} {latitude})"
 
+    hours_of_operation_json = json.dumps(gym.hours_of_operation)
+
     try:
         cursor.execute(
             """
@@ -108,7 +111,7 @@ def add_gym_listing(
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, ST_GeographyFromText(%s), %s, %s)
             RETURNING id
             """,
-            (gym.gym_name, gym.gym_description, gym.address1, gym.city, gym.state, gym.zipcode, longitude, latitude, point, gym.amenities, gym.hours_of_operation),
+            (gym.gym_name, gym.gym_description, gym.address1, gym.city, gym.state, gym.zipcode, longitude, latitude, point, gym.amenities, hours_of_operation_json),
         )
         connection.commit()  # Commit the transaction
         gym_row = cursor.fetchone()
