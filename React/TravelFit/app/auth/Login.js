@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, TextInput, View, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
 import { Link } from 'expo-router';
 // import * as Keychain from 'react-native-keychain'
 import { KeyboardAvoidingView } from 'native-base';
@@ -37,7 +37,7 @@ export default function index() {
           <TextInput secureTextEntry={false} placeholder='Password' id='password' style={styles.userinput}>
           </TextInput> 
 
-          <Text onPress={handleLogin} style={styles.loginButton}>Login</Text>
+          <Button title='Login' onPress={handleLogin} style={styles.loginButton}></Button>
         </KeyboardAvoidingView>
     </View>
   )
