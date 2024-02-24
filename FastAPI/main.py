@@ -191,6 +191,10 @@ def update_gym_info(
         if not gym:
             raise HTTPException(status_code=404, detail="Gym not found")
 
+         # Serialize hours_of_operation to JSON string
+        if update_request.hours_of_operation:
+            update_request.hours_of_operation = json.dumps(update_request.hours_of_operation)
+
         # Construct the SQL query for updating gym information
         update_query = "UPDATE gyms SET"
         update_values = []
@@ -199,15 +203,15 @@ def update_gym_info(
             update_query += " gym_name = %s,"
             update_values.append(update_request.gym_name)
 
-        if update_request.description:
-            update_query += " gym_description = %s,"
+        if update_request.gym_description:
+            update_query += " description = %s,"
             update_values.append(update_request.gym_description)
 
-        if update_request.address:
+        if update_request.address1:
             update_query += " address1 = %s,"
             update_values.append(update_request.address1)
 
-        if update_request.address:
+        if update_request.address2:
             update_query += " address2 = %s,"
             update_values.append(update_request.address2)
 
