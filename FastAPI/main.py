@@ -29,7 +29,7 @@ async def root():
     return {"message": "TravelFitAPI"}
 
 
-@app.get("/gyms/city/{city_name}")
+@app.get("/gyms/city/{city_name}", response_model=List[GymCityResponse])
 def get_gyms_in_city(
     city_name: str,
     db: tuple = Depends(get_db_connection)
@@ -39,7 +39,7 @@ def get_gyms_in_city(
     try:
         cursor.execute(
             """
-            SELECT id, gym_name, description, address1, address2, city, state, zipcode, longitude, latitude, location, amenities, hours_of_operation
+            SELECT id, gym_name, longitude, latitude
             FROM gyms
             WHERE city = %s
             """,
@@ -50,26 +50,18 @@ def get_gyms_in_city(
         if not gyms:
             raise HTTPException(status_code=404, detail=f"No gyms found in {city_name}")
 
-        gyms_info = []
+    # Create GymCityResponse objects for each gym
+        gym_responses = []
         for gym in gyms:
-            gym_info = {
-                "id": gym[0],
-                "gym_name": gym[1],
-                "description": gym[2],
-                "address1": gym[3],
-                "address2": gym[4] if gym[4] is not None else None,
-                "city": gym[5],
-                "state": gym[6],
-                "zipcode": gym[7],
-                "longitude": gym[8],
-                "latitude": gym[9],
-                "location": gym[10],
-                "amenities": gym[11] if gym[11] is not None else [],
-                "hours_of_operation": gym[12] if gym[12] is not None else {}
-            }
-            gyms_info.append(gym_info)
+            gym_response = GymCityResponse(
+                id=gym[0],
+                gym_name=gym[1],
+                coordinate={"latitude": gym[2], "longitude": gym[3]}
+            )
+            gym_responses.append(gym_response)
 
-        return gyms_info
+        return gym_responses
+       
 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to fetch gym information")
@@ -491,7 +483,6 @@ async def upload_photos(
 
     return {"message": "Photos uploaded successfully"}
 
-from fastapi import HTTPException
 
 # delete gym photos
 @app.delete("/gyms/{gym_id}/photos/{photo_id}")

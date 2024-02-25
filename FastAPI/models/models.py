@@ -67,3 +67,12 @@ class PassOptionResponse(BaseModel):
         
     class Config:
         orm_mode = True
+
+class Coordinate(BaseModel):
+    latitude: float
+    longitude: float
+
+class GymCityResponse(BaseModel):
+    id: int
+    gym_name: str
+    coordinate: Coordinate
