@@ -162,7 +162,7 @@ def get_gym_by_id(
             "zipcode": gym[7],
             "amenities": gym[8] if gym[8] is not None else [],
             "hours_of_operation": gym[9] if gym[9] is not None else {},
-            "photos": gym_photos
+            "photos": gym_photos if gym_photos else []
         }
 
         # Optionally, fetch and include gym photos here, still deciding
