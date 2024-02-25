@@ -129,7 +129,7 @@ def get_gym_by_id(
     try:
         cursor.execute(
             """
-            SELECT id, gym_name, description, address1, address2, city, state, zipcode, longitude, latitude, location, amenities, hours_of_operation
+            SELECT id, gym_name, description, address1, address2, city, state, zipcode, amenities, hours_of_operation
             FROM gyms
             WHERE id = %s
             """,
@@ -139,6 +139,16 @@ def get_gym_by_id(
 
         if gym is None:
             raise HTTPException(status_code=404, detail="Gym not found")
+        
+        cursor.execute(
+            """
+            SELECT photo_url
+            FROM GymPhotos
+            WHERE gym_id = %s
+            """,
+            (gym_id,)
+        )
+        gym_photos = [row[0] for row in cursor.fetchall()]
 
         # Construct a dictionary to represent the gym
         gym_info = {
@@ -150,11 +160,9 @@ def get_gym_by_id(
             "city": gym[5],
             "state": gym[6],
             "zipcode": gym[7],
-            "longitude": gym[8],
-            "latitude": gym[9],
-            "location": gym[10],
-            "amenities": gym[11] if gym[11] is not None else [],
-            "hours_of_operation": gym[12] if gym[12] is not None else {}
+            "amenities": gym[8] if gym[8] is not None else [],
+            "hours_of_operation": gym[9] if gym[9] is not None else {},
+            "photos": gym_photos
         }
 
         # Optionally, fetch and include gym photos here, still deciding
