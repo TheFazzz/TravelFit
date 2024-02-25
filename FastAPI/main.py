@@ -56,7 +56,7 @@ def get_gyms_in_city(
             gym_response = GymCityResponse(
                 id=gym[0],
                 gym_name=gym[1],
-                coordinate={"latitude": gym[2], "longitude": gym[3]}
+                coordinate={"latitude": gym[3], "longitude": gym[2]}
             )
             gym_responses.append(gym_response)
 
