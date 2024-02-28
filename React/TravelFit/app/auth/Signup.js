@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
 import { Link } from 'expo-router';
 // import * as Keychain from 'react-native-keychain'
 import { KeyboardAvoidingView } from 'native-base';
+import { ScrollView } from 'native-base';
 
 export default function index() {
 
@@ -26,8 +27,8 @@ export default function index() {
   }
 
   return (
-    <View>
-        <KeyboardAvoidingView style={styles.container}>
+    <View style={styles.container}>
+        <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{flexGrow: 1}}>
           <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
           
           <View style={{flexDirection: 'row'}}>
@@ -50,7 +51,7 @@ export default function index() {
 
           <Button title='Sign Up' onPress={signUpHandle} style={styles.signUpButton}></Button>
             
-        </KeyboardAvoidingView>
+        </ScrollView>
     </View>
   )
 }
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     backgroundColor: 'silver',
     alignItems: 'center',
-    // justifyContent: 'center',
+    justifyContent: 'center',
   },
   userinput: {
     overflow: 'hidden',

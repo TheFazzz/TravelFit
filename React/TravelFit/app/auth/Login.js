@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
 import { Link } from 'expo-router';
 // import * as Keychain from 'react-native-keychain'
 import { KeyboardAvoidingView } from 'native-base';
+import { ScrollView } from 'native-base';
 
 export default function index() {
 
@@ -26,19 +27,19 @@ export default function index() {
   }
 
   return (
-    <View>
-        <KeyboardAvoidingView style={styles.container}>
+    <View style={styles.container}>
+        <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{flexGrow: 1}}>
           <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
 
 
           <TextInput placeholder='Username' id='username' style={styles.userinput}>
           </TextInput> 
 
-          <TextInput secureTextEntry={false} placeholder='Password' id='password' style={styles.userinput}>
+          <TextInput secureTextEntry={true} placeholder='Password' id='password' style={styles.userinput}>
           </TextInput> 
 
           <Button title='Login' onPress={handleLogin} style={styles.loginButton}></Button>
-        </KeyboardAvoidingView>
+        </ScrollView>
     </View>
   )
 }
@@ -46,8 +47,9 @@ export default function index() {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
+    // height: "auto",
     flexDirection: 'column',
-    // flex: 1,
+    // flexGrow: 1,
     backgroundColor: 'silver',
     alignItems: 'center',
     justifyContent: 'center',
@@ -62,13 +64,14 @@ const styles = StyleSheet.create({
   loginButton: {
     overflow: 'hidden',
     backgroundColor: '#89CFF0',
-    borderRadius: 15,
+    borderRadius: 25,
     color: 'white',
     paddingVertical: '5px',
     paddingHorizontal: '25px',
     textAlign: 'center',
-    width: 100,
+    width: 200,
     height: 25,
+    marginTop: '20px'
   },
   imageSize: {
     // flex: 1,
