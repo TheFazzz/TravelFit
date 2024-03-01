@@ -263,8 +263,13 @@ def update_gym_info(
 def add_guest_pass_options(
     gym_id: int,
     req: PassOptionCreateRequest,
+    user: dict = Depends(get_current_user),  # get the current user
     db: tuple = Depends(get_db_connection)
 ):
+    if not is_user_admin(user):
+        raise HTTPException(status_code=403, detail="You don't have permission to access this resource.")
+
+    
     connection, cursor = db
     try:
         # Construct the SQL query
@@ -556,5 +561,39 @@ async def get_gym_photos(
         cursor.close()
         connection.close()
     
-
-
+# The front-end will make a post request to this endpoint providing the users
+# latitude and longitude and optionaly radius_in_meter(or defaults to 2000)
+@app.post("/getNearbyGyms")
+async def get_nearby_gyms(
+    location: UserLocation,
+    db: tuple = Depends(get_db_connection)
+):
+    # query database for nearby gyms based on the location
+    connection, cursor = db    
+    try:
+        cursor.execute(
+            """
+            SELECT id, gym_name, description, address1, address2, city, state, zipcode, longitude, latitude
+            FROM gyms
+            WHERE ST_DWithin(
+                location,
+                ST_SetSRID(ST_MakePoint(%s, %s), 4326),
+                %s
+            )
+            ORDER BY ST_Distance(
+                location,
+                ST_SetSRID(ST_MakePoint(%s, %s), 4326)
+);
+            """,
+            (location.longitude, location.latitude, location.radius_in_meters, location.longitude, location.latitude)
+        )
+        gyms = cursor.fetchall()
+        return gyms
+        
+        
+    except psycopg2.Error as e:
+        raise HTTPException(status_code=500, detail="Failed to fetch gyms nearby")
+    finally:
+        cursor.close()
+        connection.close()
+    

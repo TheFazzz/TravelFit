@@ -76,3 +76,8 @@ class GymCityResponse(BaseModel):
     id: int
     gym_name: str
     coordinate: Coordinate
+
+class UserLocation(BaseModel):
+    latitude: float
+    longitude: float
+    radius_in_meters: float = 2000  # Default radius of 2000 meters or user specify

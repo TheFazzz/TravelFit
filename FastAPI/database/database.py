@@ -106,3 +106,19 @@ def delete_gym_photo(photo_id: int, db):
     finally:
         cursor.close()
         connection.close()
+
+def is_user_admin(user_id: int, db) -> bool:
+    """
+        Check if the user is an admin.
+        bool: True if the user is an admin, False otherwise.
+    """
+    connection, cursor = db
+    try:
+        cursor.execute("SELECT id FROM Admins WHERE user_id = %s", (user_id,))
+        admin = cursor.fetchone()
+        return admin is not None
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()

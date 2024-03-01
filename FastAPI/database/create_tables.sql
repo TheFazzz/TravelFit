@@ -1,3 +1,8 @@
+CREATE TABLE Admins (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER UNIQUE REFERENCES Users(id) ON DELETE CASCADE
+);
+
 CREATE TABLE Users (
   id SERIAL PRIMARY KEY,
   firstName TEXT NOT NULL,
@@ -21,8 +26,6 @@ CREATE TABLE Gyms (
   amenities TEXT[],
   hours_of_operation JSONB
 );
-
-
 
 CREATE TABLE GymPhotos (
   id SERIAL PRIMARY KEY,

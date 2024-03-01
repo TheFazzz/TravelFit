@@ -57,7 +57,7 @@ router = APIRouter(
     tags=['auth']
 )
 
-@router.post("/token")
+@router.post("/login")
 async def login_for_access_token(
     user: LoginRequest,
     db: tuple = Depends(get_db_connection)
@@ -71,6 +71,14 @@ async def login_for_access_token(
         raise HTTPException(status_code=401, detail="Invalid credentials")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
+
+
+@router.post("/logout")
+async def logout():
+    # For a logout endpoint with JWT, you don't need to do anything on the server side
+    # Instruct the client(front-end) to discard the access token
+    return {"message": "Logout successful"}
+
 
 
 @router.post("/register")
@@ -128,7 +136,6 @@ async def all_users(
                 "lastName": user[2],
                 "email": user[3],
                 "password_hash": user[4]
-                # Add other fields as needed
             }
             for user in users
         ]
