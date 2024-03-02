@@ -580,10 +580,9 @@ async def get_nearby_gyms(
                 ST_SetSRID(ST_MakePoint(%s, %s), 4326),
                 %s
             )
-            ORDER BY ST_Distance(
-                location,
-                ST_SetSRID(ST_MakePoint(%s, %s), 4326)
-);
+            ORDER BY 
+                location <-> ST_SetSRID(ST_MakePoint(%s, %s), 4326);
+            );
             """,
             (location.longitude, location.latitude, location.radius_in_meters, location.longitude, location.latitude)
         )

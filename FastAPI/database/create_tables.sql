@@ -27,6 +27,8 @@ CREATE TABLE Gyms (
   hours_of_operation JSONB
 );
 
+CREATE INDEX idx_gyms_location ON gyms USING GIST(location);
+
 CREATE TABLE GymPhotos (
   id SERIAL PRIMARY KEY,
   gym_id INTEGER REFERENCES Gyms(id) ON DELETE CASCADE,
@@ -59,3 +61,4 @@ CREATE TABLE Payments (
   transaction_id VARCHAR(100),
   payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
