@@ -65,6 +65,7 @@ def get_gyms_in_city(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to fetch gym information")
+    
     finally:
         cursor.close()
         connection.close()
@@ -112,6 +113,9 @@ def add_gym_listing(
         id = gym_row[0]  # Access the id directly from the row 
 
         return ReturnIdResponse(id=id)
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to post gym information")
 
     finally:
         if cursor:
@@ -386,7 +390,7 @@ def delete_guest_pass_option(
 
     finally:
         cursor.close()
-        connection.close()@app.delete("/gyms/{gym_id}/guest-pass-options/{pass_option_id}")
+        connection.close()
 
 @app.delete("/gyms/{gym_id}")
 def delete_gym(
