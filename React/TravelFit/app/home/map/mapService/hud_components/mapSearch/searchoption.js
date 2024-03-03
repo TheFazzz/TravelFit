@@ -1,9 +1,11 @@
 import React, {useContext} from "react";
 import { Text } from "react-native";
-import { context } from "../../../_layout";
+import { context } from "../../../../../_layout";
 
 export default function SearchOption({data, handleSearchPress}) {
-    const {gymName, city, id} = data
+    console.log(data)
+
+    const {gym_name, id} = data
     const {setSearchFocus} = useContext(context)
 
     function handlePress(e) {
@@ -12,6 +14,6 @@ export default function SearchOption({data, handleSearchPress}) {
     }
 
     return (
-        <Text onPress={handlePress}>{gymName}, {city}</Text>
+        <Text onPress={handlePress}>{gym_name}</Text>
     )
 }

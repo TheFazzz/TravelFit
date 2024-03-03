@@ -1,14 +1,54 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import MapDisplay from './mapdisplay';
-import PullUpMenu from '../../../components/pullUpMenu';
-import LocationList from '../location/locationList';
-
+import { useData } from '../../../../contexts/DatabaseContext';
+import LoadingScreen from '../../../layout/LoadingScreen';
 
 export default function Map() {
+    const { allGyms, userLocation, setUserLocation, getLocation} = useData()
+    const [loading, setLoading] = useState(true)
+    const [allLocations, setAllLocations] = useState([])
+    const [findLocation, setFindLocation] = useState(false)
+
+    useEffect(() => {
+        loadData()
+    }, []);
+
+    async function loadData() {
+        setLoading(true)
+        setFindLocation(true)
+        constantUpdateLocation()
+        try {
+            setAllLocations(await allGyms());
+
+        } catch (error) {
+            console.error('error:', error);
+        } finally {
+            setLoading(false);  
+        }
+    }
+
+    async function constantUpdateLocation() {
+        let newLocation
+        try {
+            newLocation = await getLocation()
+        } catch (error) {
+            console.error('error', error)
+        } finally {
+            setUserLocation(newLocation)
+            setTimeout(constantUpdateLocation, 30000)
+        }
+    }
+
     return (
         <View style={styles.container}>
-            <MapDisplay/>
+            {loading? 
+            <LoadingScreen/> :
+            <MapDisplay 
+                allLocations={allLocations}
+                loadData={loadData}
+                userLocation={userLocation}
+            />}
         </View>
     )
 }

@@ -1,9 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import locationData from './locationData';
+import locationData from './locationData.js';
 import Location from './location';
+import { useData } from '../../../../contexts/DatabaseContext.js';
 
 const LocationList = () => {
+
+
     return (
         <View style={styles.container}>
             <ScrollView style={styles.scrollView}>

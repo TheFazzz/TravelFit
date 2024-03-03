@@ -1,5 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { auth } from '../fakeauth'
+import {
+  loginWithEmailAndPassword,
+  registerNewUser,
+  getAllUsers
+} from './AuthConnection'
 
 const AuthContext = React.createContext()
 
@@ -11,56 +15,29 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
 
-    function signup(email, password){
-      return auth.createUserWithEmailAndPassword(email, password)
+    async function login(email, password){
+      return loginWithEmailAndPassword(email, password)
     }
 
-    function login(email, password) {
-      return auth.signInWithEmailAndPassword(email, password)
+    async function register(first_name, last_name, email, password){
+      return registerNewUser(first_name, last_name, email, password)
     }
 
-    function logout() {
-      return auth.signOut()
+    async function allUsers(){
+      return getAllUsers()
     }
-
-    function resetPassword(email){
-      return auth.sendPasswordResetEmail(email)
-    }
-
-    function updateEmail(email){
-      return currentUser.updateEmail(email)
-    }
-
-    function updatePassword(password){
-      return currentUser.updatePassword(password)
-    }
-
-    useEffect(() => {
-      const unsubscribe = auth.onAuthStateChanged(user => {
-        setLoading(false)
-        setCurrentUser(user)
-      })
-
-      return unsubscribe
-    }, []);
-
-    auth.onAuthStateChanged(user => {
-          setCurrentUser(user)
-        })
     
     const value = {
       currentUser,
+      setCurrentUser,
       login,
-      signup,
-      logout,
-      resetPassword,
-      updateEmail,
-      updatePassword
+      register,
+      allUsers
     }
 
     return (
       <AuthContext.Provider value = {value}>
-          {!loading && children}
+          {children}
       </AuthContext.Provider>
     )
 }

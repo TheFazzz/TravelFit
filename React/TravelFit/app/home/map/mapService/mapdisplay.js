@@ -1,10 +1,9 @@
-import React, { Component, useRef, useState } from 'react'
+import React, { Component, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
-import locationData from '../location/locationData';
-import PullUpMenu from '../../../components/pullUpMenu';
-import LocationList from '../location/locationList';
-import MapSearch from './mapSearch/mapsearch'
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import { Link } from 'expo-router';
+
+import MapHUD from './mapHUD';
 
 class MapDisplay extends Component {
 
@@ -19,6 +18,8 @@ class MapDisplay extends Component {
 
       },
       focusedMarker: null,
+      userLocation: null,
+      currentLocation: null,
     };
     this.mapRef = React.createRef()
     this.markerRefs = {};
@@ -34,21 +35,23 @@ class MapDisplay extends Component {
 
   }
 
+  loadData() {
+    this.props.loadData()
+  }
+
   animateToRegion(region, markerId) {
     this.mapRef.current.animateToRegion({
       latitude: region.latitude,
       longitude: region.longitude,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
     }, 1000);
     this.setState({ focusedMarker: markerId })
   }
 
-  //TODO: use 'showsUserLocation' once we figure out geolocation stuff
   render() {
     return (
       <View>
-        <PullUpMenu Content={LocationList} />
         <View style={{ zIndex: -1 }}>
           <MapView
             ref={this.mapRef}
@@ -59,16 +62,34 @@ class MapDisplay extends Component {
             scrollEnabled={true}
             customMapStyle={mapstyle}
             region={this.state.region}
+            showsUserLocation={true}
+            followsUserLocation={true}
           >
-            {locationData.map((marker, index) => (
+            {this.props.allLocations.map((marker, index) => (
               <Marker
                 key={marker.id}
                 coordinate={marker.coordinate}
-                title={marker.gymName}
+                title={marker.gym_name}
                 ref={(ref) => { this.markerRefs[index] = ref; }}
-              />
+                onPress={() => {
+                  this.animateToRegion(marker.coordinate)
+                  this.setState({ currentLocation: marker })
+                }}
+              >
+                <Callout>
+                  <Text>{marker.gym_name}</Text>
+                  <Link href={{
+                    pathname: '/home/gymPage/[id]',
+                    params: { id: marker.id }
+                  }}>More Info</Link>
+                </Callout>
+              </Marker>
             ))}
-            <MapSearch animateToRegion={this.animateToRegion} />
+            <MapHUD
+              animateToRegion={this.animateToRegion}
+              allLocations={this.props.allLocations}
+              data={this.state.currentLocation}
+            />
           </MapView>
         </View>
       </View>

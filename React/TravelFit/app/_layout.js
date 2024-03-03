@@ -3,15 +3,16 @@ import Footer from './layout/Footer';
 import Header from './layout/Header';
 import { StyleSheet, Text, View } from 'react-native';
 import { Box, NativeBaseProvider } from 'native-base';
-import { styles } from '../styles';
-import nativebasetheme from '../nativebasetheme';
-import { DataProvider } from '../../contexts/DatabaseContext';
+import { styles } from './styles';
+import nativebasetheme from './nativebasetheme';
+import { DataProvider } from '../contexts/DatabaseContext';
 
 import React, { useState, useContext } from 'react'
 export const context = React.createContext()
 
 export default function HomeLayout() {
   const [searchFocus, setSearchFocus] = useState(false)
+
 
   return (
     <NativeBaseProvider>

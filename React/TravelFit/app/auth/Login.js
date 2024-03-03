@@ -4,10 +4,11 @@ import { Link } from 'expo-router';
 // import * as Keychain from 'react-native-keychain'
 import { KeyboardAvoidingView } from 'native-base';
 import { ScrollView } from 'native-base';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function index() {
-
-  // const [isLoggedIn, setIsLoggedin] = useState(false);
+  const { login } = useAuth()
+  console.log(data)
 
   const handleLogin = async ()=> {
     const token = '';

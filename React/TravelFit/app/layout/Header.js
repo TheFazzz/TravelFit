@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link } from 'expo-router'
 import { StyleSheet, Text, View} from 'react-native';
-import { styles } from '../../styles';
+import { styles } from '../styles'
 import { Button, extendTheme } from 'native-base'
 
 import { context } from '../_layout';
