@@ -7,6 +7,7 @@ export default function FollowUserLocation({animateToRegion}) {
     const {userLocation} = useData()
 
     return (
+        
         <Button
             style={styles.container}
             onPress={() => {
