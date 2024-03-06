@@ -66,7 +66,13 @@ async def login_for_access_token(
         stored_user = await get_user_by_email(user.email, db)
         if stored_user and verify_password(user.password, stored_user["password_hash"]):
             user_id = stored_user["id"]
-            access_token = await create_access_token(data={"sub": str(user_id)})
+            first_name = stored_user["firstName"]
+            last_name = stored_user["lastName"]
+            access_token = await create_access_token(data={
+                "sub": str(user_id),
+                "firstName": first_name,
+                "lastName": last_name
+            })
             return {"access_token": access_token, "token_type": "bearer"}
         raise HTTPException(status_code=401, detail="Invalid credentials")
     except Exception as e:
