@@ -600,3 +600,48 @@ async def get_nearby_gyms(
         cursor.close()
         connection.close()
     
+@app.post("/guest-passes/user_id")
+async def get_user_guest_passes(
+    user: dict = Depends(get_current_user),
+    db: tuple = Depends(get_db_connection)
+):
+    # query database for nearby gyms based on the location
+    connection, cursor = db    
+    
+    try:
+        
+        user_id = int(user["sub"])
+        # Insert the guest pass purchase into the database
+        cursor.execute(
+            """
+            SELECT 
+                gp.id AS guest_pass_id,
+                g.gym_name,
+                po.pass_name,
+                po.price,
+                po.duration,
+                po.description
+            FROM 
+                GuestPassPurchases gp
+            JOIN 
+                Gyms g ON gp.gym_id = g.id
+            JOIN 
+                PassOptions po ON gp.pass_option_id = po.id
+            WHERE 
+                gp.user_id = %s;
+            """,
+            (user_id,)
+        )
+        guest_passes = cursor.fetchall()
+
+        return [{"id": guest_pass[0], "gym_name": guest_pass[1], "pass_name": guest_pass[2],
+                 "price": guest_pass[3], "duration": guest_pass[4], 
+                 "description": guest_pass[5]} for guest_pass in guest_passes]
+        
+    except Exception as e:
+        connection.rollback()
+        raise HTTPException(status_code=500, detail="Failed to fetch guest passes")
+    finally:
+        cursor.close()
+        connection.close()
+    

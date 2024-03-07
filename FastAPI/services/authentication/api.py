@@ -11,7 +11,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import os
-import psycopg2
+from psycopg2 import IntegrityError
 
 from models.models import *
 from database.database import *
@@ -113,6 +113,13 @@ async def register(
         user_row = get_user(id, db) 
 
         return ReturnIdResponse(id=id)
+    
+    except IntegrityError as e:
+        # Check if the error is due to a duplicate email
+        if 'unique constraint "users_email_key"' in str(e):
+            raise HTTPException(status_code=400, detail="Email is already in use")
+        else:
+            raise HTTPException(status_code=500, detail="Internal Server Error")
 
     finally:
         if cursor:
