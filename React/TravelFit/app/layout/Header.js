@@ -12,7 +12,9 @@ export default function Header() {
 
   return (
     <View style={styles.header}>
-        <Link href={'/'} style={header.container}>Back to Index</Link>
+        <Link href={'/'} style={header.container}>
+          Back to Index
+        </Link>
         <View style={styles.exit}>
         {searchFocus? <Button
           onPress={() => {setSearchFocus(false)}}
@@ -29,7 +31,8 @@ export default function Header() {
 
 const header = StyleSheet.create({
   container: {
-    paddingTop: 50
+    paddingTop: 50,
+    color: '#FFFFFF',
   },
   exit: {
     paddingBottom: 10,
