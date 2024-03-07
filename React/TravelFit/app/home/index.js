@@ -96,8 +96,6 @@ export default function index() {
         );
     }
 
-    
-    test()
     //<UserName/>
     return( 
        
