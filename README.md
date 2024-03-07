@@ -21,6 +21,9 @@ Mobile App users can search local gym's and purchase guest passes while travelin
 python3 -m pip install -r requirements.txt
 ```
 * Any modifications needed to be made to files/folders
+* Install Node.js:
+https://nodejs.org/en/download
+
 
 ### Executing program
 
@@ -32,6 +35,15 @@ cd FastAPI
 uvicorn main:app --reload
 ```
 * ctrl-c to stop server
+
+
+*How to run frontend
+```
+cd React
+cd TravelFit
+npm install
+npm run start
+```
 
 ## Help
 
