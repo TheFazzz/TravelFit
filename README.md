@@ -63,15 +63,15 @@ s //this will (s)witch to expo go mode from development mode
 assuming you have your preffered device installed. 
 then from here you can choose to run on either android Emulator or Ios Simulator or your own device:
 
-*Ios Simulator:
+* Ios Simulator:
 ```
 i //will run Ios simulator (MAC ONLY)
 ```
-*Android Emulator:
+* Android Emulator:
 ```
 a //will run Android Emulator
 ```
-*Expo Go Device:
+* Expo Go Device:
 - Open Expo Go
 - Ensure you are on the same wifi as your server
 - (Ios) hit `i` on your node server
