@@ -28,7 +28,7 @@ export default function index() {
       router.replace('/home')
     } catch (error) {
       console.error(error)
-      setError(error)
+      // setError(error)
     } 
   }
 
@@ -65,7 +65,7 @@ export default function index() {
                 {error}
               </Text>
             </View>}
-            
+
         </ScrollView>
     </View>
   )

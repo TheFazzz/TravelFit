@@ -23,10 +23,10 @@ export function AuthProvider({ children }) {
       return new Promise((resolve, reject) => {
         loginWithEmailAndPassword(email, password).then(tokenInfo => {
           const {access_token} = tokenInfo
+          const decrypted = decryptToken(access_token)
           setBearerToken(tokenInfo)
-          setCurrentUser(decryptToken(access_token))
+          setCurrentUser(decrypted)
           resolve(true)
-
         }).catch(error => reject(error))
       })
     }
@@ -44,11 +44,10 @@ export function AuthProvider({ children }) {
       setBearerToken(null)
     }
 
-    async function decryptToken(token){
+    function decryptToken(token){
       const {firstName, lastName, sub} = jwtDecode(token)
-      console.log(details)
       return {firstName, lastName, sub}
-  }
+    }
     
     const value = {
       currentUser,
