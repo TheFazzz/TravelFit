@@ -1,30 +1,35 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 // import * as Keychain from 'react-native-keychain'
 import { KeyboardAvoidingView } from 'native-base';
 import { ScrollView } from 'native-base';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function index() {
+
+  const router = useRouter()
   const { login } = useAuth()
-  console.log(data)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [error, setError] = useState(null)
+  const [message, setMessage] = useState(null)
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
 
   const handleLogin = async ()=> {
-    const token = '';
-    const username = '';
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-
-    const toggleShowPassword = () => {
-      setShowPassword(!showPassword);
-    }
-
-    await Keychain.setPassword(username, token);
-    setIsLoggedin(true);
-    setUserDetails({token, username});
-
-    console.log("logged in")
+    try {
+      await login(email, password)
+      console.log('logged in')
+      router.replace('/home')
+    } catch (error) {
+      console.error(error)
+      setError(error)
+    } 
   }
 
   return (
@@ -32,14 +37,35 @@ export default function index() {
         <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{flexGrow: 1}}>
           <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
 
-
-          <TextInput placeholder='Username' id='username' style={styles.userinput}>
+          <TextInput 
+            placeholder='Email' 
+            id='email' 
+            style={styles.userinput} 
+            value={email} 
+            onChangeText={setEmail}
+            autoCapitalize='none'
+            >
           </TextInput> 
 
-          <TextInput secureTextEntry={true} placeholder='Password' id='password' style={styles.userinput}>
+          <TextInput 
+            secureTextEntry={true} 
+            placeholder='Password' 
+            id='password' 
+            style={styles.userinput} 
+            value={password} 
+            onChangeText={setPassword}
+            autoCapitalize='none'
+            >
           </TextInput> 
 
           <Button title='Login' onPress={handleLogin} style={styles.loginButton}></Button>
+
+          {error && <View>
+              <Text>
+                {error}
+              </Text>
+            </View>}
+            
         </ScrollView>
     </View>
   )

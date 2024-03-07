@@ -6,6 +6,7 @@ import { Box, NativeBaseProvider } from 'native-base';
 import { styles } from './styles';
 import nativebasetheme from './nativebasetheme';
 import { DataProvider } from '../contexts/DatabaseContext';
+import { AuthProvider } from '../contexts/AuthContext';
 
 import React, { useState, useContext } from 'react'
 export const context = React.createContext()
@@ -16,17 +17,19 @@ export default function HomeLayout() {
 
   return (
     <NativeBaseProvider>
-      <DataProvider>
-        <context.Provider value={{ searchFocus, setSearchFocus }}>
-          <View style={styles.container}>
-            <Header />
-            <View style={styles.body}>
-              <Slot />
+      <AuthProvider>
+        <DataProvider>
+          <context.Provider value={{ searchFocus, setSearchFocus }}>
+            <View style={styles.container}>
+              <Header />
+              <View style={styles.body}>
+                <Slot />
+              </View>
+              <Footer />
             </View>
-            <Footer />
-          </View>
-        </context.Provider>
-      </DataProvider>
+          </context.Provider>
+        </DataProvider>
+      </AuthProvider>
     </NativeBaseProvider>
   );
 }
