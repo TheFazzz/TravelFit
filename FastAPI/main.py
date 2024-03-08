@@ -1,27 +1,26 @@
 import uvicorn
 import googlemaps
 from fastapi import Depends, FastAPI, HTTPException, APIRouter, UploadFile, File
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt
-from passlib.context import CryptContext
 from typing import List
 from pydantic import BaseModel
 from psycopg2.extensions import AsIs
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 
-from database.database import *
+from services.database import *
 from models.models import *
-from services.authentication.api import get_current_user
-import services.authentication.api
+from utils.settings import get_blob_connection_string
+from routes.auth import get_current_user
+import routes.auth
 import os
 import json
 
 
 app = FastAPI()
-app.include_router(services.authentication.api.router)
+app.include_router(routes.auth.router)
 
 # Load environment variables
 blob_connection_string = os.getenv("BLOB_CONNECTION_STRING")
+
 
 # API endPoints
 @app.get("/")
@@ -472,6 +471,8 @@ async def upload_photos(
     gym_id: int, 
     files: List[UploadFile] = File(...)
     ):
+    blob_connection_string = get_blob_connection_string()
+
     container_name = f"gym-photos"
     blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
     container_client = blob_service_client.get_container_client(container_name)

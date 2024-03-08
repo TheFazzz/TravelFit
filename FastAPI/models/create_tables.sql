@@ -8,7 +8,8 @@ CREATE TABLE Users (
   firstName TEXT NOT NULL,
   lastName TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL
+  password_hash TEXT NOT NULL,
+  profile_photo TEXT
 );
 
 CREATE TABLE Gyms (

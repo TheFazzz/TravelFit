@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, status, UploadFile, File
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta
@@ -11,10 +11,13 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import os
+import uuid
 from psycopg2 import IntegrityError
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 
 from models.models import *
-from database.database import *
+from services.database import *
+from utils.settings import get_blob_connection_string
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")  # Get the secret key
@@ -57,6 +60,8 @@ router = APIRouter(
     tags=['auth']
 )
 
+
+
 @router.post("/login")
 async def login_for_access_token(
     user: LoginRequest,
@@ -90,6 +95,7 @@ async def logout():
 @router.post("/register")
 async def register(
     req: RegisterRequest,
+    profile_photo: UploadFile = File(None),  # Optional profile photo
     db: tuple = Depends(get_db_connection)
 ):
     connection, cursor = db
@@ -103,16 +109,11 @@ async def register(
             """,
             (req.first_name, req.last_name, req.email, hashed_password),
         )
-        connection.commit()  # Commit the transaction
-        user_row = cursor.fetchone()
-
-        assert user_row is not None
-        id = user_row[0]  # Access the id directly from the row
-
+        user_id = cursor.fetchone()[0]  # Get the inserted user ID
         
-        user_row = get_user(id, db) 
+        connection.commit()  
 
-        return ReturnIdResponse(id=id)
+        return ReturnIdResponse(id=user_id)
     
     except IntegrityError as e:
         # Check if the error is due to a duplicate email
@@ -126,6 +127,63 @@ async def register(
             cursor.close()
         if connection:
             connection.close()
+
+@router.post("/users/{user_id}/profile-photo")
+async def upload_profile_photo(
+    user_id: int,
+    profile_photo: UploadFile = File(...),
+    db: tuple = Depends(get_db_connection)
+):
+    connection, cursor = db
+    try:
+        # Check if user already has a profile photo
+        cursor.execute(
+            """
+            SELECT profile_photo FROM users WHERE id = %s
+            """,
+            (user_id,)
+        )
+        current_profile_photo_url = cursor.fetchone()[0]
+
+        blob_connection_string = get_blob_connection_string()
+        container_name = f"profile-photos"
+        blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
+        container_client = blob_service_client.get_container_client(container_name)
+
+        # Delete the old profile photo from blob storage if it exists
+        if current_profile_photo_url:
+            blob_name = current_profile_photo_url.split("/")[-1]
+            blob_client = container_client.get_blob_client(blob_name)
+            blob_client.delete_blob()
+
+        # Generate a unique filename for the profile photo
+        unique_filename = f"{user_id}_{uuid.uuid4().hex}{os.path.splitext(profile_photo.filename)[1]}"
+        
+        # Check if the container exists, if not create one
+        if not container_client.exists():
+            container_client.create_container()
+
+        blob_client = container_client.get_blob_client(unique_filename)
+        blob_client.upload_blob(profile_photo.file)
+        profile_photo_url = f"https://travelfitstorage.blob.core.windows.net/{container_name}/{unique_filename}"
+        
+        # Update the user record with the profile photo URL
+        cursor.execute(
+            """
+            UPDATE users
+            SET profile_photo = %s
+            WHERE id = %s
+            """,
+            (profile_photo_url, user_id),
+        )
+        
+        connection.commit()  # Commit the transaction
+
+        return {"message": "Profile photo uploaded successfully", "profile_photo_url": profile_photo_url}
+    
+    finally:
+        cursor.close()
+        connection.close()
 
 @router.get("/users")
 async def all_users(
