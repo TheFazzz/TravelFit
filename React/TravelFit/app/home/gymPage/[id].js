@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import locationData from '../map/location/locationData';
 import { useData } from '../../../contexts/DatabaseContext';
+import LoadingScreen from '../../layout/LoadingScreen';
 
 export default function Index(props) {
     const query = useLocalSearchParams()
@@ -70,6 +71,7 @@ export default function Index(props) {
                     title="Order Day Pass"
                 ></Button>
             </>}
+            {loading && <LoadingScreen/>}
         </View>
     )
 }

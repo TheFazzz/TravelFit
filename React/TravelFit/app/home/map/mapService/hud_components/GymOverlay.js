@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Pressable, Flex, Heading, Button, useSafeArea } from 'native-base'
+import { Box, Pressable, Flex, Heading, Button, useSafeArea, Spinner } from 'native-base'
 import { Text, StyleSheet, View, Dimensions } from 'react-native'
 import { Link } from "expo-router";
 import { useData } from "../../../../../contexts/DatabaseContext";
@@ -41,6 +41,7 @@ export default function GymOverlay(props) {
 
     return (
         <>
+            {loading && <Spinner size="lg" position={'absolute'} mt={240} ml={120}/>}
             {props.currentMarker && !loading && <View style={styles.view}>
                 <Box
                     alignItems="center"
