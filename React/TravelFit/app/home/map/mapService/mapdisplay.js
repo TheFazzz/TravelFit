@@ -96,6 +96,7 @@ class MapDisplay extends Component {
           </MapView>
         </View>
         <MapHUD
+          setGymId={this.props.setGymId}
           animateToRegion={this.animateToRegion}
           focusedMarker={this.focusedMarker}
           allLocations={this.props.allLocations}

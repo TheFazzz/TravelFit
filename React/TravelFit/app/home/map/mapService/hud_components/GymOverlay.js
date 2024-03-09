@@ -84,13 +84,12 @@ export default function GymOverlay(props) {
                                                 color="darkBlue.600"
                                                 p="2">
 
-                                                <Button size="md" variant="link">
-                                                    <Link href={{
-                                                        pathname: '/home/gymPage/[id]',
-                                                        params: { id: gymData.id }
-                                                    }}>
-                                                        More Info
-                                                    </Link>
+                                                <Button 
+                                                    size="md" 
+                                                    variant="link"
+                                                    onPress={() => props.setGymId(gymData.id)}
+                                                    >
+                                                    More Info
                                                 </Button>
 
                                             </Text>

@@ -29,7 +29,7 @@ export default function MapHUD(props) {
 
     return (
         <>
-            <GymOverlay currentMarker={currentLocation}/>
+            <GymOverlay currentMarker={currentLocation} setGymId={props.setGymId}/>
             <MapSearch animateToRegion={props.animateToRegion} allLocations={props.allLocations} setSearchedLocation={setSearchedLocation}/>
             <FollowUserLocation animateToRegion={props.animateToRegion}/>
         </>

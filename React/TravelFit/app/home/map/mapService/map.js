@@ -4,7 +4,7 @@ import MapDisplay from './mapdisplay';
 import { useData } from '../../../../contexts/DatabaseContext';
 import LoadingScreen from '../../../layout/LoadingScreen';
 
-export default function Map() {
+export default function Map(props) {
     const { allGyms, userLocation, setUserLocation, getLocation} = useData()
     const [loading, setLoading] = useState(true)
     const [allLocations, setAllLocations] = useState([])
@@ -44,7 +44,8 @@ export default function Map() {
         <View style={styles.container}>
             {loading? 
             <LoadingScreen/> :
-            <MapDisplay 
+            <MapDisplay
+                setGymId={props.setGymId}
                 allLocations={allLocations}
                 loadData={loadData}
                 userLocation={userLocation}
