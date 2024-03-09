@@ -12,36 +12,60 @@ export default function index() {
   requestLocationPermission()
 
   function existingPasses() {
-    return <Box alignItems="center">
-      <Pressable maxW="96">
-        {({isHovered, isFocused, isPressed}) => {
-          return <Box bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"} style={{
-            transform: [{
-              scale: isPressed ? 0.96 : 1
-            }]
-          }} p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-
-            <Heading>
-              Gym Passes
-            </Heading>
-            <Text mt="2" fontSize="sm" color="coolGray.700" bold>
-              list of all available passes as of purchase date:
-            </Text>
-            <Flex>
-              {isFocused ? <Text mt="2" fontSize={12} fontWeight="medium" textDecorationLine="underline" color="darkBlue.600" alignSelf="flex-start">
-                3 passes
-              </Text> : <Text mt="0" fontSize={12} fontWeight="medium" color="darkBlue.600" p="2">
-                <Link href="https://google.com">
-                  <Button size="md" variant="link">
-                    3 passes
-                  </Button>
-                </Link>
-              </Text>}
-            </Flex>
-          </Box>;
-        }}
-      </Pressable>
-    </Box>;
+    return (
+      <Box alignItems="center">
+        <Pressable maxW="96">
+          {({ isHovered, isFocused, isPressed }) => {
+            return (
+              <Box
+                bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"}
+                style={{ transform: [{ scale: isPressed ? 0.96 : 1 }] }}
+                p="5"
+                rounded="8"
+                shadow={3}
+                borderWidth="1"
+                borderColor="coolGray.300">
+                <Heading>
+                  Gym Passes
+                </Heading>
+                <Text 
+                  mt="2" 
+                  fontSize="sm" 
+                  color="coolGray.700" 
+                  bold>
+                  list of all available passes as of purchase date:
+                </Text>
+                <Flex>
+                  {isFocused ?
+                    <Text 
+                      mt="2" 
+                      fontSize={12} 
+                      fontWeight="medium" 
+                      textDecorationLine="underline" 
+                      color="darkBlue.600" 
+                      alignSelf="flex-start">
+                      3 passes
+                    </Text>
+                    :
+                    <Text 
+                      mt="0" 
+                      fontSize={12} 
+                      fontWeight="medium" 
+                      color="darkBlue.600" 
+                      p="2">
+                      <Link href="https://google.com">
+                        <Button size="md" variant="link">
+                          3 passes
+                        </Button>
+                      </Link>
+                    </Text>
+                  }
+                </Flex>
+              </Box>
+              )}}
+        </Pressable>
+      </Box>
+    )
   }
 
 
@@ -95,7 +119,7 @@ export default function index() {
   return (
     <Center >
       <Heading style={{ textAlign: 'center' }} size="lg" mb={4} p={6}>
-        Welcome! {currentUser && <UserName/>}
+        Welcome! {currentUser && <UserName />}
       </Heading>
 
       <Avatar bg={'green.100'} size={"lg"}> </Avatar>
