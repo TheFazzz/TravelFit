@@ -77,7 +77,7 @@ class MapDisplay extends Component {
             showsUserLocation={true}
             followsUserLocation={true}
           >
-            {this.props.allLocations.map((marker, index) => (
+            {this.props.allLocations && this.props.allLocations.map((marker, index) => (
               <Marker
                 key={marker.id}
                 coordinate={marker.coordinate}
