@@ -49,7 +49,7 @@ class GymUpdateRequest(BaseModel):
 class PassOptionCreateRequest(BaseModel):
     pass_name: str
     price: Decimal = Field(default=0, max_digits=5, decimal_places=2)
-    duration: str
+    duration: int
     description: Optional[str] = None 
 
     @validator('price')
@@ -63,11 +63,8 @@ class PassOptionResponse(BaseModel):
     gym_id: int
     pass_name: str
     price: Decimal
-    duration: str
+    duration: int
     description: str  
-        
-    class Config:
-        orm_mode = True
 
 class Coordinate(BaseModel):
     latitude: float

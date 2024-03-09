@@ -185,6 +185,45 @@ async def upload_profile_photo(
         cursor.close()
         connection.close()
 
+@router.get("/users/{user_id}")
+def get_user_info(
+    user_id: int,
+    db: tuple = Depends(get_db_connection)
+):
+    connection, cursor = db
+    try:
+        cursor.execute(
+            """
+            SELECT firstName, lastName, email, profile_photo
+            FROM users
+            WHERE id = %s
+            """,
+            (user_id,)
+        )
+        
+        user = cursor.fetchone()
+        
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        connection.commit()
+
+        user_info = {
+            "first_name": user[0],
+            "last_name": user[1],
+            "email": user[2],
+            "profile_photo": user[3] if user[3] is not None else None
+        }
+        
+        return user_info
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to fetch user info")
+
+    finally:
+        cursor.close()
+        connection.close()
+
 @router.get("/users")
 async def all_users(
     db: tuple = Depends(get_db_connection)

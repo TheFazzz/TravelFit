@@ -11,9 +11,12 @@ from models.models import *
 from utils.settings import get_blob_connection_string
 from routes.auth import get_current_user
 import routes.auth
+from services.blob_functions  import *
 import os
 import json
-
+import io
+import qrcode
+from qrcode.image.pil import PilImage
 
 app = FastAPI()
 app.include_router(routes.auth.router)
@@ -168,8 +171,6 @@ def get_gym_by_id(
             "photos": gym_photos if gym_photos else []
         }
 
-        # Optionally, fetch and include gym photos here, still deciding
-
         return gym_info
 
     except Exception as e:
@@ -266,11 +267,11 @@ def update_gym_info(
 def add_guest_pass_options(
     gym_id: int,
     req: PassOptionCreateRequest,
-    user: dict = Depends(get_current_user),  # get the current user
+    # user: dict = Depends(get_current_user),  # get the current user
     db: tuple = Depends(get_db_connection)
 ):
-    if not is_user_admin(user):
-        raise HTTPException(status_code=403, detail="You don't have permission to access this resource.")
+    # if not is_user_admin(user):
+    #    raise HTTPException(status_code=403, detail="You don't have permission to access this resource.")
 
     
     connection, cursor = db
@@ -278,7 +279,7 @@ def add_guest_pass_options(
         # Construct the SQL query
         cursor.execute(
             """
-            INSERT INTO passoptions (gym_id, pass_name, price, duration, description)
+            INSERT INTO passoptions (gym_id, pass_name, price, duration_days, description)
             VALUES (%s, %s, %s, %s, %s)
             RETURNING id
             """,
@@ -312,7 +313,7 @@ def get_guest_pass_options(
     try:
         cursor.execute(
             """
-            SELECT id, gym_id, pass_name, price, duration, description
+            SELECT id, gym_id, pass_name, price, duration_days, description
             FROM passoptions
             WHERE gym_id = %s
             """,
@@ -442,9 +443,7 @@ def purchase_guest_pass(
     db: tuple = Depends(get_db_connection)
 ):
     connection, cursor = db
-    
     try:
-        
         user_id = int(user["sub"])
         # Insert the guest pass purchase into the database
         cursor.execute(
@@ -456,6 +455,43 @@ def purchase_guest_pass(
             (user_id, gym_id, pass_option_id)
         )
         purchase_id = cursor.fetchone()[0]
+
+        cursor.execute(
+            """
+            SELECT pass_name, duration_days
+            FROM passoptions
+            WHERE id = %s
+            """,
+            (pass_option_id,)
+        )
+        pass_info = cursor.fetchone()
+        
+        # Generate QR code
+        qr_code_data = (
+            f"pass_id:{purchase_id},user_id:{user_id},gym_id:{gym_id}, "
+            f"pass_name:{pass_info[0]}, duration:{pass_info[1]}, "
+            "scan_url:http://127.0.0.1:8000/process-qr-code"
+        )
+        qr_code = qrcode.make(qr_code_data, image_factory=PilImage)
+
+        # Create an in-memory buffer to store the QR code image
+        qr_code_buffer = io.BytesIO()
+        qr_code.save(qr_code_buffer, format='PNG')
+        qr_code_buffer.seek(0)  # Reset buffer position to the beginning
+
+        # Save QR code image to blob storage
+        qr_code_filename = f"pass_{purchase_id}_qr.png"
+        blob_url = upload_qr_code_to_blob_storage(qr_code_buffer, qr_code_filename)
+
+        cursor.execute(
+            """
+            UPDATE guestpasspurchases
+            SET qr_code = %s 
+            WHERE id = %s
+            """,
+            (blob_url, purchase_id,)
+        )
+        
         connection.commit()
         return {"message": "Guest pass purchased successfully", "purchase_id": purchase_id}
     except Exception as e:
@@ -646,3 +682,15 @@ async def get_user_guest_passes(
         cursor.close()
         connection.close()
     
+app.post("/process-qr-code")
+async def process_qr_code(pass_id: int, user_id: int, gym_id: int, duration: int):
+    # Figure out how to pull in data from QR code
+    try:          
+        # 1. Update the GuestPassPurchases table to mark the pass as active
+        # 2. Calculate the expiration time based on the current time and duration
+        # 3. Update the expiration_time column in the database
+        
+        return {"message": "Pass activated successfully"}
+    except Exception as e:
+        # Handle any errors that may occur during pass activation
+        raise HTTPException(status_code=500, detail="Failed to activate pass")
