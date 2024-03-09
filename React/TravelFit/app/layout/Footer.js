@@ -11,7 +11,7 @@ export default function Footer() {
         <Link href={'/home/map'}>Map</Link>
         <Link href={{
           pathname: '/home/gymPage/[id]',
-          params: { id: 1 }
+          params: { id: 6 }
           }}>Gym Page</Link>
     </View>
   )

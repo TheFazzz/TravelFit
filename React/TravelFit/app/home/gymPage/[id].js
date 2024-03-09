@@ -36,7 +36,7 @@ export default function Index(props) {
 
     useEffect(() => {
         if (props.value) gatherData(props.value)
-        else if (query.id) gatherData(query.id)
+        else if (query) gatherData(query.id)
         else setGymData({
             address1: '123 Test St',
             address2: 'Apt C',
