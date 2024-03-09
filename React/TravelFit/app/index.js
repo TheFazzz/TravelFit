@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { styles } from './styles';
 import { useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext';
@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/AuthContext';
 export default function index() {
     const { currentUser } = useAuth()
     
+
     return (
         <View style={styles.container}>
             <Text>This is the index page</Text>
