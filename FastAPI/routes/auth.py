@@ -95,7 +95,6 @@ async def logout():
 @router.post("/register")
 async def register(
     req: RegisterRequest,
-    profile_photo: UploadFile = File(None),  # Optional profile photo
     db: tuple = Depends(get_db_connection)
 ):
     connection, cursor = db

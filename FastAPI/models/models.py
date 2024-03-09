@@ -12,7 +12,7 @@ class RegisterRequest(BaseModel):
     last_name: str
     email: str
     password: str
-    profile_photo: Optional[str] = None
+    
 
 class ReturnIdResponse(BaseModel):
     id: int
