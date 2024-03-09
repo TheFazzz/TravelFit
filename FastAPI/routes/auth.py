@@ -185,6 +185,55 @@ async def upload_profile_photo(
         cursor.close()
         connection.close()
 
+@router.put("/users/{user_id}")
+async def update_user_info(
+    user_id: int,
+    user_info: UpdateUserInfo,
+    db: tuple = Depends(get_db_connection)
+):
+    connection, cursor = db
+    try:
+         # Check if the user exists
+        cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
+        user = cursor.fetchone()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        # Construct the UPDATE query based on provided fields
+        update_query = "UPDATE users SET"
+        update_values = []
+        if user_info.firstName:
+            update_query += " firstName = %s,"
+            update_values.append(user_info.firstName)
+        if user_info.lastName:
+            update_query += " lastName = %s,"
+            update_values.append(user_info.lastName)
+        if user_info.email:
+            update_query += " email = %s,"
+            update_values.append(user_info.email)
+        
+
+        # Remove trailing comma and space from the query
+        update_query = update_query.rstrip(",")
+
+        # Add the WHERE clause
+        update_query += " WHERE id = %s"
+        update_values.append(user_id)
+
+        # Execute the UPDATE query
+        cursor.execute(update_query, update_values)
+        connection.commit()
+
+        return {"message": "User information updated successfully"}
+
+    except Exception as e:
+        connection.rollback()
+        raise HTTPException(status_code=500, detail="Failed to update user information")
+
+    finally:
+        cursor.close()
+        connection.close()
+
 @router.get("/users/{user_id}")
 def get_user_info(
     user_id: int,

@@ -79,3 +79,8 @@ class UserLocation(BaseModel):
     latitude: float
     longitude: float
     radius_in_meters: float = 2000  # Default radius of 2000 meters or user specify
+
+class UpdateUserInfo(BaseModel):
+    firstName: Optional[str]
+    lastName: Optional[str]
+    email: Optional[str]
