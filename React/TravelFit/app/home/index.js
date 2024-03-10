@@ -3,7 +3,7 @@ import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { styles } from '../styles'
 import { useData } from '../../contexts/DatabaseContext';
-import {Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link} from 'native-base'
+import {Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack} from 'native-base'
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function index() {
@@ -86,13 +86,11 @@ export default function index() {
     {
         user = identity.user;
         return(
-        <Center>
-            <VStack>
             <Heading size="lg" mb={4} p={8}>
             {user}
             </Heading>
-            </VStack>
-        </Center>
+      
+      
         );
     }
 
@@ -100,11 +98,12 @@ export default function index() {
     return( 
        
        <Center >
-            
+            <HStack space={3}>
         <Heading style={{textAlign: 'center'}} size="lg" mb={4} p={6}> 
         Welcome! 
         </Heading>
-            
+          {UserName()}
+          </HStack>
         <Avatar bg={'green.100'} size={"lg"}> </Avatar>
             {premium()}
             {existingPasses()}
