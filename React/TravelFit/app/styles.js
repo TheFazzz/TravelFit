@@ -35,9 +35,10 @@ export const styles = StyleSheet.create({
         bottom: 0,
         display: 'flex',
         flexDirection: 'row',
-        gap: 20,
+        gap: 70,
         backgroundColor: 'lightgrey',
         width: '100%',
         height: '8%',
+        justifyContent: 'center',
     }
 });

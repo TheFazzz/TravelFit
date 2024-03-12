@@ -6,6 +6,9 @@ import { Button, extendTheme } from 'native-base'
 
 import { context } from '../_layout';
 
+import { Icon } from 'native-base';
+import { MaterialCommunityIcons} from '@expo/vector-icons'
+
 export default function Header() {
 
   const {searchFocus, setSearchFocus} = useContext(context)
@@ -13,7 +16,7 @@ export default function Header() {
   return (
     <View style={styles.header}>
         <Link href={'/'} style={header.container}>
-          Back to Index
+          <Icon as={MaterialCommunityIcons} name='arrow-u-left-bottom' style={{paddingTop: 10, color: '#AFE5E7'}} size='8' />
         </Link>
         <View style={styles.exit}>
         {searchFocus? <Button
