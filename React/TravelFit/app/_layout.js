@@ -6,14 +6,22 @@ import { Box, NativeBaseProvider } from 'native-base';
 import { styles } from './styles';
 import nativebasetheme from './nativebasetheme';
 import { DataProvider } from '../contexts/DatabaseContext';
-import { AuthProvider } from '../contexts/AuthContext';
+import { AuthProvider, useAuth } from '../contexts/AuthContext';
 
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 export const context = React.createContext()
 
 export default function HomeLayout() {
+
   const [searchFocus, setSearchFocus] = useState(false)
 
+  useEffect(() => {
+  checkLogin()
+  }, [])
+
+  async function checkLogin() {
+ 
+  }
 
   return (
     <NativeBaseProvider>

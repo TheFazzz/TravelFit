@@ -1,7 +1,5 @@
 import { Platform } from "react-native"
-
 let URL
-
 if (Platform.OS == 'ios') {
     URL = `http://127.0.0.1:8000`
 } else if (Platform.OS == 'android') {
@@ -81,7 +79,7 @@ export async function purchaseGymPassByIdandPassOptionId(gym_id, pass_option_id,
 
 export async function getGymPhotosbyId(id){
     try {
-        const response = await fetch(`${URL}/gyms/${gym_id}/photos`);
+        const response = await fetch(`${URL}/gyms/${id}/photos`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
