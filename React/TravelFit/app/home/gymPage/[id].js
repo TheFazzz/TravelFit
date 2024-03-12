@@ -67,27 +67,6 @@ export default function Index(props) {
                     title='back'
                     onPress={() => {props.setGymId(null)}}   
                 >
-<<<<<<< HEAD
-                </Button>
-                <View style={styles.tabButtons}>   
-                    <Button
-                        title="Gym Information"
-                        variant='link'
-                        style={styles.button}
-                        onPress={() => {router.replace('./../../purchase/purchaseScreen')}}
-                    ></Button>
-
-                    <Button
-                        title="Order Day Pass"
-                        variant='link'
-                        style={styles.button}
-                        onPress={() => {router.replace('./../../purchase/purchaseScreen')}}
-                    ></Button>
-                </View>  
-
-                <Text>
-                    this is the gym page
-=======
                 
                 
                     </Button>
@@ -115,7 +94,6 @@ export default function Index(props) {
             
                 {/*<Text>
                     this is the gym pagev
->>>>>>> 38fb2f196262b498720531458b38ba46013b97d3
                 </Text>
                 <Text>
                     City: {gymData.city}
@@ -128,10 +106,6 @@ export default function Index(props) {
                 </Text>
                 <Text>
                     Description: {gymData.description}
-<<<<<<< HEAD
-                </Text>
-
-=======
                     </Text>*/}
 
                 {showInfo && (
@@ -145,7 +119,6 @@ export default function Index(props) {
                 <Button
                     title="Order Day Pass"
                 ></Button>
->>>>>>> 38fb2f196262b498720531458b38ba46013b97d3
             </>}
             {loading && <LoadingScreen/>}
         </View>
@@ -159,20 +132,10 @@ let styles = StyleSheet.create({
         width: '110%',
         backgroundColor: 'aqua',
     },
-<<<<<<< HEAD
-    tabButtons: {
-        display: 'flex',
-        flexDirection: 'row',
-        width: '100%'
-    },
-    button: {
-        width: '50%'
-=======
     buttons: {
         marginTop: 30,
         flexDirection: 'row',
         justifyContent: 'center',
         marginBottom: 30
->>>>>>> 38fb2f196262b498720531458b38ba46013b97d3
     }
 })
