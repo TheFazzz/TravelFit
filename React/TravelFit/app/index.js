@@ -8,13 +8,14 @@ import { getData, storeData } from '../asyncStorage/asyncStorage';
 import LoadingScreen from './layout/LoadingScreen';
 
 
-export default function index() {
-    const { currentUser, login } = useAuth()
+export default function index(props) {
+    const { currentUser, login, loaded, setLoaded } = useAuth()
     const [loading, setLoading] = useState(true)
     const router = useRouter()
 
     useEffect(() => {
-        loadLogin()
+        if (!loaded) loadLogin()
+        else setLoading(false)
     }, [])
 
     async function loadLogin() {
@@ -35,6 +36,7 @@ export default function index() {
             storeData('login-data', null)
         } finally {
             setLoading(false)
+            setLoaded(true)
         }
     }
 

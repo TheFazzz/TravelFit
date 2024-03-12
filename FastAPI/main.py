@@ -636,7 +636,7 @@ async def get_nearby_gyms(
     finally:
         cursor.close()
         connection.close()
-    
+# Need to add QR code to this endpoint as well    
 @app.post("/guest-passes/user_id")
 async def get_user_guest_passes(
     user: dict = Depends(get_current_user),
@@ -652,12 +652,12 @@ async def get_user_guest_passes(
         cursor.execute(
             """
             SELECT 
-                gp.id AS guest_pass_id,
                 g.gym_name,
                 po.pass_name,
                 po.price,
                 po.duration,
                 po.description
+                gp.qr_code
             FROM 
                 GuestPassPurchases gp
             JOIN 
@@ -665,7 +665,8 @@ async def get_user_guest_passes(
             JOIN 
                 PassOptions po ON gp.pass_option_id = po.id
             WHERE 
-                gp.user_id = %s;
+                gp.user_id = %s AND
+                gp.is_valid = TRUE;
             """,
             (user_id,)
         )
@@ -681,16 +682,54 @@ async def get_user_guest_passes(
     finally:
         cursor.close()
         connection.close()
-    
-app.post("/process-qr-code")
-async def process_qr_code(pass_id: int, user_id: int, gym_id: int, duration: int):
-    # Figure out how to pull in data from QR code
-    try:          
-        # 1. Update the GuestPassPurchases table to mark the pass as active
-        # 2. Calculate the expiration time based on the current time and duration
-        # 3. Update the expiration_time column in the database
+
+# 1. Update the GuestPassPurchases table to mark the pass as active
+# 2. Calculate the expiration time based on the current time and duration
+# 3. Update the expiration_time column in the database    
+@app.post("/verify-pass")
+async def verify_pass(
+    scanned_data: ScannedQrCodeData,
+    db: tuple = Depends(get_db_connection),
+):
+    connection, cursor = db
+    try:
+        # 
+        cursor.execute(
+            """
+            SELECT expiration_date, is_valid FROM guestpasspurchases
+            WHERE id = %s
+               
+            """,
+            (scanned_data.pass_id,)
+        )
+        guest_pass = cursor.fetchone()
+
+        if guest_pass is None:
+            raise HTTPException(status_code=404, detail="Pass not found")
+
+        expiration_date = guest_pass[0]
+        is_valid = guest_pass[1]
+
+        if expiration_date is None:
         
-        return {"message": "Pass activated successfully"}
+            cursor.execute(
+                """
+                UPDATE guestpasspurchases
+                SET expiration_date = CURRENT_TIMESTAMP + INTERVAL '%s days'
+                WHERE id = %s
+                """,
+                (scanned_data.duration, scanned_data.pass_id)
+            )
+
+            connection.commit()
+
+        if is_valid:
+            return {"message": "Pass is valid"}
+        else:
+            raise HTTPException(status_code=400, detail="Pass is not valid")
+        
     except Exception as e:
-        # Handle any errors that may occur during pass activation
-        raise HTTPException(status_code=500, detail="Failed to activate pass")
+        connection.rollback()
+        raise HTTPException(status_code=500, detail="Failed to fetch guest pass from QR code")    
+
+    

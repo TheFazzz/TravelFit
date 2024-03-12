@@ -38,7 +38,7 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "~3.29.0",
     "react-native-select-dropdown": "^3.4.0",
-    "react-native-svg": "^9.13.6",
+    "react-native-svg": "14.1.0",
     "react-native-web": "~0.19.6"
   },
   "devDependencies": {

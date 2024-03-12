@@ -15,14 +15,6 @@ export default function HomeLayout() {
 
   const [searchFocus, setSearchFocus] = useState(false)
 
-  useEffect(() => {
-  checkLogin()
-  }, [])
-
-  async function checkLogin() {
- 
-  }
-
   return (
     <NativeBaseProvider>
       <AuthProvider>
@@ -31,7 +23,7 @@ export default function HomeLayout() {
             <View style={styles.container}>
               <Header />
               <View style={styles.body}>
-                <Slot />
+                <Slot/>
               </View>
               <Footer />
             </View>

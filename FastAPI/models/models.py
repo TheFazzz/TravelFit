@@ -84,3 +84,10 @@ class UpdateUserInfo(BaseModel):
     firstName: Optional[str]
     lastName: Optional[str]
     email: Optional[str]
+
+class ScannedQrCodeData(BaseModel):
+    pass_id: int
+    user_id: int
+    gym_id: int
+    pass_name: str
+    duration: int
