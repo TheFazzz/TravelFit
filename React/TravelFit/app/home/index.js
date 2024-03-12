@@ -3,7 +3,7 @@ import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { styles } from '../styles'
 import { useData } from '../../contexts/DatabaseContext';
-import { Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link } from 'native-base'
+import {Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack} from 'native-base'
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function index() {

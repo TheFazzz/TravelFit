@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 import psycopg2
 import os
 
@@ -52,8 +52,8 @@ async def get_user_by_email(email: str, db):
                 "email": user_data[3],
                 "password_hash": user_data[4],
             }
-        else:
-            return None
+        
+        raise HTTPException(status_code=401, detail="User not found")
 
     finally:
        if cursor:

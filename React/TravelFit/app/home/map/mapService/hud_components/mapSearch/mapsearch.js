@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'white',
         position: 'absolute',
-        opacity: '0.6',
+        opacity: 0.6,
     }
 
 })

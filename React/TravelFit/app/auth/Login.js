@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
 import { useRouter } from 'expo-router';
-// import * as Keychain from 'react-native-keychain'
-import { KeyboardAvoidingView } from 'native-base';
-import { ScrollView } from 'native-base';
+import { ScrollView, Checkbox, HStack } from 'native-base';
 import { useAuth } from '../../contexts/AuthContext';
+import { storeData } from '../../asyncStorage/asyncStorage';
 
 export default function index() {
 
@@ -13,60 +12,91 @@ export default function index() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [saveLogin, setSaveLogin] = useState(false)
 
   const [error, setError] = useState(null)
   const [message, setMessage] = useState(null)
+
+  useEffect(() => {
+    console.log(saveLogin)
+  }, [saveLogin])
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   }
 
-  const handleLogin = async ()=> {
-    try {
-      await login(email, password)
-      console.log('logged in')
-      router.replace('/home')
-    } catch (error) {
-      console.error(error)
-      // setError(error)
-    } 
+  const handleLogin = async () => {
+    if (email.length == 0) {
+      setError('Email Required')
+    } else if (password.length == 0) {
+      setError('Password Required')
+    } else if (!isValidEmail(email)) {
+      setError('Email must be in proper email format')
+    } else {
+      try {
+        await login(email, password)
+          if (saveLogin) {
+            await storeData('login-data', {email, password})
+          }
+        console.log('logged in')
+        router.replace('/home')
+      } catch (error) {
+        setError(error)
+      }
+    }
+  }
+
+  function isValidEmail(email) {
+    var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return regex.test(email)
   }
 
   return (
     <View style={styles.container}>
-        <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{flexGrow: 1}}>
-          <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
+      <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{ flexGrow: 1 }}>
+        <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
 
-          <TextInput 
-            placeholder='Email' 
-            id='email' 
-            style={styles.userinput} 
-            value={email} 
-            onChangeText={setEmail}
-            autoCapitalize='none'
-            >
-          </TextInput> 
+        <TextInput
+          placeholder='Email'
+          id='email'
+          style={styles.userinput}
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize='none'
+        >
+        </TextInput>
 
-          <TextInput 
-            secureTextEntry={true} 
-            placeholder='Password' 
-            id='password' 
-            style={styles.userinput} 
-            value={password} 
-            onChangeText={setPassword}
-            autoCapitalize='none'
-            >
-          </TextInput> 
+        <TextInput
+          secureTextEntry={true}
+          placeholder='Password'
+          id='password'
+          style={styles.userinput}
+          value={password}
+          onChangeText={setPassword}
+          autoCapitalize='none'
+        >
+        </TextInput>
 
-          <Button title='Login' onPress={handleLogin} style={styles.loginButton}></Button>
+      <HStack space={6}>
+        <Checkbox
+          shadow={2}
+          value={saveLogin}
+          onChange={(e) => setSaveLogin(e)}
+          accessibilityLabel="This is a dummy checkbox"
+        >
+          Remember Me?
+        </Checkbox>
+      </HStack>
 
-          {error && <View>
-              <Text>
-                {error}
-              </Text>
-            </View>}
+        <Button title='Login' value='test' onPress={handleLogin} style={styles.loginButton}></Button>
 
-        </ScrollView>
+        {error && <View>
+          <Text>
+            {error}
+          </Text>
+        </View>}
+
+      </ScrollView>
     </View>
   )
 }

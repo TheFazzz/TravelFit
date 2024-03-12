@@ -80,6 +80,10 @@ async def login_for_access_token(
             })
             return {"access_token": access_token, "token_type": "bearer"}
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    except HTTPException as e:
+        # Catch the specific HTTPException raised from get_user_by_email
+        # and return it directly to the client
+        raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
 

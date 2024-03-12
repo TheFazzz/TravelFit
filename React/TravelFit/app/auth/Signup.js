@@ -40,15 +40,22 @@ export default function index() {
     return true
   }
 
+  function isValidEmail(email) {
+    var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return regex.test(email)
+  }
+
   useEffect(() => {
     setError(null)
-  }, [firstName, lastName])
+  }, [firstName, lastName, email])
 
   const signUpHandle = async ()=> {
     if (!validString(firstName)) {
       setError('First Name Required')
     } else if (!validString(lastName)) {
       setError('Last Name Required')
+    } else if (!isValidEmail(email)) {
+      setError('Email must be Valid')
     } else if (!error) {
       register(firstName, lastName, email, password)
       .then(obj => {
