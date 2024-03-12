@@ -5,10 +5,13 @@ import { router, useLocalSearchParams } from 'expo-router';
 import locationData from '../map/location/locationData';
 import { useData } from '../../../contexts/DatabaseContext';
 import LoadingScreen from '../../layout/LoadingScreen';
+import { useRouter } from 'expo-router';
+
 
 export default function Index(props) {
     const query = useLocalSearchParams()
 
+    const router = useRouter()
     const {findGym} = useData()
     const [loading, setLoading] = useState(true)
     const [gymData, setGymData] = useState({
@@ -61,8 +64,23 @@ export default function Index(props) {
                     title='back'
                     onPress={() => {props.setGymId(null)}}
                 >
-
                 </Button>
+                <View style={styles.tabButtons}>   
+                    <Button
+                        title="Gym Information"
+                        variant='link'
+                        style={styles.button}
+                        onPress={() => {router.replace('./../../purchase/purchaseScreen')}}
+                    ></Button>
+
+                    <Button
+                        title="Order Day Pass"
+                        variant='link'
+                        style={styles.button}
+                        onPress={() => {router.replace('./../../purchase/purchaseScreen')}}
+                    ></Button>
+                </View>  
+
                 <Text>
                     this is the gym page
                 </Text>
@@ -79,10 +97,6 @@ export default function Index(props) {
                     Description: {gymData.description}
                 </Text>
 
-
-                <Button
-                    title="Order Day Pass"
-                ></Button>
             </>}
             {loading && <LoadingScreen/>}
         </View>
@@ -95,5 +109,13 @@ let styles = StyleSheet.create({
         height: '100%',
         width: '110%',
         backgroundColor: 'aqua',
+    },
+    tabButtons: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%'
+    },
+    button: {
+        width: '50%'
     }
 })
