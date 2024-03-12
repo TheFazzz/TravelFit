@@ -77,7 +77,7 @@ class MapDisplay extends Component {
             showsUserLocation={true}
             followsUserLocation={true}
           >
-            {this.props.allLocations && this.props.allLocations.map((marker, index) => (
+            {this.props.allLocations ? this.props.allLocations.map((marker, index) => (
               <Marker
                 key={marker.id}
                 coordinate={marker.coordinate}
@@ -92,7 +92,7 @@ class MapDisplay extends Component {
                   <Text>{marker.gym_name}</Text>
                 </Callout>
               </Marker>
-            ))}
+            )) : <></>}
           </MapView>
         </View>
         <MapHUD

@@ -32,6 +32,33 @@ export async function gatherAllGyms(city){
     }
 }
 
+export async function getNearbyGyms(latitude, longitude, radius_in_meters) {
+    return new Promise((resolve, reject) => {
+        const body = {
+            latitude: latitude,
+            longitude: longitude,
+            radius_in_meters: radius_in_meters
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body) 
+        }
+
+        const url = `${URL}/getNearbyGyms`
+
+        fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            if (data.detail != null) reject(data.detail)
+            else resolve(data)
+        })
+        .catch(error => reject(error))
+    })
+}
+
 export async function getGymPassOptionsbyId(id) {
     return new Promise((resolve, reject) => {
         const body = {

@@ -6,6 +6,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import { Slider, Box, Button } from 'native-base';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { useData } from '../../../contexts/DatabaseContext';
 
 export default function profile() {
     // var Select = require('react-select')
@@ -15,6 +16,9 @@ export default function profile() {
 
     const [onChangeValue, setOnChangeValue] = React.useState(10);
     const [onChangeEndValue, setOnChangeEndValue] = React.useState(10);
+    const {raidiusPreferenceMeters, setRadiusPreferenceMeters} = useData()
+
+    
 
     // const changeValue = (event, value) => {
     //     setValue(value);
@@ -39,15 +43,23 @@ export default function profile() {
             </View>
 
             <View style={{ flexDirection: 'row', margin: 20 }}>
-                <Text style={{ paddingTop: 10, paddingRight: 10 }} nativeID='slider'>Budget:</Text>
-                <Text style={{ paddingTop: 10 }}>${onChangeValue}</Text>
+                <Text style={{ paddingTop: 10, paddingRight: 10 }} nativeID='slider'>Radius Preference:</Text>
+                <Text style={{ paddingTop: 10 }}>{raidiusPreferenceMeters} Meters</Text>
             </View>
 
-            <Slider w="3/4" maxW="250" defaultValue={10} colorScheme="cyan" onChange={v => {
-                setOnChangeValue(Math.floor(v));
-            }} onChangeEnd={v => {
-                v && setOnChangeEndValue(Math.floor(v));
-            }}>
+            <Slider 
+                w="3/4" 
+                maxW="250" 
+                defaultValue={raidiusPreferenceMeters}
+                minValue={200}
+                maxValue={3000} 
+                colorScheme="cyan" 
+                onChange={v => {
+                    setRadiusPreferenceMeters(Math.floor(v));
+                }} 
+                onChangeEnd={v => {
+                v && setRadiusPreferenceMeters(Math.floor(v));
+                }}>
                 <Slider.Track>
                     <Slider.FilledTrack />
                 </Slider.Track>

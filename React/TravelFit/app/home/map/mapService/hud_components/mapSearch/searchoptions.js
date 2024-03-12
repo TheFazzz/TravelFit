@@ -13,7 +13,7 @@ export default function SearchOptions({searchInput, handleSearchPress, allLocati
             item.gym_name.toLowerCase().includes(searchInput.toLowerCase())
         );
         setFilteredItems(updatedFilteredItems);
-    }, [searchInput])
+    }, [searchInput, allLocations])
 
     return (<>{searchFocus?  
         <View style={styles.container}>

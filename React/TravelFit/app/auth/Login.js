@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ScrollView, Checkbox, HStack } from 'native-base';
+import { ScrollView, Checkbox, HStack, Spinner } from 'native-base';
 import { useAuth } from '../../contexts/AuthContext';
 import { storeData } from '../../asyncStorage/asyncStorage';
 
@@ -17,6 +17,8 @@ export default function index() {
   const [error, setError] = useState(null)
   const [message, setMessage] = useState(null)
 
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
     console.log(saveLogin)
   }, [saveLogin])
@@ -24,6 +26,8 @@ export default function index() {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   }
+
+  useEffect(() => {setError(null)}, [email, password])
 
   const handleLogin = async () => {
     if (email.length == 0) {
@@ -34,6 +38,7 @@ export default function index() {
       setError('Email must be in proper email format')
     } else {
       try {
+        setLoading(true)
         await login(email, password)
           if (saveLogin) {
             await storeData('login-data', {email, password})
@@ -42,6 +47,8 @@ export default function index() {
         router.replace('/home')
       } catch (error) {
         setError(error)
+      } finally {
+        setLoading(false)
       }
     }
   }
@@ -88,7 +95,16 @@ export default function index() {
         </Checkbox>
       </HStack>
 
-        <Button title='Login' value='test' onPress={handleLogin} style={styles.loginButton}></Button>
+        {loading?
+          <Spinner size="lg" position={'absolute'} mt={470} ml={180}/>
+        :
+          <Button 
+            title='Login' 
+            value='test' 
+            onPress={handleLogin} 
+            style={styles.loginButton}>
+          </Button>
+        }
 
         {error && <View>
           <Text>

@@ -28,7 +28,7 @@ export default function Index(props) {
         zipcode: ''
     })
 
-    const [showInfo, setShowInfo] = useState(false)
+    const [showInfo, setShowInfo] = useState(true)
     const [showPassOptions, setShowPassOptions] = useState(false)  
 
     async function gatherData(id){
@@ -119,7 +119,8 @@ export default function Index(props) {
                 <Button
                     title="Order Day Pass"
                 ></Button>
-            </>}
+                </>}
+
             {loading && <LoadingScreen/>}
         </View>
     )

@@ -1,22 +1,31 @@
 import { Box, Input } from "native-base";
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { View, Text, StyleSheet, Keyboard } from 'react-native'
+import { View, Text, StyleSheet, Keyboard, Button } from 'react-native'
 import { context } from '../../../../../_layout'
 import SearchOptions from "./searchoptions";
+import { useData } from "../../../../../../contexts/DatabaseContext";
+import CityOptions from "./CityOptions";
 
 
 export default function MapSearch(props) {
-    const {searchFocus, setSearchFocus} = useContext(context)
+    const { searchFocus, setSearchFocus } = useContext(context)
     const [searchInput, setSearchInput] = useState('')
+    const [searchTypeChosen, setSearchTypeChosen] = useState(false)
+    const [cityOptionChosen, setCityOptionChosen] = useState(false)
+    const [option, setOption] = useState('')
+    const { setSearchPreference } = useData()
     const inputRef = useRef(null)
 
     useEffect(() => {
         if (inputRef.current) {
             if (searchFocus == false) {
                 Keyboard.dismiss()
+                setSearchTypeChosen(false)
+                setCityOptionChosen(false)
+                setSearchTypeChosen(false)
             }
         }
-    },[searchFocus])
+    }, [searchFocus])
 
     function handleFocus(e) {
         setSearchFocus(true)
@@ -28,10 +37,39 @@ export default function MapSearch(props) {
     function handleChange(e) {
         setSearchInput(e)
     }
-
+    
     function handleSearchPress(e) {
         props.animateToRegion(e.coordinate, e.id)
         props.setSearchedLocation(e)
+    }
+
+    function handleCityPress() {
+        console.log('hi')
+        setCityOptionChosen(false)
+        setSearchPreference('ByCity')
+        setSearchTypeChosen(true)
+    }
+    
+    function Buttons() {
+        return (
+            <View style={styles.buttons}>
+                <Button
+                    title="Search By Current Location"
+                    onPress={() => {
+                        setSearchTypeChosen(true)
+                        setSearchPreference('ByLocation')
+                    }}
+                >
+                </Button>
+                <Button
+                    title="Search By City"
+                    onPress={() => {
+                        setCityOptionChosen(true)
+                    }}
+                >
+                </Button>
+            </View>
+        )
     }
 
     return (
@@ -49,17 +87,24 @@ export default function MapSearch(props) {
                 ref={inputRef}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                onChangeText={handleChange} 
+                onChangeText={handleChange}
             />
-            {searchFocus? 
-            <>
-            <View style={styles.view}/>
-            <SearchOptions searchInput={searchInput} handleSearchPress={handleSearchPress} allLocations={props.allLocations}/>
-            </> 
-            : <></>} 
+            {searchFocus ?
+                <>
+                    <View style={styles.view} />
+                    {searchTypeChosen?
+                        <SearchOptions searchInput={searchInput} handleSearchPress={handleSearchPress} allLocations={props.allLocations} />
+                        :
+                        <Buttons/>
+                    }
+                    {cityOptionChosen && <CityOptions handleCityPress={handleCityPress}/>}
+                </>
+                : <></>}
         </>
     )
 }
+
+
 
 
 //once the user has the search bar selected, i want the whole screen to be filled
@@ -79,6 +124,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         position: 'absolute',
         opacity: 0.6,
+    },
+    buttons: {
+        position: 'absolute',
+        backgroundColor: 'blue',
+        marginTop: 50,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginLeft: 30
     }
-
 })

@@ -20,16 +20,14 @@ export default function Header() {
           {/* <IconButton href={'/'} icon={<Icon as={MaterialCommunityIcons} name='arrow-u-left-bottom' style={header.back} size='8' />} /> */}
         </Link>
 
-        <IconButton
+        {searchFocus? <IconButton
           icon={<Icon as={MaterialCommunityIcons} name='window-close' style={header.exit} size='8' />}
-          // onPress={() => {setSearchFocus(false)}}
+          onPress={() => {setSearchFocus(false)}}
           size='sm'
           color='red.100'
           style={header.exit}
-          onPress={() => {console.log('exit')}}
-
         >
-        </IconButton>
+        </IconButton> : <></>}
     </View>
   )
 }
