@@ -45,15 +45,17 @@ export default function index(props) {
             {loading ?
                 <LoadingScreen /> :
                 <View style={styles.container}>
-                    <Text>This is the index page</Text>
                     <StatusBar style="auto" />
-                    <Link href='/home'>Home</Link>
                     {currentUser ?
                         <>
                             <Link href='/auth/Logout'>Log Out</Link>
                         </>
                         :
-                        <Link href='/auth'>Authentication</Link>
+                        <>
+                            <Link href='/auth/Login'>Login</Link>
+                            <Link href='/auth/Signup'>Sign Up</Link>
+                            <Link href='/auth/ForgotPassword'>Forgot Password?</Link>
+                        </>
                     }
                 </View>
             }

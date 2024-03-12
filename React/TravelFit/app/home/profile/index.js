@@ -3,13 +3,14 @@ import React from 'react'
 import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
 // import { styles } from '../../styles';
 import SelectDropdown from 'react-native-select-dropdown';
-import { Slider } from 'native-base';
+import { Slider, Box, Button } from 'native-base';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
 
 export default function profile() {
     // var Select = require('react-select')
     const gender = ['Male', 'Female']
-
+    const router = useRouter()
     const [value, setValue] = React.useState(10);
 
     const [onChangeValue, setOnChangeValue] = React.useState(10);
@@ -39,7 +40,7 @@ export default function profile() {
 
             <View style={{ flexDirection: 'row', margin: 20 }}>
                 <Text style={{ paddingTop: 10, paddingRight: 10 }} nativeID='slider'>Budget:</Text>
-                <Text style={{paddingTop: 10}}>${onChangeValue}</Text>
+                <Text style={{ paddingTop: 10 }}>${onChangeValue}</Text>
             </View>
 
             <Slider w="3/4" maxW="250" defaultValue={10} colorScheme="cyan" onChange={v => {
@@ -52,6 +53,23 @@ export default function profile() {
                 </Slider.Track>
                 <Slider.Thumb />
             </Slider>
+
+            <Box bg={{
+                linearGradient: {
+                    colors: [`lightblue.300`, `violet.800`],
+                    start: [0, 0],
+                    end: [1, 0]
+                }
+            }} p={10} rounded="xl" _text={{
+                fontSize: `xl`,
+                fontWeight: `medium`,
+                color: `red`,
+                textAlign: `center`,
+                lineHeight: `60px`
+            }}>
+
+                <Button onPress={() => router.replace('/auth/Logout')}>Log Out</Button>
+            </Box>
 
             {/* <Slider w="3/4" maxW="250" defaultValue={10} minValue={0} maxValue={100} accessibilityLabelledBy="slider" step={5} value={this.value} onChange={changeValue} valueLabelDisplays="auto">
                     <Slider.Track>
