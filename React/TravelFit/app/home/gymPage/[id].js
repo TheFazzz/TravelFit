@@ -24,7 +24,10 @@ export default function Index(props) {
         state: '',
         zipcode: ''
     })
-        
+
+    const [showInfo, setShowInfo] = useState(false)
+    const [showPassOptions, setShowPassOptions] = useState(false)  
+
     async function gatherData(id){
         setLoading(true)
         try {
@@ -59,12 +62,35 @@ export default function Index(props) {
             {!loading && <>
                 <Button 
                     title='back'
-                    onPress={() => {props.setGymId(null)}}
+                    onPress={() => {props.setGymId(null)}}   
                 >
+                
+                
+                    </Button>
 
-                </Button>
-                <Text>
-                    this is the gym page
+                <View style={styles.buttons}><Button
+                        title="Info"
+                        onPress={() => {
+                            setShowInfo(true)
+                            setShowPassOptions(false)
+                        }}
+                    >
+                    </Button>
+                    
+                    <Button
+                        title="Pass Options"
+                        onPress={() => {
+                            setShowInfo(false)
+                            setShowPassOptions(true)
+                        }}
+                    >
+                    </Button></View>
+                    
+                
+                
+            
+                {/*<Text>
+                    this is the gym pagev
                 </Text>
                 <Text>
                     City: {gymData.city}
@@ -77,9 +103,16 @@ export default function Index(props) {
                 </Text>
                 <Text>
                     Description: {gymData.description}
-                </Text>
+                    </Text>*/}
 
-
+                {showInfo && (
+                        <View style={styles.infoContainer}>
+                            <Text>City: {gymData.city}</Text>
+                            <Text>State: {gymData.state}</Text>
+                            <Text>Gym Name: {gymData.gym_name}</Text>
+                            <Text>Description: {gymData.description}</Text>
+                        </View>
+                    )}
                 <Button
                     title="Order Day Pass"
                 ></Button>
@@ -95,5 +128,11 @@ let styles = StyleSheet.create({
         height: '100%',
         width: '110%',
         backgroundColor: 'aqua',
+    },
+    buttons: {
+        marginTop: 30,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 30
     }
 })
