@@ -8,7 +8,8 @@ CREATE TABLE Users (
   firstName TEXT NOT NULL,
   lastName TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL
+  password_hash TEXT NOT NULL,
+  profile_photo TEXT
 );
 
 CREATE TABLE Gyms (
@@ -35,13 +36,12 @@ CREATE TABLE GymPhotos (
   photo_url TEXT NOT NULL
 );
 
-
 CREATE TABLE PassOptions (
   id SERIAL PRIMARY KEY,
   gym_id INTEGER REFERENCES Gyms(id) ON DELETE CASCADE,
   pass_name TEXT NOT NULL,
   price NUMERIC NOT NULL,
-  duration TEXT NOT NULL,
+  duration_days INTEGER NOT NULL,
   description TEXT
 );
 
@@ -50,7 +50,10 @@ CREATE TABLE GuestPassPurchases (
   user_id INTEGER REFERENCES Users(id) ON DELETE CASCADE,
   gym_id INTEGER REFERENCES Gyms(id) ON DELETE CASCADE,
   pass_option_id INTEGER REFERENCES PassOptions(id) ON DELETE CASCADE,
-  purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  expiration_date TIMESTAMP, -- set once pass is used
+  is_valid BOOLEAN DEFAULT TRUE, -- boolean for pass validity
+  qr_code TEXT
 );
 
 CREATE TABLE Payments (

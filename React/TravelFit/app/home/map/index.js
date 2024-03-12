@@ -1,12 +1,16 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import Map from './mapService/map';
-import LocationList from './location/locationList';
-import PullUpMenu from '../../components/pullUpMenu';
-import { styles } from '../../styles';
+
+import Index from '../gymPage/[id]'
 
 export default function map() {
+    const [gymId, setGymId] = useState(null)
+    
     return (
-        <Map />
+        <>
+            <Map setGymId={setGymId}/>
+            {gymId && <Index value={gymId} setGymId={setGymId}/>}
+        </>
     )
 }

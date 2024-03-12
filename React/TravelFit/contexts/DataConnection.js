@@ -1,6 +1,16 @@
+import { Platform } from "react-native"
+
+let URL
+
+if (Platform.OS == 'ios') {
+    URL = `http://127.0.0.1:8000`
+} else if (Platform.OS == 'android') {
+    URL = `http://10.0.2.2:8000`
+}
+
 export async function findGymWithId(id) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/gyms/${id}`);
+        const response = await fetch(`${URL}/gyms/${id}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -13,7 +23,7 @@ export async function findGymWithId(id) {
 
 export async function gatherAllGyms(city){
     try {
-        const response = await fetch(`http://127.0.0.1:8000/gyms/city/${city}`);
+        const response = await fetch(`${URL}/gyms/city/${city}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -32,7 +42,7 @@ export async function getGymPassOptionsbyId(id) {
         const requestOptions = {
             method: 'POST'
         }
-        const url = `http://127.0.0.1:8000/gyms/${id}/guest-pass-options`
+        const url = `${URL}/gyms/${id}/guest-pass-options`
 
         fetch(url, requestOptions)
         .then(response => response.json())
@@ -56,7 +66,7 @@ export async function purchaseGymPassByIdandPassOptionId(gym_id, pass_option_id,
                 'Authorization': `Bearer ${accessToken}`
             }
         }
-        const url = `http://127.0.0.1:8000/gyms/${gym_id}/guest-passes/purchase?pass_option_id=${pass_option_id}`
+        const url = `${URL}/gyms/${gym_id}/guest-passes/purchase?pass_option_id=${pass_option_id}`
 
         fetch(url, requestOptions)
         .then(response => response.json())
@@ -71,7 +81,7 @@ export async function purchaseGymPassByIdandPassOptionId(gym_id, pass_option_id,
 
 export async function getGymPhotosbyId(id){
     try {
-        const response = await fetch(`http://127.0.0.1:8000/gyms/${gym_id}/photos`);
+        const response = await fetch(`${URL}/gyms/${gym_id}/photos`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

@@ -26,8 +26,11 @@ export default function SearchOptions({searchInput, handleSearchPress, allLocati
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
+        gap: '10',
         position: 'absolute',
-        backgroundColor: 'red',
-        opacity: 1
+        backgroundColor: 'orange',
+        marginTop: 55,
+        marginLeft: 20,
     }
 })

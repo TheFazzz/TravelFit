@@ -5,6 +5,7 @@ import { Link, useRouter } from 'expo-router';
 import { KeyboardAvoidingView } from 'native-base';
 import { ScrollView } from 'native-base';
 import { useAuth } from '../../contexts/AuthContext';
+import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate';
 
 export default function index() {
 
@@ -34,9 +35,21 @@ export default function index() {
     }
   }, [password, confirmPassword])
 
+  function validString(string) {
+    if (string.length == 0) return false
+    return true
+  }
+
+  useEffect(() => {
+    setError(null)
+  }, [firstName, lastName])
 
   const signUpHandle = async ()=> {
-    if (!error) {
+    if (!validString(firstName)) {
+      setError('First Name Required')
+    } else if (!validString(lastName)) {
+      setError('Last Name Required')
+    } else if (!error) {
       register(firstName, lastName, email, password)
       .then(obj => {
         setError(null)
@@ -44,7 +57,7 @@ export default function index() {
         setTimeout(setMessage, 10000, null)
       })
       .catch(error => {
-        setError(error)
+        console.log(error)
       })
     } else {
       shakeError()
@@ -60,6 +73,32 @@ export default function index() {
         <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{flexGrow: 1}}>
           <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
           
+          <View style={{flexDirection: 'row'}}>
+            <Text>First Name: </Text>
+            <TextInput 
+              placeholder='John' 
+              id='first_name' 
+              style={styles.userinput} 
+              value={firstName}
+              onChangeText={setFirstName}
+              autoCapitalize='none'
+              >
+            </TextInput> 
+          </View>
+
+          <View style={{flexDirection: 'row'}}>
+            <Text>Last Name: </Text>
+            <TextInput 
+              placeholder='Doe' 
+              id='last_name' 
+              style={styles.userinput} 
+              value={lastName}
+              onChangeText={setLastName}
+              autoCapitalize='none'
+              >
+            </TextInput> 
+          </View>
+
           <View style={{flexDirection: 'row'}}>
             <Text>Email: </Text>
             <TextInput 

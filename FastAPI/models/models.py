@@ -12,6 +12,7 @@ class RegisterRequest(BaseModel):
     last_name: str
     email: str
     password: str
+    
 
 class ReturnIdResponse(BaseModel):
     id: int
@@ -48,7 +49,7 @@ class GymUpdateRequest(BaseModel):
 class PassOptionCreateRequest(BaseModel):
     pass_name: str
     price: Decimal = Field(default=0, max_digits=5, decimal_places=2)
-    duration: str
+    duration: int
     description: Optional[str] = None 
 
     @validator('price')
@@ -62,11 +63,8 @@ class PassOptionResponse(BaseModel):
     gym_id: int
     pass_name: str
     price: Decimal
-    duration: str
+    duration: int
     description: str  
-        
-    class Config:
-        orm_mode = True
 
 class Coordinate(BaseModel):
     latitude: float
@@ -81,3 +79,8 @@ class UserLocation(BaseModel):
     latitude: float
     longitude: float
     radius_in_meters: float = 2000  # Default radius of 2000 meters or user specify
+
+class UpdateUserInfo(BaseModel):
+    firstName: Optional[str]
+    lastName: Optional[str]
+    email: Optional[str]

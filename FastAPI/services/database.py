@@ -122,3 +122,4 @@ def is_user_admin(user_id: int, db) -> bool:
             cursor.close()
         if connection:
             connection.close()
+

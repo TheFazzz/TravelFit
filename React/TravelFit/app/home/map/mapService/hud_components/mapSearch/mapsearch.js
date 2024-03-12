@@ -31,6 +31,7 @@ export default function MapSearch(props) {
 
     function handleSearchPress(e) {
         props.animateToRegion(e.coordinate, e.id)
+        props.setSearchedLocation(e)
     }
 
     return (
@@ -50,9 +51,12 @@ export default function MapSearch(props) {
                 onBlur={handleBlur}
                 onChangeText={handleChange} 
             />
-            <View>
-                <SearchOptions searchInput={searchInput} handleSearchPress={handleSearchPress} allLocations={props.allLocations}/>
-            </View> 
+            {searchFocus? 
+            <>
+            <View style={styles.view}/>
+            <SearchOptions searchInput={searchInput} handleSearchPress={handleSearchPress} allLocations={props.allLocations}/>
+            </> 
+            : <></>} 
         </>
     )
 }
@@ -67,7 +71,14 @@ const padding = '1%'
 const styles = StyleSheet.create({
     search: {
         //everything you want to display on the map needs to have position: absolute
-        display: 'absoulte',
+        position: 'absoulte',
+    },
+    view: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'white',
+        position: 'absolute',
+        opacity: '0.6',
     }
 
 })

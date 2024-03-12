@@ -1,4 +1,12 @@
+import { Platform } from "react-native"
 
+let URL
+
+if (Platform.OS == 'ios') {
+    URL = `http://127.0.0.1:8000`
+} else if (Platform.OS == 'android') {
+    URL = `http://10.0.2.2:8000`
+}
 
 export async function loginWithEmailAndPassword(email, password) {
     return new Promise((resolve, reject) => {
@@ -6,7 +14,7 @@ export async function loginWithEmailAndPassword(email, password) {
             email: email,
             password: password
         }
-        fetch('http://127.0.0.1:8000/auth/login', {
+        fetch(`${URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +45,7 @@ export async function registerNewUser(first_name, last_name, email, password){
             password: password
         }
     
-        fetch('http://127.0.0.1:8000/auth/register', {
+        fetch(`${URL}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +67,7 @@ export async function registerNewUser(first_name, last_name, email, password){
     }
 
 export async function getAllUsers(){
-    fetch('http://127.0.0.1:8000/auth/users', {method: 'POST'})
+    fetch(`${URL}/auth/users`, {method: 'POST'})
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error(error))
