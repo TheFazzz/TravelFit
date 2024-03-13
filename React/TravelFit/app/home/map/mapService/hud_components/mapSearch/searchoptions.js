@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         gap: 10,
         position: 'absolute',
-        backgroundColor: 'orange',
         marginTop: 55,
         marginLeft: 20,
     }

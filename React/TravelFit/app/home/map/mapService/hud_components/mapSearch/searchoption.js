@@ -1,6 +1,7 @@
 import React, {useContext} from "react";
 import { Text } from "react-native";
 import { context } from "../../../../../_layout";
+import { Button } from 'native-base'
 
 export default function SearchOption({data, handleSearchPress}) {
     console.log(data)
@@ -13,7 +14,16 @@ export default function SearchOption({data, handleSearchPress}) {
         setSearchFocus(false)
     }
 
+    const format = `${gym_name}`
+
     return (
-        <Text onPress={handlePress}>{gym_name}</Text>
+        <Button 
+            onPress={handlePress}
+            width={300}
+            height={10}
+            paddingLeft={-40}
+        >
+            {format}
+        </Button>
     )
 }

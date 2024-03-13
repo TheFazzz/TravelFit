@@ -1,6 +1,6 @@
-import { Box, Input } from "native-base";
+import { Box, Input, Button } from "native-base";
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { View, Text, StyleSheet, Keyboard, Button } from 'react-native'
+import { View, Text, StyleSheet, Keyboard } from 'react-native'
 import { context } from '../../../../../_layout'
 import SearchOptions from "./searchoptions";
 import { useData } from "../../../../../../contexts/DatabaseContext";
@@ -14,6 +14,7 @@ export default function MapSearch(props) {
     const [cityOptionChosen, setCityOptionChosen] = useState(false)
     const [option, setOption] = useState('')
     const { setSearchPreference } = useData()
+    const [cityColor, setCityColor] = useState(null)
     const inputRef = useRef(null)
 
     useEffect(() => {
@@ -37,7 +38,7 @@ export default function MapSearch(props) {
     function handleChange(e) {
         setSearchInput(e)
     }
-    
+
     function handleSearchPress(e) {
         props.animateToRegion(e.coordinate, e.id)
         props.setSearchedLocation(e)
@@ -49,24 +50,33 @@ export default function MapSearch(props) {
         setSearchPreference('ByCity')
         setSearchTypeChosen(true)
     }
-    
+
+    //changes the color of the 'Search By City' Button when clicked
+    useEffect(() => {
+        if (cityOptionChosen) setCityColor('red')
+        else setCityColor(null)
+    }, [cityOptionChosen])
+
     function Buttons() {
         return (
             <View style={styles.buttons}>
                 <Button
-                    title="Search By Current Location"
                     onPress={() => {
                         setSearchTypeChosen(true)
                         setSearchPreference('ByLocation')
+                        setCityOptionChosen(false)
                     }}
                 >
+                    Search By Current Location
                 </Button>
                 <Button
-                    title="Search By City"
+                    color='info.800'
+                    isDisabled={cityOptionChosen}
                     onPress={() => {
                         setCityOptionChosen(true)
                     }}
                 >
+                    Search By City
                 </Button>
             </View>
         )
@@ -80,7 +90,8 @@ export default function MapSearch(props) {
                 rounded='lg'
                 ml='3'
                 mt='3'
-                mr='6'
+                mr={10}
+                pr={3}
                 placeholder="Search"
                 variant='rounded'
                 w="100%"
@@ -92,12 +103,12 @@ export default function MapSearch(props) {
             {searchFocus ?
                 <>
                     <View style={styles.view} />
-                    {searchTypeChosen?
+                    {searchTypeChosen ?
                         <SearchOptions searchInput={searchInput} handleSearchPress={handleSearchPress} allLocations={props.allLocations} />
                         :
-                        <Buttons/>
+                        <Buttons />
                     }
-                    {cityOptionChosen && <CityOptions handleCityPress={handleCityPress}/>}
+                    {cityOptionChosen && <CityOptions handleCityPress={handleCityPress} />}
                 </>
                 : <></>}
         </>
@@ -126,9 +137,10 @@ const styles = StyleSheet.create({
         opacity: 0.6,
     },
     buttons: {
+        display: 'flex',
+        gap: 25,
         position: 'absolute',
-        backgroundColor: 'blue',
-        marginTop: 50,
+        marginTop: 60,
         flexDirection: 'row',
         justifyContent: 'center',
         marginLeft: 30
