@@ -1,22 +1,32 @@
-import { Box, Input } from "native-base";
+import { Box, Input, Button } from "native-base";
 import React, { useContext, useState, useRef, useEffect } from "react";
 import { View, Text, StyleSheet, Keyboard } from 'react-native'
 import { context } from '../../../../../_layout'
 import SearchOptions from "./searchoptions";
+import { useData } from "../../../../../../contexts/DatabaseContext";
+import CityOptions from "./CityOptions";
 
 
 export default function MapSearch(props) {
-    const {searchFocus, setSearchFocus} = useContext(context)
+    const { searchFocus, setSearchFocus } = useContext(context)
     const [searchInput, setSearchInput] = useState('')
+    const [searchTypeChosen, setSearchTypeChosen] = useState(false)
+    const [cityOptionChosen, setCityOptionChosen] = useState(false)
+    const [option, setOption] = useState('')
+    const { setSearchPreference } = useData()
+    const [cityColor, setCityColor] = useState(null)
     const inputRef = useRef(null)
 
     useEffect(() => {
         if (inputRef.current) {
             if (searchFocus == false) {
                 Keyboard.dismiss()
+                setSearchTypeChosen(false)
+                setCityOptionChosen(false)
+                setSearchTypeChosen(false)
             }
         }
-    },[searchFocus])
+    }, [searchFocus])
 
     function handleFocus(e) {
         setSearchFocus(true)
@@ -34,6 +44,44 @@ export default function MapSearch(props) {
         props.setSearchedLocation(e)
     }
 
+    function handleCityPress() {
+        console.log('hi')
+        setCityOptionChosen(false)
+        setSearchPreference('ByCity')
+        setSearchTypeChosen(true)
+    }
+
+    //changes the color of the 'Search By City' Button when clicked
+    useEffect(() => {
+        if (cityOptionChosen) setCityColor('red')
+        else setCityColor(null)
+    }, [cityOptionChosen])
+
+    function Buttons() {
+        return (
+            <View style={styles.buttons}>
+                <Button
+                    onPress={() => {
+                        setSearchTypeChosen(true)
+                        setSearchPreference('ByLocation')
+                        setCityOptionChosen(false)
+                    }}
+                >
+                    Search By Current Location
+                </Button>
+                <Button
+                    color='info.800'
+                    isDisabled={cityOptionChosen}
+                    onPress={() => {
+                        setCityOptionChosen(true)
+                    }}
+                >
+                    Search By City
+                </Button>
+            </View>
+        )
+    }
+
     return (
         <>
             <Input
@@ -42,24 +90,32 @@ export default function MapSearch(props) {
                 rounded='lg'
                 ml='3'
                 mt='3'
-                mr='6'
+                mr={10}
+                pr={3}
                 placeholder="Search"
                 variant='rounded'
                 w="100%"
                 ref={inputRef}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                onChangeText={handleChange} 
+                onChangeText={handleChange}
             />
-            {searchFocus? 
-            <>
-            <View style={styles.view}/>
-            <SearchOptions searchInput={searchInput} handleSearchPress={handleSearchPress} allLocations={props.allLocations}/>
-            </> 
-            : <></>} 
+            {searchFocus ?
+                <>
+                    <View style={styles.view} />
+                    {searchTypeChosen ?
+                        <SearchOptions searchInput={searchInput} handleSearchPress={handleSearchPress} allLocations={props.allLocations} />
+                        :
+                        <Buttons />
+                    }
+                    {cityOptionChosen && <CityOptions handleCityPress={handleCityPress} />}
+                </>
+                : <></>}
         </>
     )
 }
+
+
 
 
 //once the user has the search bar selected, i want the whole screen to be filled
@@ -78,7 +134,15 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'white',
         position: 'absolute',
-        opacity: '0.6',
+        opacity: 0.6,
+    },
+    buttons: {
+        display: 'flex',
+        gap: 25,
+        position: 'absolute',
+        marginTop: 60,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginLeft: 30
     }
-
 })

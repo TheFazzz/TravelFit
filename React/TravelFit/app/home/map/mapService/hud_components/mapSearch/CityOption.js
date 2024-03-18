@@ -1,27 +1,22 @@
 import React, {useContext} from "react";
 import { Text } from "react-native";
 import { context } from "../../../../../_layout";
-import { Button } from 'native-base'
+import { Button } from "native-base";
 
-export default function SearchOption({data, handleSearchPress}) {
-    console.log(data)
-
-    const {gym_name, id} = data
-    const {setSearchFocus} = useContext(context)
+export default function CityOption({data, handleSearchPress}) {
+    const {city, state} = data
 
     function handlePress(e) {
-        handleSearchPress(data)
-        setSearchFocus(false)
+        handleSearchPress(city)
     }
-
-    const format = `${gym_name}`
-
+    
+    const format = `${city}, ${state}`
     return (
         <Button 
             onPress={handlePress}
             width={300}
             height={10}
-            paddingLeft={-40}
+            color='orange.100'
         >
             {format}
         </Button>

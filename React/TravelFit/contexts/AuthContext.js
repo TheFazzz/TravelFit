@@ -18,6 +18,7 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [bearerToken, setBearerToken] = useState(null)
+    const [loaded, setLoaded] = useState(false)
 
     async function login(email, password){
       return new Promise((resolve, reject) => {
@@ -55,7 +56,9 @@ export function AuthProvider({ children }) {
       login,
       logout,
       register,
-      allUsers
+      allUsers,
+      loaded,
+      setLoaded
     }
 
     return (

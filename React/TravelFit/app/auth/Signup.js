@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 // import * as Keychain from 'react-native-keychain'
 import { KeyboardAvoidingView } from 'native-base';
-import { ScrollView } from 'native-base';
+import { ScrollView, Spinner } from 'native-base';
 import { useAuth } from '../../contexts/AuthContext';
 import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate';
 
@@ -20,6 +20,9 @@ export default function index() {
 
   const [error, setError] = useState(null)
   const [message, setMessage] = useState(null)
+
+  const [loading, setLoading] = useState(false)
+
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -40,24 +43,34 @@ export default function index() {
     return true
   }
 
+  function isValidEmail(email) {
+    var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return regex.test(email)
+  }
+
   useEffect(() => {
     setError(null)
-  }, [firstName, lastName])
+  }, [firstName, lastName, email])
 
   const signUpHandle = async ()=> {
     if (!validString(firstName)) {
       setError('First Name Required')
     } else if (!validString(lastName)) {
       setError('Last Name Required')
+    } else if (!isValidEmail(email)) {
+      setError('Email must be Valid')
     } else if (!error) {
+      setLoading(true)
       register(firstName, lastName, email, password)
       .then(obj => {
         setError(null)
         setMessage('You are now Registered')
         setTimeout(setMessage, 10000, null)
+        setLoading(false)
       })
       .catch(error => {
-        console.log(error)
+        setError(error)
+        setLoading(false)
       })
     } else {
       shakeError()
@@ -140,12 +153,18 @@ export default function index() {
             </TextInput> 
           </View>
 
-          <Button 
-            title='Sign Up' 
-            onPress={signUpHandle} 
-            style={styles.signUpButton}
+          {loading?
+            <Spinner size="lg" position={'absolute'} mt={500} ml={180}/>
+            :
+            <Button 
+              title='Sign Up' 
+              onPress={signUpHandle} 
+              style={styles.signUpButton}
             >
             </Button>
+          }
+
+          
             
             {error && <View>
               <Text>

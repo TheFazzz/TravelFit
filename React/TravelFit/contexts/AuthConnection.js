@@ -14,6 +14,7 @@ export async function loginWithEmailAndPassword(email, password) {
             email: email,
             password: password
         }
+
         fetch(`${URL}/auth/login`, {
             method: 'POST',
             headers: {

@@ -6,7 +6,8 @@ import { useData } from "../../../../../contexts/DatabaseContext";
 
 export default function GymOverlay(props) {
 
-    const { findGym } = useData()
+    const { findGym, userLocation } = useData()
+    const [distance, setDistance] = useState()
     const [loading, setLoading] = useState(false)
     const [gymData, setGymData] = useState({
         address1: '',
@@ -17,6 +18,7 @@ export default function GymOverlay(props) {
         hours: {},
         id: '',
         latitude: '',
+        longitude: '',
         location: '',
         state: '',
         zipcode: ''
@@ -26,10 +28,13 @@ export default function GymOverlay(props) {
         try {
             setLoading(true)
             setGymData(await findGym(props.currentMarker.id))
+            console.log(props.currentMarker)
         } finally {
             setLoading(false)
+            if (props.currentMarker) setDistance(calcDistance(userLocation, props.currentMarker.coordinate))
         }
     }
+    
 
     useEffect(() => {
         gatherData()
@@ -39,9 +44,33 @@ export default function GymOverlay(props) {
         gatherData()
     }, [props.currentMarker])
 
+    function calcDistance(dist1, dist2) {
+        console.log(dist1.latitude, dist2)
+        var lat1 = dist1.latitude
+        var lon1 = dist1.longitude
+        var lat2 = dist2.latitude
+        var lon2 = dist2.longitude
+
+        var R = 6371; // km
+        var dLat = toRad(lat2-lat1);
+        var dLon = toRad(lon2-lon1);
+        lat1 = toRad(lat1);
+        lat2 = toRad(lat2);
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c;
+        return d;
+    }
+
+    function toRad(deg) {
+        return deg * (Math.PI / 180)
+    }
+
     return (
         <>
-            {loading && <Spinner size="lg" position={'absolute'} mt={240} ml={120}/>}
+            {loading && <Spinner size="lg" position={'absolute'} mt={240} ml={120} />}
             {props.currentMarker && !loading && <View style={styles.view}>
                 <Box
                     alignItems="center"
@@ -66,6 +95,13 @@ export default function GymOverlay(props) {
                                         bold>
                                         {gymData.city} , {gymData.state}
                                     </Text>
+                                    <Text
+                                        mt="2"
+                                        fontSize="sm"
+                                        color="coolGray.700"
+                                        bold>
+                                        {distance? `${distance.toFixed(1)} Km` : ''}
+                                    </Text>
                                     <Flex>
                                         {isFocused ?
                                             <Text
@@ -85,11 +121,11 @@ export default function GymOverlay(props) {
                                                 color="darkBlue.600"
                                                 p="2">
 
-                                                <Button 
-                                                    size="md" 
+                                                <Button
+                                                    size="md"
                                                     variant="link"
                                                     onPress={() => props.setGymId(gymData.id)}
-                                                    >
+                                                >
                                                     More Info
                                                 </Button>
 

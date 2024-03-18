@@ -5,26 +5,45 @@ import { useData } from '../../../../contexts/DatabaseContext';
 import LoadingScreen from '../../../layout/LoadingScreen';
 
 export default function Map(props) {
-    const { allGyms, userLocation, setUserLocation, getLocation} = useData()
+
+    const { 
+        allGyms, 
+        nearbyGyms,
+        userLocation, 
+        setUserLocation, 
+        getLocation,
+        searchPreference,
+        perferedCity
+    } = useData()
+
     const [loading, setLoading] = useState(true)
+    const [first, setFirst] = useState(true)
+    const [reload, setReload] = useState(false)
     const [allLocations, setAllLocations] = useState([])
     const [findLocation, setFindLocation] = useState(false)
 
     useEffect(() => {
-        loadData()
+        loadData(false)
     }, []);
 
-    async function loadData() {
-        setLoading(true)
+    useEffect(() => {
+        if (!first) loadData(true)
+    }, [searchPreference, perferedCity])
+
+    async function loadData(reload) {
+        if (!reload) setLoading(true)
+        if (reload) setReload(true)
         setFindLocation(true)
         constantUpdateLocation()
         try {
-            setAllLocations(await allGyms());
-
+            if (searchPreference == 'ByCity') setAllLocations(await allGyms());
+            if (searchPreference == 'ByLocation') setAllLocations(await nearbyGyms())
         } catch (error) {
             console.error('error:', error);
         } finally {
-            setLoading(false);  
+            setFirst(false)
+            setLoading(false);
+            setReload(false)  
         }
     }
 
@@ -40,8 +59,14 @@ export default function Map(props) {
         }
     }
 
+
     return (
         <View style={styles.container}>
+            {reload && 
+                <View style={styles.loading}>
+                    <LoadingScreen/>
+                </View>
+            }
             {loading? 
             <LoadingScreen/> :
             <MapDisplay
@@ -63,5 +88,8 @@ const styles = StyleSheet.create({
         right: 0,
         width: width,
         height: height,
+    },
+    loading: {
+        position: 'absolute'
     }
 })
