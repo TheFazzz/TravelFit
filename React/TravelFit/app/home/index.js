@@ -3,11 +3,7 @@ import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { styles } from '../styles'
 import { useData } from '../../contexts/DatabaseContext';
-<<<<<<< HEAD
 import {Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack} from 'native-base'
-=======
-import { Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link } from 'native-base'
->>>>>>> cff901a468874e42f70bc52c9d00272b9000c140
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function index() {
@@ -58,8 +54,8 @@ export default function index() {
                       color="darkBlue.600" 
                       p="2">
                       <Link href="https://google.com">
-                        <Button size="md" variant="link">
-                          3 passes
+                        <Button size="md" variant="link" p={-3}>
+                         3 passes
                         </Button>
                       </Link>
                     </Text>
@@ -101,42 +97,6 @@ export default function index() {
             This will be the mission statement and our long term goal
           </Text>
         </VStack>
-<<<<<<< HEAD
-        </Center>
-       );
-    }
-    const UserName = () =>
-    {
-        user = identity.user;
-        return(
-            <Heading size="lg" mb={4} p={8}>
-            {user}
-            </Heading>
-      
-      
-        );
-    }
-
-    //<UserName/>
-    return( 
-       
-       <Center >
-            <HStack space={3}>
-        <Heading style={{textAlign: 'center'}} size="lg" mb={4} p={6}> 
-        Welcome! 
-        </Heading>
-          {UserName()}
-          </HStack>
-        <Avatar bg={'green.100'} size={"lg"}> </Avatar>
-            {premium()}
-            {existingPasses()}
-            <VStack mb= "2.5" mt="1.5" direction = "column" space={4}>
-            {missionStatement()}
-            </VStack>
-        </Center>
-       
-        );  
-=======
       </Center>
     );
   }
@@ -171,5 +131,4 @@ export default function index() {
     </Center>
 
   );
->>>>>>> cff901a468874e42f70bc52c9d00272b9000c140
 }
