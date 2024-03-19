@@ -470,7 +470,7 @@ def purchase_guest_pass(
         qr_code_data = (
             f"pass_id:{purchase_id},user_id:{user_id},gym_id:{gym_id}, "
             f"pass_name:{pass_info[0]}, duration:{pass_info[1]}, "
-            "scan_url:http://127.0.0.1:8000/process-qr-code"
+            "scan_url:http://127.0.0.1:8000/verify-pass"
         )
         qr_code = qrcode.make(qr_code_data, image_factory=PilImage)
 
