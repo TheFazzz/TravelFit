@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ScrollView, Checkbox, HStack, Spinner } from 'native-base';
+import { ScrollView, Checkbox, HStack, Spinner, Box, Input, VStack, Center, Link } from 'native-base';
 import { useAuth } from '../../contexts/AuthContext';
 import { storeData } from '../../asyncStorage/asyncStorage';
 
@@ -58,33 +58,75 @@ export default function index() {
     return regex.test(email)
   }
 
+  
+
+  const emailBox = () => {
+    return <Box bg="white"  alignSelf='center'px={"-10"} >
+      <Input mx="3"
+        size = "md"
+        placeholder="Email"
+        w="75%"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize = 'none'
+        
+         />
+    </Box>
+  }
+
+  const passwordBox = () =>{
+    return <Box bg="white"  alignSelf='center'px={"-10"} >
+      <Input mx="3"
+        size = "md"
+        placeholder="Password"
+        id='password'
+        w="75%"
+        value={password}
+        onChangeText={setPassword}
+        autoCapitalize = 'none'
+        secureTextEntry={true}
+         />
+    </Box>
+  }
+
+  //forgot password link
+  const forgotPWLink = () => {
+    return <Box alignItems="center" paddingBottom={4}> 
+      <Link href='/forgotPW' mt={4}_text={{
+      fontSize:"md",
+      _light:{
+        color: "cyan.500"
+      },
+      color: "cyan.300"
+    }} 
+    isUnderlined _hover={{
+      _text: {
+        _light: {
+           color: "cyan.600"
+        },
+       color: "cyan.400"
+      }
+    }} >
+      Forgot Password?
+    </Link>
+    </Box>;
+  }
+  
   return (
     <View style={styles.container}>
       <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{ flexGrow: 1 }}>
         <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
-
-        <TextInput
-          placeholder='Email'
-          id='email'
-          style={styles.userinput}
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize='none'
-        >
-        </TextInput>
-
-        <TextInput
-          secureTextEntry={true}
-          placeholder='Password'
-          id='password'
-          style={styles.userinput}
-          value={password}
-          onChangeText={setPassword}
-          autoCapitalize='none'
-        >
-        </TextInput>
-
-      <HStack space={6}>
+      
+       
+      <VStack space={3}>
+     {emailBox()}
+     {passwordBox()}
+     
+     
+      </VStack>
+     
+      <HStack space={6} alignSelf={'center'} alignItems={'center'} >
+        
         <Checkbox
           shadow={2}
           value={saveLogin}
@@ -93,6 +135,7 @@ export default function index() {
         >
           Remember Me?
         </Checkbox>
+        {forgotPWLink()}
       </HStack>
 
         {loading?
@@ -107,7 +150,7 @@ export default function index() {
         }
 
         {error && <View>
-          <Text>
+          <Text bold alignSelf={'center'} fontSize="2xl"  >
             {error}
           </Text>
         </View>}
@@ -123,7 +166,7 @@ const styles = StyleSheet.create({
     // height: "auto",
     flexDirection: 'column',
     // flexGrow: 1,
-    backgroundColor: 'silver',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
