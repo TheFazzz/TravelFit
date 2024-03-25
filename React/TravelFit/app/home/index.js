@@ -118,8 +118,11 @@ export default function index() {
   //<UserName/>
   return (
     <Center >
-      <Heading style={{ textAlign: 'center' }} size="lg" mb={4} p={6}>
-        Welcome! {currentUser && <UserName />}
+      <Heading style={{  }} size="lg" mb={4} p={6} >
+        Welcome! 
+      </Heading>
+      <Heading>
+        {currentUser && <UserName />}
       </Heading>
 
       <Avatar bg={'green.100'} size={"lg"}> </Avatar>

@@ -118,6 +118,8 @@ export default function Index(props) {
                     )}
                 <Button
                     title="Order Day Pass"
+                    variant='link'
+                    onPress={() => {router.replace('../../purchase/purchaseScreen')}}
                 ></Button>
                 </>}
 
