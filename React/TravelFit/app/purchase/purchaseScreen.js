@@ -6,12 +6,38 @@ import { useRef } from 'react'
 // import { useAuth } from '../contexts/AuthContext';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 
 export default function purchaseScreen() {
 
   const router = useRouter()
 
+  const [cardName, setCardName] = useState('');
+  const [creditNum, setCreditNum] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [expire, setExpire] = useState('');
+  const [zip, setZip] = useState('');
+  const [error, setError] = useState(null);
+
+  function validString(string)
+  {
+    if(string.length == 0)
+      return false;
+    return true;
+  }
+
   const handlePurchase = () => {
+
+    if(!validString(cardName))
+      setError('Card name is required');
+    else if(!validString(creditNum))
+      setError('Credit Card Number is required')
+    else if(!validString(cvv))
+      setError('CVV is required')
+    else if(!validString(expire))
+      setError('Expiration Date is required')
+    else if(!validString(zip))
+      setError('Zipcode is required')
     Alert.alert('Purchase Confirmed');
     router.replace('../home')
   }
@@ -24,6 +50,8 @@ export default function purchaseScreen() {
         <TextInput
           placeholder='Name'
           id='cardName'
+          value={cardName}
+          onChangeText={setCardName}
           style={styles.userinput}
           secureTextEntry={true}
         >
@@ -35,6 +63,8 @@ export default function purchaseScreen() {
         <TextInput
           placeholder='Credit Card #'
           id='creditNum'
+          value={creditNum}
+          onChangeText={setCreditNum}
           style={styles.userinput}
           secureTextEntry={true}
           keyboardType='numeric'
@@ -43,10 +73,12 @@ export default function purchaseScreen() {
       </View>
 
       <View style={{ flexDirection: 'row' }}>
-        <Text>CVS: </Text>
+        <Text>CVV: </Text>
         <TextInput
-          placeholder='CVS'
-          id='cvs'
+          placeholder='CVV'
+          id='cvv'
+          value={cvv}
+          onChangeText={setCvv}
           style={styles.userinput}
           secureTextEntry={true}
           keyboardType='numeric'
@@ -59,6 +91,8 @@ export default function purchaseScreen() {
         <TextInput
           placeholder='Expiration Date'
           id='expDate'
+          value={expire}
+          onChangeText={setExpire}
           style={styles.userinput}
           secureTextEntry={true}
           keyboardType='numeric'
@@ -71,6 +105,8 @@ export default function purchaseScreen() {
         <TextInput
           placeholder='Zip Code'
           id='zipCode'
+          value={zip}
+          onChangeText={setZip}
           style={styles.userinput}
           secureTextEntry={true}
           keyboardType='numeric'
@@ -82,6 +118,11 @@ export default function purchaseScreen() {
       title='Confirm'
       onPress={() => {handlePurchase()}}
       ></Button>
+
+{/* {error && <View>
+              <Text>
+                {error}
+              </Text> */}
 
     </View>
   );
