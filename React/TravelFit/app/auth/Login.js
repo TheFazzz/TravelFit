@@ -39,12 +39,13 @@ export default function index() {
     } else {
       try {
         setLoading(true)
-        await login(email, password)
+        const userRole = await login(email, password)
           if (saveLogin) {
-            await storeData('login-data', {email, password})
+            await storeData('login-data', {email, password, userRole})
           }
         console.log('logged in')
-        router.replace('/home')
+        if (userRole == 'User') router.replace('/home')
+        else if (userRole == 'Gym') router.replace('/gym_user')
       } catch (error) {
         setError(error)
       } finally {
