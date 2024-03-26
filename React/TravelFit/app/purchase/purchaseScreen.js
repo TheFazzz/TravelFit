@@ -19,33 +19,38 @@ export default function purchaseScreen() {
   const [zip, setZip] = useState('');
   const [error, setError] = useState(null);
 
-  function validString(string)
-  {
-    if(string.length == 0)
+  function validString(string) {
+    if (string.length == 0)
       return false;
     return true;
   }
 
   const handlePurchase = () => {
 
-    if(!validString(cardName))
+    if (!validString(cardName))
       setError('Card name is required');
-    else if(!validString(creditNum))
+    else if (!validString(creditNum))
       setError('Credit Card Number is required')
-    else if(!validString(cvv))
+    else if (!validString(cvv))
       setError('CVV is required')
-    else if(!validString(expire))
+    else if (!validString(expire))
       setError('Expiration Date is required')
-    else if(!validString(zip))
-      setError('Zipcode is required')
-    Alert.alert('Purchase Confirmed');
-    router.replace('../home')
+    else if (!validString(zip))
+      setError('Zip code is required')
+    else {
+      Alert.alert('Purchase Confirmed');
+      router.replace('../home')
+    }
   }
 
   return (
     <View style={styles.container}>
 
-      <View style={{ flexDirection: 'row', marginTop: 250 }}>
+      <Text style={{fontSize: 26}}>
+        Credit Card Payment
+      </Text>
+
+      <View style={{ flexDirection: 'row', marginTop: 100 }}>
         <Text>Cardholder Name: </Text>
         <TextInput
           placeholder='Name'
@@ -53,7 +58,6 @@ export default function purchaseScreen() {
           value={cardName}
           onChangeText={setCardName}
           style={styles.userinput}
-          secureTextEntry={true}
         >
         </TextInput>
       </View>
@@ -66,7 +70,6 @@ export default function purchaseScreen() {
           value={creditNum}
           onChangeText={setCreditNum}
           style={styles.userinput}
-          secureTextEntry={true}
           keyboardType='numeric'
         >
         </TextInput>
@@ -80,7 +83,6 @@ export default function purchaseScreen() {
           value={cvv}
           onChangeText={setCvv}
           style={styles.userinput}
-          secureTextEntry={true}
           keyboardType='numeric'
         >
         </TextInput>
@@ -94,7 +96,6 @@ export default function purchaseScreen() {
           value={expire}
           onChangeText={setExpire}
           style={styles.userinput}
-          secureTextEntry={true}
           keyboardType='numeric'
         >
         </TextInput>
@@ -108,21 +109,21 @@ export default function purchaseScreen() {
           value={zip}
           onChangeText={setZip}
           style={styles.userinput}
-          secureTextEntry={true}
           keyboardType='numeric'
         >
         </TextInput>
       </View>
 
-      <Button 
-      title='Confirm'
-      onPress={() => {handlePurchase()}}
+      <Button
+        title='Confirm'
+        onPress={() => { handlePurchase() }}
       ></Button>
 
-{/* {error && <View>
-              <Text>
-                {error}
-              </Text> */}
+      {error && <View>
+        <Text style={{padding: 15, color: 'red'}}>
+          {error}
+        </Text>
+      </View>}
 
     </View>
   );
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'silver',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
   },
   userinput: {
     overflow: 'hidden',
