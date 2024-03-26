@@ -19,15 +19,19 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true)
     const [bearerToken, setBearerToken] = useState(null)
     const [loaded, setLoaded] = useState(false)
+    const [userRole, setUserRole] = useState(null)
 
     async function login(email, password){
       return new Promise((resolve, reject) => {
         loginWithEmailAndPassword(email, password).then(tokenInfo => {
           const {access_token} = tokenInfo
           const decrypted = decryptToken(access_token)
+          const userRole = 'User' //change to 'User' or 'Gym' to change roles
+          
           setBearerToken(tokenInfo)
           setCurrentUser(decrypted)
-          resolve(true)
+          setUserRole(userRole)
+          resolve(userRole)
         }).catch(error => reject(error))
       })
     }
@@ -43,6 +47,7 @@ export function AuthProvider({ children }) {
     async function logout() {
       setCurrentUser(null)
       setBearerToken(null)
+      setUserRole(null)
     }
 
     function decryptToken(token){
@@ -53,6 +58,7 @@ export function AuthProvider({ children }) {
     const value = {
       currentUser,
       setCurrentUser,
+      userRole,
       login,
       logout,
       register,

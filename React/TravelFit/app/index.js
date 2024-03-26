@@ -24,8 +24,9 @@ export default function index(props) {
             if (loginData) {
                 const { email, password } = loginData
                 try {
-                    await login(email, password)
-                    router.replace('./home')
+                    const userRole = await login(email, password)
+                    if (userRole == 'User') router.replace('/home')
+                    else if (userRole == 'Gym') router.replace('/gym_user')
                 } catch (error) {
                     console.error('error logging in')
                     storeData('login-data', null)
