@@ -17,13 +17,14 @@ import json
 import io
 import qrcode
 from qrcode.image.pil import PilImage
+import logging
 
 app = FastAPI()
 app.include_router(routes.auth.router)
 
 # Load environment variables
 blob_connection_string = os.getenv("BLOB_CONNECTION_STRING")
-
+logger = logging.getLogger(__name__)
 
 # API endPoints
 @app.get("/")
@@ -637,7 +638,7 @@ async def get_nearby_gyms(
         cursor.close()
         connection.close()
 # Need to add QR code to this endpoint as well    
-@app.post("/guest-passes/user_id")
+@app.get("/guest-passes/user_id")
 async def get_user_guest_passes(
     user: dict = Depends(get_current_user),
     db: tuple = Depends(get_db_connection)
@@ -655,8 +656,8 @@ async def get_user_guest_passes(
                 g.gym_name,
                 po.pass_name,
                 po.price,
-                po.duration,
-                po.description
+                po.duration_days,
+                po.description,
                 gp.qr_code
             FROM 
                 GuestPassPurchases gp
