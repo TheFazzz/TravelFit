@@ -3,14 +3,14 @@ import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, Text, TextInput, View, Button, Alert } from 'react-native';
 // import { styles } from '../styles';
 import { useRef } from 'react'
-// import { useAuth } from '../contexts/AuthContext';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { router, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useState, useEffect } from 'react';
 
 export default function purchaseScreen() {
 
   const router = useRouter()
+  const query = useLocalSearchParams()
 
   const [cardName, setCardName] = useState('');
   const [creditNum, setCreditNum] = useState('');
@@ -18,6 +18,19 @@ export default function purchaseScreen() {
   const [expire, setExpire] = useState('');
   const [zip, setZip] = useState('');
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false)
+
+  const { purchasePass } = useAuth()
+  const { city, gym_name, gym_id, pass_id, pass_description, pass_name, pass_price } = query
+
+  async function gatherData(){
+    console.log(query)
+  }
+
+  useEffect(() => {
+    gatherData()
+  }, [])
+
 
   function validString(string) {
     if (string.length == 0)
@@ -25,8 +38,7 @@ export default function purchaseScreen() {
     return true;
   }
 
-  const handlePurchase = () => {
-
+  async function handlePurchase() {
     if (!validString(cardName))
       setError('Card name is required');
     else if (!validString(creditNum))
@@ -38,7 +50,12 @@ export default function purchaseScreen() {
     else if (!validString(zip))
       setError('Zip code is required')
     else {
-      Alert.alert('Purchase Confirmed');
+      try {
+        const returnStatement = await purchasePass(gym_id, pass_id)
+        Alert.alert('Purchase Confirmed');
+      } catch (error) {
+        console.error(error)
+      } 
       router.replace('../home')
     }
   }
@@ -46,9 +63,11 @@ export default function purchaseScreen() {
   return (
     <View style={styles.container}>
 
-      <Text style={{fontSize: 26}}>
+      <Text style={{ fontSize: 26 }}>
         Credit Card Payment
       </Text>
+
+      <Text>{gym_name}, {city} - {pass_name} - ${pass_price}</Text>
 
       <View style={{ flexDirection: 'row', marginTop: 100 }}>
         <Text>Cardholder Name: </Text>
@@ -120,7 +139,7 @@ export default function purchaseScreen() {
       ></Button>
 
       {error && <View>
-        <Text style={{padding: 15, color: 'red'}}>
+        <Text style={{ padding: 15, color: 'red' }}>
           {error}
         </Text>
       </View>}

@@ -5,10 +5,12 @@ import { styles } from '../styles'
 import { useData } from '../../contexts/DatabaseContext';
 import {Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack} from 'native-base'
 import { useAuth } from '../../contexts/AuthContext';
+import { useRouter } from 'expo-router';
 
 export default function index() {
   const { requestLocationPermission } = useData()
   const { currentUser } = useAuth()
+  const router = useRouter()
   requestLocationPermission()
 
   function existingPasses() {
@@ -54,7 +56,14 @@ export default function index() {
                       color="darkBlue.600" 
                       p="2">
                       <Link href="https://google.com">
-                        <Button size="md" variant="link" p={-3}>
+                        <Button 
+                          size="md" 
+                          variant="link" 
+                          p={-3}
+                          onPress={() => {
+                            router.replace('/home/purchased_passes')
+                          }}
+                          >
                          3 passes
                         </Button>
                       </Link>
@@ -115,7 +124,6 @@ export default function index() {
     );
   }
 
-  //<UserName/>
   return (
     <Center >
       <Heading style={{  }} size="lg" mb={4} p={6} >

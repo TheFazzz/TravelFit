@@ -74,3 +74,54 @@ export async function getAllUsers(){
     .catch(error => console.error(error))
 }
 
+export async function purchaseGymPassByIdandPassOptionId(gym_id, pass_option_id, accessToken) {
+    return new Promise((resolve, reject) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }
+        const url = `${URL}/gyms/${gym_id}/guest-passes/purchase?pass_option_id=${pass_option_id}`
+
+        fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            if (data.detail) {
+                reject(data.detail)
+            }
+            resolve(data)
+        })
+        .catch(error => {
+            reject(error)
+        })
+    })
+}
+
+export async function getUserPasses(accessToken, user_id) {
+    return new Promise((resolve, reject) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-type': 'application/json'
+            }
+        }
+
+        console.log(accessToken)
+
+        const url = `${URL}/guest-passes/user_id`
+
+        fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            if (data.detail) {
+                reject(data.detail)
+            }
+            else resolve(data)
+        })
+        .catch(error => {
+            reject(error)
+        })
+    })
+}

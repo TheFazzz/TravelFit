@@ -61,11 +61,8 @@ export async function getNearbyGyms(latitude, longitude, radius_in_meters) {
 
 export async function getGymPassOptionsbyId(id) {
     return new Promise((resolve, reject) => {
-        const body = {
-            //add body content here
-        }
         const requestOptions = {
-            method: 'POST'
+            method: 'GET'
         }
         const url = `${URL}/gyms/${id}/guest-pass-options`
 
@@ -80,29 +77,7 @@ export async function getGymPassOptionsbyId(id) {
     })
 }
 
-export async function purchaseGymPassByIdandPassOptionId(gym_id, pass_option_id, accessToken) {
-    return new Promise((resolve, reject) => {
-        const body = {
-            //add body content here
-        }
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        }
-        const url = `${URL}/gyms/${gym_id}/guest-passes/purchase?pass_option_id=${pass_option_id}`
 
-        fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            resolve(data)
-        })
-        .catch(error => {
-            reject(error)
-        })
-    })
-}
 
 export async function getGymPhotosbyId(id){
     try {

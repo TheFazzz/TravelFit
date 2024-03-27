@@ -2,11 +2,14 @@ import React, { useContext, useState, useEffect } from 'react'
 import {
   loginWithEmailAndPassword,
   registerNewUser,
-  getAllUsers
+  getAllUsers,
+  purchaseGymPassByIdandPassOptionId,
+  getUserPasses
 } from './AuthConnection'
 
 import { jwtDecode } from 'jwt-decode'
 import 'core-js/stable/atob'
+import { accessibilityProps } from 'react-native-web/dist/cjs/modules/forwardedProps'
 
 const AuthContext = React.createContext()
 
@@ -24,11 +27,12 @@ export function AuthProvider({ children }) {
     async function login(email, password){
       return new Promise((resolve, reject) => {
         loginWithEmailAndPassword(email, password).then(tokenInfo => {
+          
           const {access_token} = tokenInfo
           const decrypted = decryptToken(access_token)
           const userRole = 'User' //change to 'User' or 'Gym' to change roles
           
-          setBearerToken(tokenInfo)
+          setBearerToken(access_token)
           setCurrentUser(decrypted)
           setUserRole(userRole)
           resolve(userRole)
@@ -54,6 +58,15 @@ export function AuthProvider({ children }) {
       const {firstName, lastName, sub} = jwtDecode(token)
       return {firstName, lastName, sub}
     }
+
+    function purchasePass(gym_id, pass_option_id) {
+      return purchaseGymPassByIdandPassOptionId(gym_id, pass_option_id, bearerToken)
+    }
+
+    function userPasses(){
+      const {sub} = currentUser
+      return getUserPasses(bearerToken, sub)
+    }
     
     const value = {
       currentUser,
@@ -64,7 +77,9 @@ export function AuthProvider({ children }) {
       register,
       allUsers,
       loaded,
-      setLoaded
+      setLoaded,
+      purchasePass,
+      userPasses
     }
 
     return (
