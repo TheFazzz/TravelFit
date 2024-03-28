@@ -101,20 +101,18 @@ export async function purchaseGymPassByIdandPassOptionId(gym_id, pass_option_id,
 export async function getUserPasses(accessToken, user_id) {
     return new Promise((resolve, reject) => {
         const requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-type': 'application/json'
             }
         }
-
-        console.log(accessToken)
-
         const url = `${URL}/guest-passes/user_id`
 
         fetch(url, requestOptions)
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             if (data.detail) {
                 reject(data.detail)
             }
