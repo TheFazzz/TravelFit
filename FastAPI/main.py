@@ -653,12 +653,17 @@ async def get_user_guest_passes(
         cursor.execute(
             """
             SELECT 
+                g.id,
                 g.gym_name,
+                g.city,
                 po.pass_name,
-                po.price,
                 po.duration_days,
                 po.description,
-                gp.qr_code
+                gp.qr_code,
+                gp.expiration_date,
+                gp.is_valid,
+                g.latitude,
+                g.longitude
             FROM 
                 GuestPassPurchases gp
             JOIN 
@@ -673,9 +678,11 @@ async def get_user_guest_passes(
         )
         guest_passes = cursor.fetchall()
 
-        return [{"id": guest_pass[0], "gym_name": guest_pass[1], "pass_name": guest_pass[2],
-                 "price": guest_pass[3], "duration": guest_pass[4], 
-                 "description": guest_pass[5]} for guest_pass in guest_passes]
+        return [{"gym_id": guest_pass[0], "gym_name": guest_pass[1], "city": guest_pass[2],
+                 "pass_name": guest_pass[3], "duration_days": guest_pass[4], 
+                 "description": guest_pass[5], "qr_code": guest_pass[6], "expiration": guest_pass[7],
+                 "is_valid": guest_pass[8], "latitude": guest_pass[9], "longitude": guest_pass[10]} 
+                 for guest_pass in guest_passes]
         
     except Exception as e:
         connection.rollback()
