@@ -2,7 +2,7 @@ import { Slot } from 'expo-router';
 import Footer from './layout/Footer';
 import Header from './layout/Header';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { Box, NativeBaseProvider } from 'native-base';
+import { Box, NativeBaseProvider, ScrollView } from 'native-base';
 import { styles } from './styles';
 import nativebasetheme from './nativebasetheme';
 import { DataProvider } from '../contexts/DatabaseContext';
@@ -42,9 +42,9 @@ export default function HomeLayout() {
             {background && <Image source={require('../assets/freeweights.png')} style={styles.backgroundImage}/>}
             <View style={styles.container}>
               {header && <Header />}
-              <View style={styles.body}>
-                <Slot />
-              </View>
+                <View style={styles.body}>
+                  <Slot />
+                </View>
               {footer && <Footer />}
             </View>
           </context.Provider>

@@ -8,6 +8,8 @@ import { useData } from '../../../contexts/DatabaseContext';
 import LoadingScreen from '../../layout/LoadingScreen';
 import { useRouter } from 'expo-router';
 
+import { SliderBox } from "react-native-image-slider-box";
+
 
 export default function Index(props) {
     const query = useLocalSearchParams()
@@ -66,13 +68,40 @@ export default function Index(props) {
     useEffect(() => { console.log(gymData) }, [gymData])
 
     function Info() {
+        const infoStyles = StyleSheet.create({
+            section: {
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                paddingBottom: 2,
+            },
+            container: {
+                display: 'flex',
+                gap: 3,
+                paddingTop: 20,
+                paddingLeft: 20,
+                marginRight: 30,
+            }
+        })
+
+        //add info here
+        const infoData = {
+            'City': gymData.city,
+            'State': gymData.state,
+            'Gym Name': gymData.gym_name,
+            'Description': gymData.description
+        }
+
         return (
-            <View style={styles.infoContainer}>
-                <Text>City: {gymData.city}</Text>
-                <Text>State: {gymData.state}</Text>
-                <Text>Gym Name: {gymData.gym_name}</Text>
-                <Text>Description: {gymData.description}</Text>
-            </View>
+            <>
+                <SlideShow />
+                <View style={infoStyles.container}>
+                    {Object.keys(infoData).map((keyName, i) => (
+                        <View style={infoStyles.section}>
+                            <Text>{keyName}: {infoData[keyName]}</Text>
+                        </View>
+                    ))}
+                </View>
+            </>
         )
     }
 
@@ -81,7 +110,7 @@ export default function Index(props) {
             <View>
                 <View style={styles.passes}>
                     {passOption.map((data, index) => (
-                        <Pass data={data}/>
+                        <Pass data={data} />
                     ))}
                 </View>
             </View>
@@ -93,45 +122,46 @@ export default function Index(props) {
         return (
             <View>
                 <Box alignItems="center">
-                <Pressable maxW="96">
-                    {({ isHovered, isPressed }) => {
-                    return (
-                    <Box
-                        bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"}
-                        style={{ transform: [{ scale: isPressed ? 0.96 : 1 }] }} w={400} pl={70}
-                        p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-                        <Heading>
-                            {data.pass_name} - ${data.price}
-                        </Heading>
-                        <Text mt="2" fontSize="sm" color="coolGray.700" bold>
-                            {data.description}
-                        </Text>                                    
-                        <Flex>
-                        <Text mt="0" fontSize={12} fontWeight="medium" color="darkBlue.600" p="2">
-                            <Link href="https://google.com">
-                                <Button size="md" variant="link" p={-3}
-                                    onPress={() => {
-                                        router.replace({
-                                            pathname: '/purchase/purchaseScreen',
-                                            params: {
-                                                city: gymData.city,
-                                                gym_name: gymData.gym_name,
-                                                gym_id: gymData.id,
-                                                pass_id: data.id,
-                                                pass_name: data.pass_name,
-                                                pass_description: data.description,
-                                                pass_price: data.price
-                                            }
-                                        })
-                                }}>
-                                    Order Pass
-                                </Button>
-                            </Link>
-                        </Text>
-                        </Flex>
-                    </Box>
-                    )}}
-                </Pressable>
+                    <Pressable maxW="96">
+                        {({ isHovered, isPressed }) => {
+                            return (
+                                <Box
+                                    bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"}
+                                    style={{ transform: [{ scale: isPressed ? 0.96 : 1 }] }} w={400} pl={70}
+                                    p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
+                                    <Heading>
+                                        {data.pass_name} - ${data.price}
+                                    </Heading>
+                                    <Text mt="2" fontSize="sm" color="coolGray.700" bold>
+                                        {data.description}
+                                    </Text>
+                                    <Flex>
+                                        <Text mt="0" fontSize={12} fontWeight="medium" color="darkBlue.600" p="2">
+                                            <Link href="https://google.com">
+                                                <Button size="md" variant="link" p={-3}
+                                                    onPress={() => {
+                                                        router.replace({
+                                                            pathname: '/purchase/purchaseScreen',
+                                                            params: {
+                                                                city: gymData.city,
+                                                                gym_name: gymData.gym_name,
+                                                                gym_id: gymData.id,
+                                                                pass_id: data.id,
+                                                                pass_name: data.pass_name,
+                                                                pass_description: data.description,
+                                                                pass_price: data.price
+                                                            }
+                                                        })
+                                                    }}>
+                                                    Order Pass
+                                                </Button>
+                                            </Link>
+                                        </Text>
+                                    </Flex>
+                                </Box>
+                            )
+                        }}
+                    </Pressable>
                 </Box>
             </View>
         )
@@ -150,6 +180,17 @@ export default function Index(props) {
                         setShowInfo(false)
                         setShowPassOptions(true)
                     }}>Pass Options</Button>
+            </View>
+        )
+    }
+
+    function SlideShow() {
+        const { photos } = gymData
+        return (
+            <View style={styles.sliderbox}>
+                <SliderBox
+                    images={photos}
+                />
             </View>
         )
     }
@@ -173,9 +214,11 @@ export default function Index(props) {
 let styles = StyleSheet.create({
     display: {
         position: 'absolute',
-        height: '100%',
+        height: '120%',
         width: '110%',
-        backgroundColor: 'aqua',
+        backgroundColor: 'white',
+        paddingTop: 90,
+        paddingBottom: 90
     },
     buttons: {
         display: 'flex',
@@ -188,5 +231,8 @@ let styles = StyleSheet.create({
     passes: {
         display: 'flex',
         gap: 10
+    },
+    sliderbox: {
+        flex: 0,
     }
 })

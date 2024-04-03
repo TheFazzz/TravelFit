@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'expo-router'
 import { StyleSheet, Text, View} from 'react-native';
-import { styles } from '../styles'
 import { Button, extendTheme } from 'native-base'
 
 import { context } from '../_layout';
@@ -14,7 +13,7 @@ export default function Header() {
   const {searchFocus, setSearchFocus} = useContext(context)
 
   return (
-    <View style={styles.header}>
+    <View style={header.header}>
         <Link href={'/'} style={header.container}>
           <Icon as={MaterialCommunityIcons} name='arrow-u-left-bottom' style={{paddingTop: 10, color: '#AFE5E7'}} size='8' />
           {/* <IconButton href={'/'} icon={<Icon as={MaterialCommunityIcons} name='arrow-u-left-bottom' style={header.back} size='8' />} /> */}
@@ -32,10 +31,10 @@ export default function Header() {
   )
 }
 
+let paddingleftandright = 15
 const header = StyleSheet.create({
   container: {
     paddingTop: 50,
-    color: '#FFFFFF',
     flexDirection: 'row'
   },
   exit: {
@@ -48,7 +47,7 @@ const header = StyleSheet.create({
     color: 'red',
     width: 33,
     height: 33,
-    backgroundColor: '#004C6D'
+    // backgroundColor: '#004C6D'
   },
   back: {
     position: 'absolute',
@@ -60,5 +59,17 @@ const header = StyleSheet.create({
     // height: 50,
     color: '#AFE5E7',
     // backgroundColor: 'red'
+  },
+  header: {
+    zIndex: 1,
+    position: 'absolute',
+    paddingLeft: paddingleftandright,
+    paddingRight: paddingleftandright,
+    top: 0,
+    // backgroundColor: 'white',
+    color:'white',
+    width: '100%',
+    height: '10%',
+    flexDirection: 'row'
   }
 })

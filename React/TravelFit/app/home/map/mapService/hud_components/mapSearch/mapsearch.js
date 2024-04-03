@@ -84,22 +84,25 @@ export default function MapSearch(props) {
 
     return (
         <>
-            <Input
-                mx='3'
-                position='absolute'
-                rounded='lg'
-                ml='3'
-                mt='3'
-                mr={10}
-                pr={3}
-                placeholder="Search"
-                variant='rounded'
-                w="100%"
-                ref={inputRef}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                onChangeText={handleChange}
-            />
+            <View style={{
+                position:'absolute',
+                width: '93%',
+                marginTop: 95,
+            }}>
+                <Input
+                    position='absolute'
+                    rounded='lg'
+                    ml='3'
+                    placeholder="Search"
+                    variant='rounded'
+                    w="100%"
+                    ref={inputRef}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    onChangeText={handleChange}
+                    style={styles.search}
+                />
+            </View>
             {searchFocus ?
                 <>
                     <View style={styles.view} />
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         gap: 25,
         position: 'absolute',
-        marginTop: 60,
+        marginTop: 140,
         flexDirection: 'row',
         justifyContent: 'center',
         marginLeft: 30

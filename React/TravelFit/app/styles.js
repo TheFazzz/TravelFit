@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     body: {
+        paddingTop: 90,
         paddingLeft: paddingleftandright,
         paddingRight: paddingleftandright,
         flex: 1,
@@ -20,16 +21,7 @@ export const styles = StyleSheet.create({
         width: '100%',
         height: screenHeight * 2 * 2,
     },
-    header: {
-        paddingLeft: paddingleftandright,
-        paddingRight: paddingleftandright,
-        top: 0,
-        backgroundColor: '#004C6D',
-        color:'white',
-        width: '100%',
-        height: '11%',
-        flexDirection: 'row'
-    },
+
     footer: {
         paddingLeft: paddingleftandright,
         paddingRight: paddingleftandright,

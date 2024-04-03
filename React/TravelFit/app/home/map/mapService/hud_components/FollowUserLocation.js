@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         bottom: 200,
+        left: 10,
         backgroundColor: 'blue',
         opacity: 1
     }

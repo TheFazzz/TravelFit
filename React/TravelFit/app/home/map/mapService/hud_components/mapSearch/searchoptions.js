@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         gap: 10,
         position: 'absolute',
-        marginTop: 55,
+        marginTop: 135,
         marginLeft: 20,
     }
 })

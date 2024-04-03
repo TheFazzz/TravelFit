@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         gap: 10,
         position: 'absolute',
-        marginTop: 115,
+        marginTop: 195,
         marginLeft: 40,
     }
 })

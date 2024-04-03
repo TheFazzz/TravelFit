@@ -4,6 +4,7 @@ import MapSearch from "./hud_components/mapSearch/mapsearch";
 import FollowUserLocation from "./hud_components/FollowUserLocation";
 import { context } from "../../../_layout";
 import GymOverlay from "./hud_components/GymOverlay";
+import { styleProps } from "react-native-web/dist/cjs/modules/forwardedProps";
 
 export default function MapHUD(props) {
     const [currentLocation, setCurrentLocation] = useState()
@@ -38,7 +39,6 @@ export default function MapHUD(props) {
 
 const HUDStyles = StyleSheet.create({
     all: {
-        height: '100%',
         position: 'absolute',
         pointerEvents: 'none',
     },
