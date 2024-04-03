@@ -2,20 +2,25 @@ import { Link, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { styles } from './styles';
-import { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext';
 import { getData, storeData } from '../asyncStorage/asyncStorage';
 import LoadingScreen from './layout/LoadingScreen';
-
+import { useLayout } from './_layout';
+import { context } from './_layout'
 
 export default function index(props) {
     const { currentUser, login, loaded, setLoaded } = useAuth()
-    const [loading, setLoading] = useState(true)
+    const { setHeader, setFooter } = useContext(context)
     const router = useRouter()
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (!loaded) loadLogin()
-        else setLoading(false)
+        else {
+            router.replace('/auth/Login')
+            setLoading(false)
+        }
     }, [])
 
     async function loadLogin() {
@@ -25,12 +30,18 @@ export default function index(props) {
                 const { email, password } = loginData
                 try {
                     const userRole = await login(email, password)
-                    if (userRole == 'User') router.replace('/home')
+                    if (userRole == 'User') {
+                        setHeader(true)
+                        setFooter(true)
+                        router.replace('/home')
+                    }
                     else if (userRole == 'Gym') router.replace('/gym_user')
                 } catch (error) {
                     console.error('error logging in')
                     storeData('login-data', null)
                 }
+            } else {
+                router.replace('/auth/Login')
             }
         } catch (error) {
             console.error('login not found')

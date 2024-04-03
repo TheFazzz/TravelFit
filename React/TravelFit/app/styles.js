@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-        backgroundColor: '#AFE5E7',
+        // backgroundColor: '#AFE5E7',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
         paddingLeft: paddingleftandright,
         paddingRight: paddingleftandright,
         flex: 1,
-        backgroundColor: '#AFE5E7',
+        // backgroundColor: '#AFE5E7',
         width: '100%',
         height: screenHeight * 2 * 2,
     },
@@ -41,5 +41,12 @@ export const styles = StyleSheet.create({
         width: '100%',
         height: '8%',
         justifyContent: 'center',
+    },
+    backgroundImage: {
+        flex: 1,
+        resizeMode: 'cover',
+        position: 'absolute',
+        height: '100%',
+        width: '100%'
     }
 });

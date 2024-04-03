@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react'
+import { StyleSheet, Text, TextInput, View, Image } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ScrollView, Checkbox, HStack, Spinner, Box, Input, VStack, Center, Link } from 'native-base';
+import { ScrollView, Checkbox, HStack, Spinner, Box, Input, VStack, Center, Link, Button } from 'native-base';
 import { useAuth } from '../../contexts/AuthContext';
 import { storeData } from '../../asyncStorage/asyncStorage';
+import { context } from '../_layout';
 
 export default function index() {
 
   const router = useRouter()
   const { login } = useAuth()
+  const { setFooter, setHeader } = useContext(context)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +29,7 @@ export default function index() {
     setShowPassword(!showPassword);
   }
 
-  useEffect(() => {setError(null)}, [email, password])
+  useEffect(() => { setError(null) }, [email, password])
 
   const handleLogin = async () => {
     if (email.length == 0) {
@@ -40,11 +42,15 @@ export default function index() {
       try {
         setLoading(true)
         const userRole = await login(email, password)
-          if (saveLogin) {
-            await storeData('login-data', {email, password, userRole})
-          }
+        if (saveLogin) {
+          await storeData('login-data', { email, password, userRole })
+        }
         console.log('logged in')
-        if (userRole == 'User') router.replace('/home')
+        if (userRole == 'User') {
+          setFooter(true)
+          setHeader(true)
+          router.replace('/home')
+        }
         else if (userRole == 'Gym') router.replace('/gym_user')
       } catch (error) {
         setError(error)
@@ -59,104 +65,127 @@ export default function index() {
     return regex.test(email)
   }
 
-  
+
 
   const emailBox = () => {
-    return <Box bg="white"  alignSelf='center'px={"-10"} >
-      <Input mx="3"
-        size = "md"
+    return (
+    <Box  alignSelf='center' px={"-10"} >
+      <Input 
+        bg="white"
+        mx="3"
+        size="md"
         placeholder="Email"
-        w="75%"
+        w={styles.form.width}
         value={email}
         onChangeText={setEmail}
-        autoCapitalize = 'none'
-        
-         />
+        autoCapitalize='none'
+
+      />
     </Box>
+    )
   }
 
-  const passwordBox = () =>{
-    return <Box bg="white"  alignSelf='center'px={"-10"} >
-      <Input mx="3"
-        size = "md"
+  const passwordBox = () => {
+    return (
+    <Box alignSelf='center' px={"-10"} >
+      <Input 
+        bg="white"
+        mx="3"
+        size="md"
         placeholder="Password"
         id='password'
-        w="75%"
+        w={styles.form.width}
+        style={styles.form}
         value={password}
         onChangeText={setPassword}
-        autoCapitalize = 'none'
+        autoCapitalize='none'
         secureTextEntry={true}
-         />
+      />
     </Box>
+    )
   }
+
+
 
   //forgot password link
   const forgotPWLink = () => {
-    return <Box alignItems="center" paddingBottom={4}> 
-      <Link href='/forgotPW' mt={4}_text={{
-      fontSize:"md",
-      _light:{
-        color: "cyan.500"
-      },
-      color: "cyan.300"
-    }} 
-    isUnderlined _hover={{
-      _text: {
+    return <Box alignItems="center" paddingBottom={4}>
+      <Link href='/forgotPW' mt={4} _text={{
+        fontSize: "md",
         _light: {
-           color: "cyan.600"
+          color: "cyan.500"
         },
-       color: "cyan.400"
-      }
-    }} >
-      Forgot Password?
-    </Link>
+        color: "cyan.300"
+      }}
+        isUnderlined _hover={{
+          _text: {
+            _light: {
+              color: "cyan.600"
+            },
+            color: "cyan.400"
+          }
+        }} >
+          <Text style={styles.fontForgotpassword}>
+            Forgot Password?
+          </Text>
+      </Link>
     </Box>;
   }
-  
+
   return (
     <View style={styles.container}>
-      <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{ flexGrow: 1 }}>
-        <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
-      
-       
-      <VStack space={3}>
-     {emailBox()}
-     {passwordBox()}
-     
-     
+      <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
+      <VStack space={3} style={styles.forms}>
+        {emailBox()}
+        {passwordBox()}
       </VStack>
-     
       <HStack space={6} alignSelf={'center'} alignItems={'center'} >
-        
+
         <Checkbox
           shadow={2}
           value={saveLogin}
           onChange={(e) => setSaveLogin(e)}
           accessibilityLabel="This is a dummy checkbox"
         >
-          Remember Me?
+          <Text style={styles.font}>
+            Remember Me?
+          </Text>
         </Checkbox>
         {forgotPWLink()}
       </HStack>
 
-        {loading?
-          <Spinner size="lg" position={'absolute'} mt={470} ml={180}/>
+      {loading ?
+        <Spinner size="lg" position={'absolute'} mt={470} ml={180} />
         :
-          <Button 
-            title='Login' 
-            value='test' 
-            onPress={handleLogin} 
-            style={styles.loginButton}>
-          </Button>
-        }
+        <Button
+          onPress={handleLogin}
+          style={styles.form}
+          >
+            <Text style={styles.font}>
+              Login
+            </Text>
+        </Button>
+      }
 
-        {error && <View>
-          <Text bold alignSelf={'center'} fontSize="2xl"  >
-            {error}
+      
+      <View style={styles.error}>
+        <Text bold alignSelf={'center'} fontSize="2xl" style={styles.fontError}>
+          {error}
+        </Text>
+      </View>
+
+      <View style={styles.signup}>
+        <Text style={styles.font}>
+          Don't have an account? 
+        </Text>
+        <Link style={styles.signupLink} onPress={() => {
+          router.replace('/auth/Signup')
+        }}>
+          <Text style={styles.font}>
+            Sign Up
           </Text>
-        </View>}
-
-      </ScrollView>
+        </Link>
+      </View>
     </View>
   )
 }
@@ -167,9 +196,21 @@ const styles = StyleSheet.create({
     // height: "auto",
     flexDirection: 'column',
     // flexGrow: 1,
-    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
+    height: '100%'
+  },
+  error: {
+    paddingTop: 15
+  },
+  signup: {
+    marginTop: 100,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5
+  },
+  signupLink: {
+    bottom: 2,
   },
   userinput: {
     overflow: 'hidden',
@@ -197,5 +238,30 @@ const styles = StyleSheet.create({
     width: 400,
     resizeMode: 'contain',
     justifyContent: 'center'
+  },
+  font: {
+    color: 'white',
+    shadowColor: 'black 410',
+    shadowOpacity: 1,
+    fontSize: 17
+  },
+  fontError: {
+    color: 'red',
+    shadowColor: 'black 410',
+    shadowOpacity: 1,
+    fontSize: 17
+  },
+  fontForgotpassword: {
+    color: 'aqua',
+    shadowColor: 'black 410',
+    shadowOpacity: 1,
+    fontSize: 17
+  },
+  form: {
+    width: '85%'
+  },
+  forms: {
+    display: 'flex',
+    gap: 7
   }
 });
