@@ -45,7 +45,11 @@
           "microphonePermission": "Allow TravelFit to access your microphone",
           "recordAudioAndroid": true
         }
-      ]
+      ],
+      "expo-font",
+      {
+        "fonts": ["assets/fonts/CREDC.ttf"]
+      }
     ],
     "extra": {
       "router": {

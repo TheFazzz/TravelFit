@@ -93,7 +93,22 @@ export default function index() {
       lineHeight: `60px`
     }}>
 
-      <Button onPress={() => console.log("change this to diff page")}>Try Premium Today!</Button>
+      <Button onPress={() => {
+        router.replace({
+          pathname: '/purchase/purchaseScreen',
+          params: {
+              city: 'Fullerton',
+              gym_name: 'Chuze Fitness',
+              gym_id: 6,
+              pass_id: 7,
+              pass_name: 'Day Pass',
+              pass_description: 'Day Pass for Chuze Fitness',
+              pass_price: 10
+          }
+      })
+        }}>
+          Try Premium Today!
+      </Button>
     </Box>
   };
 
