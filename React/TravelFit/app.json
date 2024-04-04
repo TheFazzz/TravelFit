@@ -46,10 +46,12 @@
           "recordAudioAndroid": true
         }
       ],
-      "expo-font",
-      {
-        "fonts": ["assets/fonts/CREDC.ttf"]
-      }
+      [
+        "expo-font",
+        {
+          "fonts": ["assets/fonts/CREDC.ttf"]
+        }
+      ]
     ],
     "extra": {
       "router": {
