@@ -124,12 +124,14 @@ export default function purchaseScreen() {
             value={cardName}
             onChangeText={setCardName}
             style={form.userinput}
+            autoCapitalize='none'
+
           >
           </Input>
         </View>
 
         <View style={form.section}>
-          <Text>Card number </Text>
+          <Text>Card number</Text>
           <Input
             placeholder='0000 0000 0000 0000'
             id='creditNum'
@@ -138,6 +140,8 @@ export default function purchaseScreen() {
             onChangeText={setCreditNum}
             style={form.userinput}
             keyboardType='numeric'
+            autoCapitalize='none'
+
           >
           </Input>
         </View>
@@ -152,6 +156,7 @@ export default function purchaseScreen() {
               value={expire}
               onChangeText={setExpire}
               style={form.userinput}
+              autoCapitalize='none'
               keyboardType='numeric'
             >
             </Input>
@@ -167,12 +172,11 @@ export default function purchaseScreen() {
               onChangeText={setCvv}
               style={form.userinput}
               keyboardType='numeric'
+              autoCapitalize='none'
             >
             </Input>
           </View>
         </View>
-        
-
       </View>
     )
   }

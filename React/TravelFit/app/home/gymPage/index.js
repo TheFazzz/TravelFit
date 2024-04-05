@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { Heading, Flex, Box, Button, Link } from 'native-base'
 
@@ -9,12 +9,14 @@ import LoadingScreen from '../../layout/LoadingScreen';
 import { useRouter } from 'expo-router';
 
 import { SliderBox } from "react-native-image-slider-box";
+import { context } from '../../_layout';
 
 
 export default function Index(props) {
     const query = useLocalSearchParams()
     const router = useRouter()
     const { findGym, gymPassOptionsById } = useData()
+    const { removeBackground } = useContext(context)
     const [loading, setLoading] = useState(true)
     const [gymData, setGymData] = useState({
         address1: '',
@@ -48,6 +50,8 @@ export default function Index(props) {
     }
 
     useEffect(() => {
+        removeBackground()
+
         if (props.value) gatherData(props.value)
         else if (query) gatherData(query.id)
         else setGymData({
@@ -199,9 +203,6 @@ export default function Index(props) {
         <View style={styles.display}>
             {!loading &&
                 <>
-                    <Button onPress={() => { props.setGymId(null) }}>
-                        Back
-                    </Button>
                     <Tabs />
                     {showInfo && <Info />}
                     {showPassOptions && <Passes />}

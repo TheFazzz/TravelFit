@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { View, StyleSheet, Text, Pressable, Platform, Linking } from 'react-native'
 import { Heading, Flex, Box, Button, Link } from 'native-base'
 import { useAuth } from '../../../contexts/AuthContext'
 import LoadingScreen from '../../layout/LoadingScreen'
 import { useRouter } from 'expo-router'
-import Index from '../gymPage/[id]'
+import Index from '../gymPage'
+import { context } from '../../_layout'
+import QRCode from './qrCode'
 
 export default function index() {
     const router = useRouter()
@@ -12,8 +14,12 @@ export default function index() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const { userPasses, currentUser } = useAuth()
+    const { removeBackground, backButton, setBackButton, setFooter } = useContext(context)
 
     const [gymId, setGymId] = useState(null)
+    const [qrCodePage, setQrCodePage] = useState(null)
+
+    const [loaded, setLoaded] = useState(false)
 
 
     async function loadData() {
@@ -26,13 +32,24 @@ export default function index() {
             console.error(error)
         } finally {
             setLoading(false)
+            setLoaded(true)
             console.log(passes)
         }
     }
 
     useEffect(() => {
-        loadData()
+        if (!loaded) loadData()
+        removeBackground()
+        setFooter(true)
+        setBackButton([['route', '/home']])
     }, [])
+    
+    useEffect(() => {
+        if (!qrCodePage) {
+            removeBackground()
+            setFooter(true)
+        }
+    }, [qrCodePage])
 
     function openGPS(lat, lng, gym_name) {
         const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
@@ -46,7 +63,7 @@ export default function index() {
     }
 
     function Pass(props) {
-        const { description, gym_name, id, qr_code, city, pass_name, latitude, longitude , gym_id, duration_days, is_valid} = props.data
+        const { description, gym_name, id, qr_code, city, pass_name, latitude, longitude, gym_id, duration_days, is_valid } = props.data
         return (
             <View>
                 <Box alignItems="center">
@@ -55,9 +72,9 @@ export default function index() {
                             return (
                                 <Box
                                     bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"}
-                                    style={{ transform: [{ scale: isPressed ? 0.96 : 1 }] }} w={400} 
+                                    style={{ transform: [{ scale: isPressed ? 0.96 : 1 }] }} w={400}
                                     p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-                                    <View style={{display: 'flex', flexDirection: 'row', gap: 30}}>
+                                    <View style={{ display: 'flex', flexDirection: 'row', gap: 30 }}>
                                         <View>
                                             <Heading>
                                                 {gym_name}, {city}
@@ -69,13 +86,11 @@ export default function index() {
                                                 <Link style={{ display: 'flex', gap: 8 }}>
                                                     <Button size="md" variant="link" p={-3}
                                                         onPress={() => {
-                                                            router.replace({
-                                                                pathname: '/home/purchased_passes/qrCode',
-                                                                params: {
-                                                                    image: qr_code,
-                                                                    pass_name: pass_name,
-                                                                    gym_name: gym_name,
-                                                                }
+                                                            setQrCodePage({
+                                                                image: qr_code,
+                                                                pass_name: pass_name,
+                                                                gym_name: gym_name,
+                                                                city: city
                                                             })
                                                         }}>
                                                         QR Code
@@ -89,6 +104,7 @@ export default function index() {
                                                     <Button size="md" variant="link" p={-3}
                                                         onPress={() => {
                                                             setGymId(gym_id)
+                                                            setBackButton(backButton.concat([[setGymId, null]]))
                                                         }}>
                                                         Gym Info
                                                     </Button>
@@ -121,22 +137,26 @@ export default function index() {
 
     return (
         <>
-            {!loading ?
-                <View style={styles.view}>
-                    <Heading style={styles.heading} size="lg" mb={1} p={4} pl={9}>
-                        Current Passes for {currentUser.firstName}
-                    </Heading>
-                    {passes.length == 0 ?
-                        <Text>
-                            No passes.
-                        </Text>
-                        :
-                        <Passes />
-                    }
-                </View>
+            {qrCodePage ?
+                <QRCode params={qrCodePage} setQrCodePage={setQrCodePage} />
                 :
-                <LoadingScreen />}
-                {gymId && <Index value={gymId} setGymId={setGymId}/>}
+                !loading ?
+                    <View style={styles.view}>
+                        <Heading style={styles.heading} size="lg" mb={1} p={4} pl={9}>
+                            Current Passes for {currentUser.firstName}
+                        </Heading>
+                        {passes.length == 0 ?
+                            <Text>
+                                No passes.
+                            </Text>
+                            :
+                            <Passes />
+                        }
+                    </View>
+                    :
+                    <LoadingScreen />
+            }
+            {gymId && <Index value={gymId} setGymId={setGymId} />}
         </>
     )
 }

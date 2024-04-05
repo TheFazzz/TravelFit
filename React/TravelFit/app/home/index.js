@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { styles } from '../styles'
@@ -6,11 +6,20 @@ import { useData } from '../../contexts/DatabaseContext';
 import {Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack} from 'native-base'
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'expo-router';
+import { context } from '../_layout';
 
 export default function index() {
   const { requestLocationPermission } = useData()
   const { currentUser } = useAuth()
   const router = useRouter()
+  const { removeBackground, setBackButton, setFooter } = useContext(context) 
+
+  useEffect(() => {
+    removeBackground()
+    setFooter(true)
+    setBackButton([])
+  }, [])
+
   requestLocationPermission()
 
   function existingPasses() {

@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Box, Pressable, Flex, Heading, Button, useSafeArea, Spinner } from 'native-base'
 import { Text, StyleSheet, View, Dimensions } from 'react-native'
 import { Link } from "expo-router";
 import { useData } from "../../../../../contexts/DatabaseContext";
+import { context } from "../../../../_layout";
 
 export default function GymOverlay(props) {
 
     const { findGym, userLocation } = useData()
     const [distance, setDistance] = useState()
     const [loading, setLoading] = useState(false)
+    const { setBackButton, backButton } = useContext(context)
     const [gymData, setGymData] = useState({
         address1: '',
         address2: '',
@@ -124,7 +126,10 @@ export default function GymOverlay(props) {
                                                 <Button
                                                     size="md"
                                                     variant="link"
-                                                    onPress={() => props.setGymId(gymData.id)}
+                                                    onPress={() => {
+                                                        props.setGymId(gymData.id)
+                                                        setBackButton(backButton.concat([[props.setGymId, null]]))
+                                                    }}
                                                 >
                                                     More Info
                                                 </Button>

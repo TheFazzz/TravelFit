@@ -1,5 +1,5 @@
 // import { baseFontSize } from 'native-base/lib/typescript/theme/tools';
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TextInput } from 'react-native';
 // import { styles } from '../../styles';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -7,6 +7,7 @@ import { Slider, Box, Button } from 'native-base';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useData } from '../../../contexts/DatabaseContext';
+import { context } from '../../_layout';
 
 export default function profile() {
     // var Select = require('react-select')
@@ -17,6 +18,11 @@ export default function profile() {
     const [onChangeValue, setOnChangeValue] = React.useState(10);
     const [onChangeEndValue, setOnChangeEndValue] = React.useState(10);
     const {raidiusPreferenceMeters, setRadiusPreferenceMeters} = useData()
+    const { removeBackground } = useContext(context)
+
+    useEffect(() => {
+        removeBackground()
+    }, [])
 
     
 

@@ -21,14 +21,12 @@ export const styles = StyleSheet.create({
         width: '100%',
         height: screenHeight * 2 * 2,
     },
-
     footer: {
         paddingLeft: paddingleftandright,
         paddingRight: paddingleftandright,
         bottom: 0,
         display: 'flex',
         flexDirection: 'row',
-        gap: 70,
         backgroundColor: 'lightgrey',
         width: '100%',
         height: '8%',

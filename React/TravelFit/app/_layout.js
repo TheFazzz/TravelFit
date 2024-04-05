@@ -16,8 +16,14 @@ export default function HomeLayout() {
   const [searchFocus, setSearchFocus] = useState(false)
   const [header, setHeader] = useState(false)
   const [footer, setFooter] = useState(false)
-  const [background, setBackground] = useState(true)
+  const [background, setBackground] = useState(null)
+  const [qr, setQr] = useState(false)
+  const [backButton, setBackButton] = useState([])
 
+  function removeBackground() {
+    setBackground(null)
+    setQr(null)
+  }
 
   const value = {
     searchFocus,
@@ -25,25 +31,29 @@ export default function HomeLayout() {
     header,
     setHeader,
     footer,
-    setFooter
+    setFooter,
+    setBackground,
+    setQr,
+    removeBackground,
+    backButton,
+    setBackButton
   }
 
   useEffect(() => {
-    if (!footer) setBackground(true)
-    else setBackground(null)
-  }, [footer])
-
+    setBackground(true)
+  }, [])
 
   return (
     <NativeBaseProvider>
       <AuthProvider>
         <DataProvider>
           <context.Provider value={value}>
-            {background && <Image source={require('../assets/freeweights.png')} style={styles.backgroundImage}/>}
+            {qr && <Image source={require(`../assets/qrCode-background.jpg`)} style={styles.backgroundImage}/>}
+            {background && <Image source={require(`../assets/freeweights.png`)} style={styles.backgroundImage}/>}
             <View style={styles.container}>
               {header && <Header />}
-                <View style={styles.body}>
-                  <Slot />
+                <View style={[styles.body, {backgroundColor: 'none'}]}>
+                  <Slot/>
                 </View>
               {footer && <Footer />}
             </View>
