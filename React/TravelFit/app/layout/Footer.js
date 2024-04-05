@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useRouter } from 'expo-router'
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { styles } from '../styles';
 import { Icon, IconButton } from 'native-base';
 import { MaterialCommunityIcons} from '@expo/vector-icons'
 import { useAuth } from '../../contexts/AuthContext';
+import { context } from '../_layout';
 
 export default function Footer() {
 
   const { userRole } = useAuth()
+  const { setBackButton } = useContext(context)
   const [footer, setFooter] = useState(false)
 
   const [iconPress, setIconPress] = useState({
@@ -37,6 +39,7 @@ export default function Footer() {
       [name]: true
     }
     setIconPress(pressed)
+    setBackButton([])
 
     router.replace({
       pathname: route,
