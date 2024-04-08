@@ -71,7 +71,7 @@ export default function index() {
     return (
     <Box  alignSelf='center' px={"-10"} >
       <Input 
-        bg="white"
+        // bg="white"
         mx="3"
         size="md"
         placeholder="Email"
@@ -79,7 +79,7 @@ export default function index() {
         value={email}
         onChangeText={setEmail}
         autoCapitalize='none'
-
+        style={{backgroundColor: 'white'}}
       />
     </Box>
     )
@@ -89,17 +89,19 @@ export default function index() {
     return (
     <Box alignSelf='center' px={"-10"} >
       <Input 
-        bg="white"
+        // bg="white"
         mx="3"
         size="md"
         placeholder="Password"
         id='password'
         w={styles.form.width}
-        style={styles.form}
+        // style={styles.form}
+        style={{backgroundColor: 'white'}}
         value={password}
         onChangeText={setPassword}
         autoCapitalize='none'
         secureTextEntry={true}
+        
       />
     </Box>
     )
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   form: {
-    width: '85%'
+    width: '85%',
   },
   forms: {
     display: 'flex',
