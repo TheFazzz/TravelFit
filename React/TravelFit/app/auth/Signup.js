@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { StyleSheet, Text, TextInput, View, Image, Button } from 'react-native';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 // import * as Keychain from 'react-native-keychain'
-import { KeyboardAvoidingView } from 'native-base';
-import { ScrollView, Spinner } from 'native-base';
+import { ScrollView, Checkbox, HStack, Spinner, Box, Input, VStack, Center, Link, Heading } from 'native-base';
 import { useAuth } from '../../contexts/AuthContext';
 import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate';
+import { context } from '../_layout';
 
 export default function index() {
-
+  const { setFooter, setHeader } = useContext(context)
   const { register } = useAuth()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -29,9 +29,10 @@ export default function index() {
   }
 
   useEffect(() => {
+    
     if (password != confirmPassword) {
       if (confirmPassword != '') {
-        setError('Passwords do not match!')
+        setError(<Heading>Passwords do not match!</Heading>)
       }
     } else {
       setError(null)
@@ -81,77 +82,116 @@ export default function index() {
     //TODO: Add Code here that will shake the error message!
   }
 
+  const firstNameBX = () => {
+    return <Box bg="white" alignSelf='center' px={"-10"} >
+      <Input mx="3"
+        size = "lg"
+        placeholder="First Name"
+        w="65%"
+        value={firstName}
+        onChangeText={setFirstName}
+        autoCapitalize = 'none'
+        id ='first_name'
+        
+         />
+    </Box>
+  }
+  const lastNameBX = () => {
+    return <Box bg="white" alignSelf='center' px={"-10"} >
+    <Input mx="3"
+      size = "lg"
+      placeholder="Last Name"
+      w="65%"
+      value={lastName}
+      onChangeText={setLastName}
+      autoCapitalize = 'none'
+      id ='last_name'
+
+      />
+      </Box>
+  }
+
+  const passwordBox = () => {
+    return (
+    <Box alignSelf='center' px={"-10"} >
+      <Input 
+        bg="white"
+        mx="3"
+        w="65%"
+        size="lg"
+        placeholder="Password"
+        id='password'
+        value={password}
+        onChangeText={setPassword}
+        autoCapitalize='none'
+        secureTextEntry={true}
+      />
+    </Box>
+    )
+  }
+
+  const confirmPassWD = () => {
+    return (
+    <Box alignSelf='center' px={"-10"} >
+      <Input 
+        bg="white"
+        mx="3"
+        w="65%"
+        size="lg"
+        placeholder='Confirm Password' 
+        id='confirmed_password'
+        value={confirmPassword}
+        style={styles.userinput}
+        onChangeText={setConfirmPassword}
+        autoCapitalize='none'
+        secureTextEntry={true}
+      />
+    </Box>
+    )
+  }
+
+  //login txt
+  const loginTXT = () => {
+    return <Heading size={"md"} p="2" textAlign={'center'} >
+      Registration Form!
+    </Heading>
+  }
+  const emailBox = () => {
+    return (
+    <Box  alignSelf='center' px={"-10"} >
+      <Input 
+        bg="white"
+        mx="3"
+        size="md"
+        placeholder="Email Address"
+        w="65%"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize='none'
+
+      />
+    </Box>
+    )
+  }
+
   return (
     <View style={styles.container}>
         <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{flexGrow: 1}}>
           <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
           
-          <View style={{flexDirection: 'row'}}>
-            <Text>First Name: </Text>
-            <TextInput 
-              placeholder='John' 
-              id='first_name' 
-              style={styles.userinput} 
-              value={firstName}
-              onChangeText={setFirstName}
-              autoCapitalize='none'
-              >
-            </TextInput> 
+          <View >
+            <VStack space={4}>
+            {loginTXT()}
+            {firstNameBX()}
+            {lastNameBX()}
+            {emailBox()}
+            {passwordBox()}
+            {confirmPassWD()}
+            </VStack>
           </View>
+            
+          
 
-          <View style={{flexDirection: 'row'}}>
-            <Text>Last Name: </Text>
-            <TextInput 
-              placeholder='Doe' 
-              id='last_name' 
-              style={styles.userinput} 
-              value={lastName}
-              onChangeText={setLastName}
-              autoCapitalize='none'
-              >
-            </TextInput> 
-          </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <Text>Email: </Text>
-            <TextInput 
-              placeholder='placeholder@email.com' 
-              id='email' 
-              style={styles.userinput} 
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize='none'
-              >
-            </TextInput> 
-          </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <Text>Password: </Text>
-            <TextInput 
-              secureTextEntry={true} 
-              placeholder='Password' 
-              id='password' 
-              style={styles.userinput}
-              value={password}
-              onChangeText={setPassword}
-              autoCapitalize='none'
-              >
-            </TextInput> 
-          </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <Text>Confirm Password: </Text>
-            <TextInput 
-              secureTextEntry={true} 
-              placeholder='Confirm Password' 
-              id='confirmed_password' 
-              style={styles.userinput}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              autoCapitalize='none'
-              >
-            </TextInput> 
-          </View>
 
           {loading?
             <Spinner size="lg" position={'absolute'} mt={500} ml={180}/>
@@ -187,7 +227,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     // flex: 1,
-    backgroundColor: 'silver',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
