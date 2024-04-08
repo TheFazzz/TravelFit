@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     search: {
         //everything you want to display on the map needs to have position: absolute
         position: 'absoulte',
+        backgroundColor: 'white'
     },
     view: {
         height: '100%',
