@@ -83,104 +83,7 @@ export default function purchaseScreen() {
       </View>
     )
   }
-
-  function Form() {
-    const form = StyleSheet.create({
-      container: {
-        paddingTop: 40,
-        display: 'flex',
-        gap: 30
-      },
-      userinput: {
-        overflow: 'hidden',
-        border: '1px solid black',
-        padding: '5px',
-        borderRadius: 15,
-        marginBottom: '10px',
-        textAlignVertical: 'top',
-      },
-      section: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 3
-      },
-      subSection: {
-        width: '45%',
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 34
-      }
-    })
-
-    return (
-      <View style={form.container}>
-        <View style={form.section}>
-          <Text>Cardholder Name</Text>
-          <Input
-            placeholder='John Doe'
-            id='cardName'
-            variant={'underlined'}
-            value={cardName}
-            onChangeText={setCardName}
-            style={form.userinput}
-            autoCapitalize='none'
-
-          >
-          </Input>
-        </View>
-
-        <View style={form.section}>
-          <Text>Card number</Text>
-          <Input
-            placeholder='0000 0000 0000 0000'
-            id='creditNum'
-            value={creditNum}
-            variant={'underlined'}
-            onChangeText={setCreditNum}
-            style={form.userinput}
-            keyboardType='numeric'
-            autoCapitalize='none'
-
-          >
-          </Input>
-        </View>
-
-        <View style={form.subSection}>
-          <View style={form.section}>
-            <Text>Exp date </Text>
-            <Input
-              placeholder='MM/YY'
-              id='expDate'
-              variant={'underlined'}
-              value={expire}
-              onChangeText={setExpire}
-              style={form.userinput}
-              autoCapitalize='none'
-              keyboardType='numeric'
-            >
-            </Input>
-          </View>
-
-          <View style={form.section}>
-            <Text>CVV </Text>
-            <Input
-              placeholder='123'
-              id='cvv'
-              value={cvv}
-              variant={'underlined'}
-              onChangeText={setCvv}
-              style={form.userinput}
-              keyboardType='numeric'
-              autoCapitalize='none'
-            >
-            </Input>
-          </View>
-        </View>
-      </View>
-    )
-  }
-
+  
   function Error() {
     return (
       <>
@@ -192,21 +95,21 @@ export default function purchaseScreen() {
       </>
     )
   }
-
+  
   function Header() {
     const header = StyleSheet.create({
       checkout: {
         fontSize: 30,
       },
       subTitle: {
-
+        
       },
       container: {
         display: 'flex',
         gap: 3
       }
     })
-
+    
     return (
       <View style={header.container}>
         <Text style={header.checkout}>
@@ -218,7 +121,7 @@ export default function purchaseScreen() {
       </View>
     )
   }
-
+  
   function ConfirmButton() {
     const button = StyleSheet.create({
       container: {
@@ -230,19 +133,19 @@ export default function purchaseScreen() {
         fontSize: 20
       }
     })
-
+    
     return(
-        <Button
-          onPress={() => { handlePurchase() }}
-          style={button.container}
-        >
+      <Button
+      onPress={() => { handlePurchase() }}
+      style={button.container}
+      >
           <Text style={button.text}>
             Pay now
           </Text>
         </Button>
     )
   }
-
+  
   function TotalAmount() {
     const amount = StyleSheet.create({
       view: {
@@ -258,9 +161,9 @@ export default function purchaseScreen() {
         fontSize: 27,
       }
     })
-
+    
     const price = parseInt(`${pass_price}`).toFixed(2)
-
+    
     return(
       <View style={amount.view}>
         <Text style={amount.text}>
@@ -272,15 +175,82 @@ export default function purchaseScreen() {
       </View>
     )
   }
-
+  
   return (
     <View style={styles.container}>
+
       <Header/>
       <Card/>
-      <Form />
+
+      <View style={form.container}>
+        <View style={form.section}>
+          <Text>Cardholder Name</Text>
+          <Input
+            placeholder='John Doe'
+            id='cardName'
+            variant={'underlined'}
+            value={cardName}
+            onChangeText={setCardName}
+            style={form.userinput}
+            autoCapitalize='none'
+            
+            >
+          </Input>
+        </View>
+
+        <View style={form.section}>
+          <Text>Card number</Text>
+          <Input
+            placeholder='0000 0000 0000 0000'
+            id='creditNum'
+            value={creditNum}
+            variant={'underlined'}
+            onChangeText={setCreditNum}
+            style={form.userinput}
+            keyboardType='numeric'
+            autoCapitalize='none'
+            
+            >
+          </Input>
+        </View>
+
+        <View style={form.subSection}>
+          <View style={form.section}>
+            <Text>Exp date </Text>
+            <Input
+              placeholder='MM/YY'
+              id='expDate'
+              variant={'underlined'}
+              value={expire}
+              onChangeText={setExpire}
+              style={form.userinput}
+              autoCapitalize='none'
+              keyboardType='numeric'
+              >
+            </Input>
+          </View>
+
+          <View style={form.section}>
+            <Text>CVV </Text>
+            <Input
+              placeholder='123'
+              id='cvv'
+              value={cvv}
+              variant={'underlined'}
+              onChangeText={setCvv}
+              style={form.userinput}
+              keyboardType='numeric'
+              autoCapitalize='none'
+              >
+            </Input>
+          </View>
+        </View>
+      </View>
+
       <TotalAmount/>
       <ConfirmButton/>
       <Error />
+      
     </View>
   );
 }
@@ -303,3 +273,31 @@ const styles = StyleSheet.create({
     height: 25,
   },
 });
+
+const form = StyleSheet.create({
+  container: {
+    paddingTop: 40,
+    display: 'flex',
+    gap: 30
+  },
+  userinput: {
+    overflow: 'hidden',
+    border: '1px solid black',
+    padding: '5px',
+    borderRadius: 15,
+    marginBottom: '10px',
+    textAlignVertical: 'top',
+  },
+  section: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 3
+  },
+  subSection: {
+    width: '45%',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 34
+  }
+})
