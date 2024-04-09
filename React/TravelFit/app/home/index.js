@@ -70,7 +70,12 @@ export default function index() {
                           variant="link" 
                           p={-3}
                           onPress={() => {
-                            router.replace('/home/purchased_passes')
+                            router.replace({
+                              pathname: '/home/purchased_passes',
+                              params: {
+                                back: '/home'
+                              }
+                            })
                           }}
                           >
                          3 passes
