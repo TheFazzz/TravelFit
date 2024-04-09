@@ -1,18 +1,24 @@
 import React, { useContext, useEffect } from 'react'
 
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { styles } from '../styles'
 import { useData } from '../../contexts/DatabaseContext';
-import {Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack} from 'native-base'
+import {Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack} from 'native-base'
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { context } from '../_layout';
+import {Avatar} from 'react-native-elements'
+import {Calendar} from 'react-native-calendars'
 
 export default function index() {
   const { requestLocationPermission } = useData()
   const { currentUser } = useAuth()
   const router = useRouter()
   const { removeBackground, setBackButton, setFooter } = useContext(context) 
+  const currentDate = new Date();
+  const currentDateString = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
 
   useEffect(() => {
     removeBackground()
@@ -146,7 +152,7 @@ export default function index() {
       <Center>
         <VStack>
           <Heading size="lg" mb={4} p={8}>
-            {user}
+            Welcome {user}
           </Heading>
         </VStack>
       </Center>
@@ -154,21 +160,26 @@ export default function index() {
   }
 
   return (
-    <Center >
-      <Heading style={{  }} size="lg" mb={4} p={6} >
-        Welcome! 
-      </Heading>
-      <Heading>
-        {currentUser && <UserName />}
-      </Heading>
+    <ScrollView>
+      <Avatar 
+        size='small'
+        rounded
+        activeOpacity={0.7}
+        title={currentUser ? currentUser.firstName[0] : '?'}
+        containerStyle={{backgroundColor: 'lightblue'}}
+        onPress={()=> {router.replace({pathname: '/profile/index'})}} //Fix Path to Profile page
+      />
 
-      <Avatar bg={'green.100'} size={"lg"}> </Avatar>
+      {currentUser && <UserName />}
+
+      <Calendar current={currentDateString} />
+
       {premium()}
       {existingPasses()}
       <VStack mb="2.5" mt="1.5" direction="column" space={4}>
         {missionStatement()}
       </VStack>
-    </Center>
+    </ScrollView>
 
   );
 }
