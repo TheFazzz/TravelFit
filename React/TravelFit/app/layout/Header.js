@@ -17,6 +17,9 @@ export default function Header() {
     if (backButton) {
       const recent = backButton[backButton.length - 1]
 
+      console.log(recent)
+      console.log(backButton)
+
       if (recent[0] == 'route') {
         router.replace(recent[1])
       } else if (recent[0]) {

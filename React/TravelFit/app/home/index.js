@@ -11,10 +11,14 @@ import {Avatar} from 'react-native-elements'
 import {Calendar} from 'react-native-calendars'
 
 export default function index() {
-  const { requestLocationPermission } = useData()
+  const { 
+    requestLocationPermission,
+    setIconPress
+  } = useData()
   const { currentUser } = useAuth()
   const router = useRouter()
   const { removeBackground, setBackButton, setFooter } = useContext(context) 
+
   const currentDate = new Date();
   const currentDateString = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
     .toString()
@@ -146,8 +150,6 @@ export default function index() {
   }
   const UserName = () => {
     const user = currentUser.firstName;
-    console.log(currentUser)
-
     return (
       <Center>
         <VStack>
@@ -167,7 +169,18 @@ export default function index() {
         activeOpacity={0.7}
         title={currentUser ? currentUser.firstName[0] : '?'}
         containerStyle={{backgroundColor: 'lightblue'}}
-        onPress={()=> {router.replace({pathname: '/profile/index'})}} //Fix Path to Profile page
+        onPress={()=> {
+          setIconPress({
+            'Home': false,
+            'Profile': true,
+            'Map': false,
+            'Pass': false
+          })
+          router.replace({
+            pathname: '/home/profile'
+          })
+          
+        }} //Fix Path to Profile page
       />
 
       {currentUser && <UserName />}

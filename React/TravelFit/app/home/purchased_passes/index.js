@@ -3,13 +3,16 @@ import { View, StyleSheet, Text, Pressable, Platform, Linking } from 'react-nati
 import { Heading, Flex, Box, Button, Link } from 'native-base'
 import { useAuth } from '../../../contexts/AuthContext'
 import LoadingScreen from '../../layout/LoadingScreen'
-import { useRouter } from 'expo-router'
+import { useRouter, useLocalSearchParams } from 'expo-router'
 import Index from '../gymPage'
 import { context } from '../../_layout'
 import QRCode from './qrCode'
 
 export default function index() {
     const router = useRouter()
+    const query = useLocalSearchParams()
+
+
     const [passes, setPasses] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
@@ -38,10 +41,12 @@ export default function index() {
     }
 
     useEffect(() => {
+        const {back} = query
+
         if (!loaded) loadData()
         removeBackground()
         setFooter(true)
-        setBackButton([['route', '/home']])
+        setBackButton([['route', back]])
     }, [])
     
     useEffect(() => {

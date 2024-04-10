@@ -6,6 +6,7 @@ import { Icon, IconButton } from 'native-base';
 import { MaterialCommunityIcons} from '@expo/vector-icons'
 import { useAuth } from '../../contexts/AuthContext';
 import { context } from '../_layout';
+import { useData } from '../../contexts/DatabaseContext';
 
 export default function Footer() {
 
@@ -13,12 +14,16 @@ export default function Footer() {
   const { setBackButton } = useContext(context)
   const [footer, setFooter] = useState(false)
 
-  const [iconPress, setIconPress] = useState({
+  const {iconPress, setIconPress} = useData()
+
+  useEffect(() => {
+    setIconPress({
       'Home': true,
       'Profile': false,
       'Map': false,
       'Pass': false
-  })
+    })
+  }, []) 
 
   const router = useRouter()
 
@@ -51,6 +56,7 @@ export default function Footer() {
     <>
     {footer? 
     <View style={styles.footer}>
+
         <IconButton 
           icon={<Icon as={MaterialCommunityIcons} name='home' style={icon.icon} size='8' />}
           onPress={() => {handleRoute('Home', '/home')}}
@@ -60,13 +66,14 @@ export default function Footer() {
           <Text>Home</Text>
         </IconButton>
 
+
         <IconButton 
-          icon={<Icon as={MaterialCommunityIcons} name='account' style={icon.icon} size='8' />}
-          onPress={() => {handleRoute('Profile', '/home/profile')}}
-          style={iconPress['Profile'] ? icon.buttonDisabled : icon.button}
-          disabled={iconPress['Profile']}
+          icon={<Icon as={MaterialCommunityIcons} name='arm-flex' style={icon.icon} size='8' />}
+          onPress={() => {handleRoute('Pass', '/home/gymPage', {id: 6})}}
+          disabled={iconPress['Pass']}
+          style={iconPress['Pass'] ? icon.buttonDisabled : icon.button}
           >
-          <Text>Profile</Text>
+          <Text>Gym Page</Text>
         </IconButton>
 
         <IconButton 
@@ -78,14 +85,16 @@ export default function Footer() {
           <Text>Map</Text>
         </IconButton>
 
+
         <IconButton 
-          icon={<Icon as={MaterialCommunityIcons} name='arm-flex' style={icon.icon} size='8' />}
-          onPress={() => {handleRoute('Pass', '/home/gymPage', {id: 6})}}
-          disabled={iconPress['Pass']}
-          style={iconPress['Pass'] ? icon.buttonDisabled : icon.button}
+          icon={<Icon as={MaterialCommunityIcons} name='account' style={icon.icon} size='8' />}
+          onPress={() => {handleRoute('Profile', '/home/profile')}}
+          style={iconPress['Profile'] ? icon.buttonDisabled : icon.button}
+          disabled={iconPress['Profile']}
           >
-          <Text>Gym Page</Text>
+          <Text>Profile</Text>
         </IconButton>
+
     </View> 
     :  
     <View style={styles.footer}>

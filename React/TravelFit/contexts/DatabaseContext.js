@@ -8,6 +8,7 @@ import {    findGymWithId,
 } from './DataConnection'
 
 import { getCurrentLocation, getLocationPermission } from './GeolocationConnection'
+import { storeData, getData } from '../asyncStorage/asyncStorage'
 
 const DataContext = React.createContext()
 
@@ -21,7 +22,26 @@ export function DataProvider({ children }) {
     const [raidiusPreferenceMeters, setRadiusPreferenceMeters] = useState(2000)
     const [searchPreference, setSearchPreference] = useState('ByCity')
     const [perferedCity, setPerferedCity] = useState('Anaheim')
+    const [darkMode, setDarkMode] = useState(false)
+    const [language, setLanguage] = useState('English')
+    const [iconPress, setIconPress] = useState({})
 
+    useEffect(() => {
+        storeData('darkMode', darkMode)
+    }, [darkMode])
+
+    useEffect(() => {
+        let mode
+        try {
+            mode = getData('darkMode')
+        } finally {
+            console.log(mode)
+            if (mode) {
+                setDarkMode(mode)
+            }
+        }
+    }, [])
+    
     async function findGym(id){
         return findGymWithId(id)
     }
@@ -74,7 +94,13 @@ export function DataProvider({ children }) {
         searchPreference,
         setSearchPreference,
         perferedCity,
-        setPerferedCity
+        setPerferedCity,
+        darkMode,
+        setDarkMode,
+        language,
+        setLanguage,
+        iconPress,
+        setIconPress
     }
 
     return(
