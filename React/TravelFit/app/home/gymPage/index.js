@@ -187,12 +187,12 @@ export default function Index(props) {
                     onPress={() => {
                         setShowInfo(true)
                         setShowPassOptions(false)
-                    }} >Info</Button>
+                    }} style={[styles.tabButton, showInfo && styles.activeTabButton]} >Info</Button>
                 <Button title="Pass Options"
                     onPress={() => {
                         setShowInfo(false)
                         setShowPassOptions(true)
-                    }}>Pass Options</Button>
+                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]} >Pass Options</Button>
             </View>
         )
     }
@@ -231,8 +231,6 @@ let styles = StyleSheet.create({
         paddingBottom: 90
     },
     buttons: {
-        display: 'flex',
-        gap: 30,
         marginTop: 30,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -244,5 +242,15 @@ let styles = StyleSheet.create({
     },
     sliderbox: {
         flex: 0,
-    }
+    },
+    tabButton: {
+        flex: 1,
+        backgroundColor: '#ccc', 
+        borderWidth: 1,
+        borderColor: '#ccc', 
+    },
+    activeTabButton: {
+        backgroundColor: '#007bff', 
+        color: '#fff', 
+    },
 })
