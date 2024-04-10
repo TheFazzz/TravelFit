@@ -167,7 +167,7 @@ export default function index() {
         activeOpacity={0.7}
         title={currentUser ? currentUser.firstName[0] : '?'}
         containerStyle={{backgroundColor: 'lightblue'}}
-        onPress={()=> {router.replace({pathname: '/profile/index'})}} //Fix Path to Profile page
+        onPress={()=> {router.replace({pathname: '/home/profile'})}} 
       />
 
       {currentUser && <UserName />}
