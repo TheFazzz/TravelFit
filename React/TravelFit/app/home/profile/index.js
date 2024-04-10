@@ -12,7 +12,6 @@ import { Icon } from 'native-base';
 import { Avatar } from 'react-native-elements'
 
 
-
 export default function profile() {
     // var Select = require('react-select')
     const router = useRouter()
@@ -29,13 +28,17 @@ export default function profile() {
         language,
         setLanguage
     } = useData()
-    const { removeBackground } = useContext(context)
+    const { removeBackground, setDarkStyle, darkStyle } = useContext(context)
     const { currentUser } = useAuth()
     const { firstName, lastName } = currentUser
 
     useEffect(() => {
         removeBackground()
     }, [])
+
+    useEffect(() => {
+        setDarkStyle(darkMode)
+    }, [darkMode])
 
     const profileSettings = {
         'Content': {
@@ -108,7 +111,7 @@ export default function profile() {
     function Arrow() {
         return (
             <>
-                <Text>{'>'}</Text>
+                <Text style={{color: darkStyle? 'white' : null}}>{'>'}</Text>
             </>
         )
     }
@@ -252,7 +255,7 @@ export default function profile() {
                 gap: 13
             },
             dataFont: {
-                color: 'grey',
+                color: darkStyle? 'silver': 'grey',
                 fontSize: 14
             }
         })
@@ -260,7 +263,7 @@ export default function profile() {
         return (
             <View style={slider.container}>
                 <Text style={slider.dataFont}>{data} {units}</Text>
-                <Text>{'>'}</Text>
+                <Text style={{color: darkStyle? 'white' : null}}>{'>'}</Text>
             </View>
         )
     }
@@ -315,9 +318,9 @@ export default function profile() {
 
         return (
             <View style={user.container}>
-                <Text style={{ fontSize: 45 }}>Profile</Text>
+                <Text style={{ fontSize: 45, color: darkStyle? 'white': null}}>Profile</Text>
                 <AvatarIcon />
-                <Text style={styles.font}>
+                <Text style={[styles.font, {color: darkStyle? 'white': null}]}>
                     {firstName} {lastName}
                 </Text>
             </View>
@@ -331,14 +334,14 @@ export default function profile() {
 
             },
             titleContainer: {
-                backgroundColor: 'silver',
+                backgroundColor: darkStyle? '#9290C3' : 'silver',
                 paddingLeft: 12,
                 paddingTop: 10,
                 paddingBottom: 5
             },
             title: {
                 fontSize: 15,
-                color: '#F0FFF0'
+                color: darkStyle? null : '#F0FFF0'
             },
             settings: {
 
@@ -367,19 +370,22 @@ export default function profile() {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
+                backgroundColor: darkStyle? '#1B1A55' : null,
                 paddingLeft: 12,
                 paddingTop: 10,
                 paddingBottom: 10,
             },
             icon: {
                 size: 10,
+                color: darkStyle? 'white': 'black'
             },
             iconContainer: {
                 width: 60,
                 paddingRight: 10,
             },
             text: {
-                fontSize: 15,
+                fontSize: 16,
+                color: darkStyle? 'white' : null,
             },
             function: {
                 position: 'absolute',
@@ -491,6 +497,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     font: {
-        fontSize: 20
+        fontSize: 20,
     }
 });

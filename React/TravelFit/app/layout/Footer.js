@@ -11,7 +11,7 @@ import { useData } from '../../contexts/DatabaseContext';
 export default function Footer() {
 
   const { userRole } = useAuth()
-  const { setBackButton } = useContext(context)
+  const { setBackButton, darkStyle } = useContext(context)
   const [footer, setFooter] = useState(false)
 
   const {iconPress, setIconPress} = useData()
@@ -51,6 +51,23 @@ export default function Footer() {
       params: params
     })
   }
+
+  const icon = StyleSheet.create({
+    icon: {
+      bottom: 10,
+      color: darkStyle? '#070F2B': null
+    },
+    button: {
+      width: 110,
+      borderRadius: 0,
+      backgroundColor: darkStyle? '#9290C3' : null
+    },
+    buttonDisabled : {
+      width: 110,
+      borderRadius: 0,
+      backgroundColor: darkStyle? '#535C91' : '#87CEEB'
+    }
+  })
 
   return (
     <>
@@ -104,15 +121,4 @@ export default function Footer() {
   )
 }
 
-const icon = StyleSheet.create({
-  icon: {
-    bottom: 10,
-  },
-  button: {
-    width: 110,
-  },
-  buttonDisabled : {
-    width: 110,
-    backgroundColor: '#87CEEB'
-  }
-})
+

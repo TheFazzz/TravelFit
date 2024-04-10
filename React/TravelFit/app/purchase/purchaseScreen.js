@@ -2,11 +2,12 @@ import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, Text, TextInput, View, Alert, Image } from 'react-native';
 import { Input, Button } from 'native-base';
-import { useRef } from 'react'
+import { useContext, useRef } from 'react'
 import { useFonts } from 'expo-font'
 import { useAuth } from '../../contexts/AuthContext';
 import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState, useEffect } from 'react';
+import { context } from '../_layout';
 
 export default function purchaseScreen() {
   const [fontsLoaded, fontError] = useFonts({
@@ -22,6 +23,8 @@ export default function purchaseScreen() {
   const [expire, setExpire] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false)
+
+  const {darkStyle} = useContext(context)
 
   const { purchasePass } = useAuth()
   const { city, gym_name, gym_id, pass_id, pass_description, pass_name, pass_price } = query
@@ -100,9 +103,10 @@ export default function purchaseScreen() {
     const header = StyleSheet.create({
       checkout: {
         fontSize: 30,
+        color: darkStyle? 'white' : 'black',
       },
       subTitle: {
-        
+        color: darkStyle? 'white' : 'black',
       },
       container: {
         display: 'flex',
@@ -138,6 +142,7 @@ export default function purchaseScreen() {
       <Button
       onPress={() => { handlePurchase() }}
       style={button.container}
+      bgColor={darkStyle? '#535C91' : null}
       >
           <Text style={button.text}>
             Pay now
@@ -175,6 +180,38 @@ export default function purchaseScreen() {
       </View>
     )
   }
+
+  const form = StyleSheet.create({
+    container: {
+      paddingTop: 40,
+      display: 'flex',
+      gap: 30
+    },
+    userinput: {
+      overflow: 'hidden',
+      border: '1px solid black',
+      padding: '5px',
+      borderRadius: 15,
+      marginBottom: '10px',
+      textAlignVertical: 'top',
+    },
+    section: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 3
+    },
+    subSection: {
+      width: '45%',
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 34
+    },
+    header: {
+      fontSize: 19,
+      color: darkStyle? 'white' : 'black'
+    }
+  })
   
   return (
     <View style={styles.container}>
@@ -184,7 +221,7 @@ export default function purchaseScreen() {
 
       <View style={form.container}>
         <View style={form.section}>
-          <Text>Cardholder Name</Text>
+          <Text style={form.header}>Cardholder Name</Text>
           <Input
             placeholder='John Doe'
             id='cardName'
@@ -199,7 +236,7 @@ export default function purchaseScreen() {
         </View>
 
         <View style={form.section}>
-          <Text>Card number</Text>
+          <Text style={form.header}>Card number</Text>
           <Input
             placeholder='0000 0000 0000 0000'
             id='creditNum'
@@ -216,7 +253,7 @@ export default function purchaseScreen() {
 
         <View style={form.subSection}>
           <View style={form.section}>
-            <Text>Exp date </Text>
+            <Text style={form.header}>Exp date </Text>
             <Input
               placeholder='MM/YY'
               id='expDate'
@@ -231,7 +268,7 @@ export default function purchaseScreen() {
           </View>
 
           <View style={form.section}>
-            <Text>CVV </Text>
+            <Text style={form.header}>CVV </Text>
             <Input
               placeholder='123'
               id='cvv'
@@ -250,7 +287,7 @@ export default function purchaseScreen() {
       <TotalAmount/>
       <ConfirmButton/>
       <Error />
-      
+
     </View>
   );
 }
@@ -274,30 +311,3 @@ const styles = StyleSheet.create({
   },
 });
 
-const form = StyleSheet.create({
-  container: {
-    paddingTop: 40,
-    display: 'flex',
-    gap: 30
-  },
-  userinput: {
-    overflow: 'hidden',
-    border: '1px solid black',
-    padding: '5px',
-    borderRadius: 15,
-    marginBottom: '10px',
-    textAlignVertical: 'top',
-  },
-  section: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 3
-  },
-  subSection: {
-    width: '45%',
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 34
-  }
-})

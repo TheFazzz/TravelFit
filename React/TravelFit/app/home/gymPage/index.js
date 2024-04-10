@@ -16,7 +16,7 @@ export default function Index(props) {
     const query = useLocalSearchParams()
     const router = useRouter()
     const { findGym, gymPassOptionsById } = useData()
-    const { removeBackground } = useContext(context)
+    const { removeBackground, darkStyle } = useContext(context)
     const [loading, setLoading] = useState(true)
     const [gymData, setGymData] = useState({
         address1: '',
@@ -87,6 +87,7 @@ export default function Index(props) {
             },
             gymName: {
                 fontSize: 24,
+                color: darkStyle? 'white': 'black',
                 fontWeight: 'bold',
                 marginBottom: 10,
                 textAlign: 'center',
@@ -208,6 +209,40 @@ export default function Index(props) {
         )
     }
 
+    let styles = StyleSheet.create({
+        display: {
+            position: 'absolute',
+            height: '120%',
+            width: '110%',
+            backgroundColor: '',
+            paddingTop: 90,
+            paddingBottom: 90
+        },
+        buttons: {
+            marginTop: 30,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginBottom: 30
+        },
+        passes: {
+            display: 'flex',
+            gap: 10
+        },
+        sliderbox: {
+            flex: 0,
+        },
+        tabButton: {
+            flex: 1,
+            backgroundColor: '#ccc', 
+            borderWidth: 1,
+            borderColor: '#ccc', 
+        },
+        activeTabButton: {
+            backgroundColor: '#007bff', 
+            color: '#fff', 
+        },
+    })
+
     return (
         <View style={styles.display}>
             {!loading &&
@@ -221,36 +256,4 @@ export default function Index(props) {
     )
 }
 
-let styles = StyleSheet.create({
-    display: {
-        position: 'absolute',
-        height: '120%',
-        width: '110%',
-        backgroundColor: 'white',
-        paddingTop: 90,
-        paddingBottom: 90
-    },
-    buttons: {
-        marginTop: 30,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginBottom: 30
-    },
-    passes: {
-        display: 'flex',
-        gap: 10
-    },
-    sliderbox: {
-        flex: 0,
-    },
-    tabButton: {
-        flex: 1,
-        backgroundColor: '#ccc', 
-        borderWidth: 1,
-        borderColor: '#ccc', 
-    },
-    activeTabButton: {
-        backgroundColor: '#007bff', 
-        color: '#fff', 
-    },
-})
+

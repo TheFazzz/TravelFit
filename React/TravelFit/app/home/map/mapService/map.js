@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import MapDisplay from './mapdisplay';
 import { useData } from '../../../../contexts/DatabaseContext';
 import LoadingScreen from '../../../layout/LoadingScreen';
+import { context } from '../../../_layout';
 
 export default function Map(props) {
 
@@ -15,6 +16,8 @@ export default function Map(props) {
         searchPreference,
         perferedCity
     } = useData()
+
+    const {darkStyle} = useContext(context)
 
     const [loading, setLoading] = useState(true)
     const [first, setFirst] = useState(true)
@@ -74,6 +77,7 @@ export default function Map(props) {
                 allLocations={allLocations}
                 loadData={loadData}
                 userLocation={userLocation}
+                darkStyle={darkStyle}
             />}
         </View>
     )

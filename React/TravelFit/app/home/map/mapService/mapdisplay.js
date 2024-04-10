@@ -2,8 +2,7 @@ import React, { Component, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { Link } from 'expo-router';
-import mapstyle from './mapstyle';
-
+import {mapstylelight, mapstyledark} from './mapstyle';
 import MapHUD from './mapHUD';
 
 class MapDisplay extends Component {
@@ -72,7 +71,7 @@ class MapDisplay extends Component {
             }}
             initialRegion={this.state.region}
             scrollEnabled={true}
-            customMapStyle={mapstyle}
+            customMapStyle={this.props.darkStyle? mapstyledark : mapstylelight}
             region={this.state.region}
             showsUserLocation={true}
             followsUserLocation={true}

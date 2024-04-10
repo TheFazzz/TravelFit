@@ -1,7 +1,10 @@
 import { StyleSheet, Dimensions } from 'react-native';
-let screenHeight = (Dimensions.get('window').height / 1);
+import { useData } from '../contexts/DatabaseContext';
+import { useEffect } from 'react';
 
+let screenHeight = (Dimensions.get('window').height / 1);
 let paddingleftandright = 15
+
 
 export const styles = StyleSheet.create({
     container: {

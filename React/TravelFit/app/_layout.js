@@ -1,16 +1,18 @@
 import { Slot } from 'expo-router';
 import Footer from './layout/Footer';
 import Header from './layout/Header';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, Image } from 'react-native';
 import { Box, NativeBaseProvider, ScrollView } from 'native-base';
-import { styles } from './styles';
 import nativebasetheme from './nativebasetheme';
 import { DataProvider } from '../contexts/DatabaseContext';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import React, { useState, useContext, useEffect } from 'react'
+import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
+
+let screenHeight = (Dimensions.get('window').height / 1);
+let paddingleftandright = 15
 
 export const context = React.createContext()
-
 export default function HomeLayout() {
 
   const [searchFocus, setSearchFocus] = useState(false)
@@ -19,6 +21,7 @@ export default function HomeLayout() {
   const [background, setBackground] = useState(null)
   const [qr, setQr] = useState(false)
   const [backButton, setBackButton] = useState([])
+  const [darkStyle, setDarkStyle] = useState(false)
 
   function removeBackground() {
     setBackground(null)
@@ -36,25 +39,75 @@ export default function HomeLayout() {
     setQr,
     removeBackground,
     backButton,
-    setBackButton
+    setBackButton,
+    setDarkStyle,
+    darkStyle
   }
 
   useEffect(() => {
     setBackground(true)
   }, [])
 
+  useEffect(() => {
+    if (darkStyle) {
+      setStatusBarStyle('light')
+    } else {
+      setStatusBarStyle('dark')
+    }
+  }, [darkStyle])
+
+
+
+  const styles = StyleSheet.create({
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      backgroundColor: darkStyle? '#070F2B': null,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    body: {
+      paddingTop: 90,
+      paddingLeft: paddingleftandright,
+      paddingRight: paddingleftandright,
+      flex: 1,
+      // backgroundColor: '#AFE5E7',
+      width: '100%',
+      height: screenHeight * 2 * 2,
+    },
+    footer: {
+      paddingLeft: paddingleftandright,
+      paddingRight: paddingleftandright,
+      bottom: 0,
+      display: 'flex',
+      flexDirection: 'row',
+      backgroundColor: 'lightgrey',
+      width: '100%',
+      height: '8%',
+      justifyContent: 'center',
+    },
+    backgroundImage: {
+      flex: 1,
+      resizeMode: 'cover',
+      position: 'absolute',
+      height: '100%',
+      width: '100%'
+    }
+  });
+
   return (
     <NativeBaseProvider>
       <AuthProvider>
         <DataProvider>
           <context.Provider value={value}>
-            {qr && <Image source={require(`../assets/qrCode-background.jpg`)} style={styles.backgroundImage}/>}
-            {background && <Image source={require(`../assets/freeweights.png`)} style={styles.backgroundImage}/>}
             <View style={styles.container}>
+            {background && <Image source={require(`../assets/freeweights.png`)} style={styles.backgroundImage} />}
+            {qr && <Image source={require(`../assets/qrCode-background.jpg`)} style={styles.backgroundImage} />}
               {header && <Header />}
-                <View style={[styles.body, {backgroundColor: 'none'}]}>
-                  <Slot/>
-                </View>
+              <View style={[styles.body, { backgroundColor: 'none' }]}>
+                <Slot />
+              </View>
               {footer && <Footer />}
             </View>
           </context.Provider>

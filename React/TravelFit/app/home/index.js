@@ -13,11 +13,12 @@ import {Calendar} from 'react-native-calendars'
 export default function index() {
   const { 
     requestLocationPermission,
-    setIconPress
+    setIconPress,
+    darkMode
   } = useData()
   const { currentUser } = useAuth()
   const router = useRouter()
-  const { removeBackground, setBackButton, setFooter } = useContext(context) 
+  const { removeBackground, setBackButton, setFooter, setDarkStyle } = useContext(context) 
 
   const currentDate = new Date();
   const currentDateString = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
@@ -29,6 +30,10 @@ export default function index() {
     setFooter(true)
     setBackButton([])
   }, [])
+
+  useEffect(() => {
+    setDarkStyle(darkMode)
+  }, [darkMode])
 
   requestLocationPermission()
 

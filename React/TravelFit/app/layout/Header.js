@@ -10,7 +10,7 @@ import { MaterialCommunityIcons, AntDesign} from '@expo/vector-icons'
 
 export default function Header() {
 
-  const {searchFocus, setSearchFocus, backButton, setBackButton} = useContext(context)
+  const {searchFocus, setSearchFocus, backButton, setBackButton, darkStyle} = useContext(context)
   const router = useRouter()
 
   function handleBack() {
@@ -38,7 +38,7 @@ export default function Header() {
         <IconButton 
           onPress={handleBack} 
           style={header.back}
-          icon={<Icon as={AntDesign} name='arrowleft' style={{color: 'black'}} size='8' />}
+          icon={<Icon as={AntDesign} name='arrowleft' style={{color: darkStyle? 'white' : 'black'}} size='8' />}
           size='sm'
           >
         </IconButton>

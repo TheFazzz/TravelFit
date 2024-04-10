@@ -25,22 +25,28 @@ export function DataProvider({ children }) {
     const [darkMode, setDarkMode] = useState(false)
     const [language, setLanguage] = useState('English')
     const [iconPress, setIconPress] = useState({})
+    const [loaded, setLoaded] = useState(false)
 
     useEffect(() => {
-        storeData('darkMode', darkMode)
+        if (loaded) storeData('darkMode', darkMode)
     }, [darkMode])
 
     useEffect(() => {
+        getDarkMode()
+    }, [])
+
+    async function getDarkMode() {
         let mode
         try {
-            mode = getData('darkMode')
+            mode = await getData('darkMode')
         } finally {
             console.log(mode)
             if (mode) {
                 setDarkMode(mode)
             }
+            setLoaded(true)
         }
-    }, [])
+    }
     
     async function findGym(id){
         return findGymWithId(id)
