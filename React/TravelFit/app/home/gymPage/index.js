@@ -84,19 +84,28 @@ export default function Index(props) {
                 paddingTop: 20,
                 paddingLeft: 20,
                 marginRight: 30,
-            }
+            },
+            gymName: {
+                fontSize: 24,
+                fontWeight: 'bold',
+                marginBottom: 10,
+                textAlign: 'center',
+            },
         })
-
+        const formatHours = (hours) => {
+            return Object.entries(hours).map(([day, hours]) => `${day}: ${hours}`).join('\n')
+        }
         //add info here
         const infoData = {
+            'Hours': formatHours(gymData.hours_of_operation),
             'City': gymData.city,
             'State': gymData.state,
-            'Gym Name': gymData.gym_name,
-            'Description': gymData.description
+            'Description': gymData.description,
+            'Address': gymData.address1
         }
-
         return (
             <>
+                <Text style={infoStyles.gymName}>{gymData.gym_name}</Text>
                 <SlideShow />
                 <View style={infoStyles.container}>
                     {Object.keys(infoData).map((keyName, i) => (
@@ -178,12 +187,12 @@ export default function Index(props) {
                     onPress={() => {
                         setShowInfo(true)
                         setShowPassOptions(false)
-                    }} >Info</Button>
+                    }} style={[styles.tabButton, showInfo && styles.activeTabButton]} >Info</Button>
                 <Button title="Pass Options"
                     onPress={() => {
                         setShowInfo(false)
                         setShowPassOptions(true)
-                    }}>Pass Options</Button>
+                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]} >Pass Options</Button>
             </View>
         )
     }
@@ -222,8 +231,6 @@ let styles = StyleSheet.create({
         paddingBottom: 90
     },
     buttons: {
-        display: 'flex',
-        gap: 30,
         marginTop: 30,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -235,5 +242,15 @@ let styles = StyleSheet.create({
     },
     sliderbox: {
         flex: 0,
-    }
+    },
+    tabButton: {
+        flex: 1,
+        backgroundColor: '#ccc', 
+        borderWidth: 1,
+        borderColor: '#ccc', 
+    },
+    activeTabButton: {
+        backgroundColor: '#007bff', 
+        color: '#fff', 
+    },
 })
