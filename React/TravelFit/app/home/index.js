@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 
-import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import { styles } from '../styles'
 import { useData } from '../../contexts/DatabaseContext';
 import { Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack } from 'native-base'
@@ -171,25 +171,30 @@ export default function index() {
 
   return (
     <ScrollView>
-      <Avatar
-        size='small'
-        rounded
-        activeOpacity={0.7}
-        title={currentUser ? currentUser.firstName[0] : '?'}
-        containerStyle={{ backgroundColor: 'lightblue' }}
-        onPress={() => {
-          setIconPress({
-            'Home': false,
-            'Profile': true,
-            'Map': false,
-            'Pass': false
-          })
-          router.replace({
-            pathname: '/home/profile'
-          })
+      <View style={{flexDirection: 'row'}}>
+        <Avatar
+          size='small'
+          rounded
+          activeOpacity={0.7}
+          title={currentUser ? currentUser.firstName[0] : '?'}
+          containerStyle={{ backgroundColor: theme.three }}
+          onPress={() => {
+            setIconPress({
+              'Home': false,
+              'Profile': true,
+              'Map': false,
+              'Pass': false
+            })
+            router.replace({
+              pathname: '/home/profile'
+            })
 
-        }} //Fix Path to Profile page
-      />
+          }} //Fix Path to Profile page
+        />
+        <Image source={require('../../assets/Banner.png')} style={{resizeMode: 'contain', height: 25, marginLeft: -60, marginTop: 5}} />
+        <Image source={require('../../assets/dumbbell-icon.png')} style={{height: 60, width: 60, marginLeft: -80, marginTop: -13, tintColor: theme.three}} />
+
+      </View>
 
       {currentUser && <UserName />}
 
@@ -198,15 +203,18 @@ export default function index() {
           backgroundColor: theme.three,
           borderWidth: 3,
           borderColor: theme.two,
-          height: 320
+          height: 320,
         }}
         headerStyle={{
           backgroundColor: theme.three
         }}
         theme={{
           calendarBackground: theme.three,
-
+          dayTextColor: theme.four,
+          monthTextColor: theme.four,
+          textSectionTitleColor: theme.four
         }}
+        hideExtraDays={true}
         current={currentDateString} 
       >
       </Calendar>
