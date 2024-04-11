@@ -8,7 +8,7 @@ import CityOptions from "./CityOptions";
 
 
 export default function MapSearch(props) {
-    const { searchFocus, setSearchFocus } = useContext(context)
+    const { searchFocus, setSearchFocus, darkStyle, theme } = useContext(context)
     const [searchInput, setSearchInput] = useState('')
     const [searchTypeChosen, setSearchTypeChosen] = useState(false)
     const [cityOptionChosen, setCityOptionChosen] = useState(false)
@@ -82,6 +82,30 @@ export default function MapSearch(props) {
         )
     }
 
+    const styles = StyleSheet.create({
+        search: {
+            //everything you want to display on the map needs to have position: absolute
+            position: 'absoulte',
+            backgroundColor: theme.three,
+        },
+        view: {
+            height: '100%',
+            width: '100%',
+            backgroundColor: theme.three,
+            position: 'absolute',
+            opacity: 0.6,
+        },
+        buttons: {
+            display: 'flex',
+            gap: 25,
+            position: 'absolute',
+            marginTop: 140,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginLeft: 30
+        }
+    })
+
     return (
         <>
             <View style={{
@@ -96,6 +120,7 @@ export default function MapSearch(props) {
                     placeholder="Search"
                     variant='rounded'
                     w="100%"
+                    bg={theme.three}
                     ref={inputRef}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
@@ -127,26 +152,3 @@ export default function MapSearch(props) {
 
 
 const padding = '1%'
-const styles = StyleSheet.create({
-    search: {
-        //everything you want to display on the map needs to have position: absolute
-        position: 'absoulte',
-        backgroundColor: 'white'
-    },
-    view: {
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'white',
-        position: 'absolute',
-        opacity: 0.6,
-    },
-    buttons: {
-        display: 'flex',
-        gap: 25,
-        position: 'absolute',
-        marginTop: 140,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginLeft: 30
-    }
-})

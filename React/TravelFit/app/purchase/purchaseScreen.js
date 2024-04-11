@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet, Text, TextInput, View, Alert, Image } from 'react-native';
-import { Input, Button } from 'native-base';
+import { Input, Button, theme } from 'native-base';
 import { useContext, useRef } from 'react'
 import { useFonts } from 'expo-font'
 import { useAuth } from '../../contexts/AuthContext';
@@ -24,7 +24,7 @@ export default function purchaseScreen() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false)
 
-  const {darkStyle} = useContext(context)
+  const {darkStyle, theme} = useContext(context)
 
   const { purchasePass } = useAuth()
   const { city, gym_name, gym_id, pass_id, pass_description, pass_name, pass_price } = query
@@ -142,7 +142,7 @@ export default function purchaseScreen() {
       <Button
       onPress={() => { handlePurchase() }}
       style={button.container}
-      bgColor={darkStyle? '#535C91' : null}
+      bgColor={theme.two}
       >
           <Text style={button.text}>
             Pay now
@@ -157,12 +157,14 @@ export default function purchaseScreen() {
         paddingTop: 60,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
       },
       text: {
+        color: theme.font,
         fontSize: 19
       },
       price: {
+        color: theme.font,
         fontSize: 27,
       }
     })
@@ -194,6 +196,7 @@ export default function purchaseScreen() {
       borderRadius: 15,
       marginBottom: '10px',
       textAlignVertical: 'top',
+      color: theme.font
     },
     section: {
       width: '100%',
@@ -209,7 +212,7 @@ export default function purchaseScreen() {
     },
     header: {
       fontSize: 19,
-      color: darkStyle? 'white' : 'black'
+      color: theme.font
     }
   })
   

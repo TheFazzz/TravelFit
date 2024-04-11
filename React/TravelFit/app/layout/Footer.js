@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useRouter } from 'expo-router'
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { styles } from '../styles';
+import { styles, light, dark } from '../styles';
 import { Icon, IconButton } from 'native-base';
 import { MaterialCommunityIcons} from '@expo/vector-icons'
 import { useAuth } from '../../contexts/AuthContext';
 import { context } from '../_layout';
 import { useData } from '../../contexts/DatabaseContext';
 
+
 export default function Footer() {
 
   const { userRole } = useAuth()
-  const { setBackButton, darkStyle } = useContext(context)
+  const { setBackButton, darkStyle, theme } = useContext(context)
   const [footer, setFooter] = useState(false)
 
   const {iconPress, setIconPress} = useData()
@@ -24,6 +25,7 @@ export default function Footer() {
       'Pass': false
     })
   }, []) 
+
 
   const router = useRouter()
 
@@ -55,17 +57,17 @@ export default function Footer() {
   const icon = StyleSheet.create({
     icon: {
       bottom: 10,
-      color: darkStyle? '#070F2B': null
+      color: theme.one
     },
     button: {
       width: 110,
       borderRadius: 0,
-      backgroundColor: darkStyle? '#9290C3' : null
+      backgroundColor: theme.three
     },
     buttonDisabled : {
       width: 110,
       borderRadius: 0,
-      backgroundColor: darkStyle? '#535C91' : '#87CEEB'
+      backgroundColor: theme.two
     }
   })
 

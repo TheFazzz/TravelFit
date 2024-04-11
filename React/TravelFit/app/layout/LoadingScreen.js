@@ -1,13 +1,18 @@
 import { View, Text, StyleSheet, Dimensions} from 'react-native'
 import { HStack, Spinner, Heading} from 'native-base'
+import { useContext } from 'react'
+import { context } from '../_layout'
 
 export default function LoadingScreen() {
+
+    const {theme} = useContext(context)
     const file = './home/layout/loadingscreen.js'
+
     return (
         <View style={styles.view}>
             <HStack space={3} justifyContent="center">
-                <Spinner size="lg"/>
-                <Heading color="primary.500" fontSize="lg">
+                <Spinner size="lg" color={theme.one}/>
+                <Heading color={theme.one} fontSize="lg">
                     Loading
                 </Heading>
             </HStack>

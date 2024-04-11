@@ -28,7 +28,7 @@ export default function profile() {
         language,
         setLanguage
     } = useData()
-    const { removeBackground, setDarkStyle, darkStyle } = useContext(context)
+    const { removeBackground, setDarkStyle, darkStyle, theme } = useContext(context)
     const { currentUser } = useAuth()
     const { firstName, lastName } = currentUser
 
@@ -111,7 +111,7 @@ export default function profile() {
     function Arrow() {
         return (
             <>
-                <Text style={{color: darkStyle? 'white' : null}}>{'>'}</Text>
+                <Text style={{color: theme.font}}>{'>'}</Text>
             </>
         )
     }
@@ -272,7 +272,15 @@ export default function profile() {
         const { data, set } = props.data
         return (
             <>
-                <Switch size='md' isChecked={data} onToggle={() => { set(!data) }} />
+                <Switch 
+                    size='md'
+                    isChecked={data} 
+                    onToggle={() => { set(!data) }} 
+                    onTrackColor={theme.two}
+                    onThumbColor={theme.one}
+                    offTrackColor={theme.two} 
+                    offThumbColor={theme.one}
+                    />
             </>
         )
     }
@@ -318,9 +326,9 @@ export default function profile() {
 
         return (
             <View style={user.container}>
-                <Text style={{ fontSize: 45, color: darkStyle? 'white': null}}>Profile</Text>
+                <Text style={{ fontSize: 45, color: theme.font}}>Profile</Text>
                 <AvatarIcon />
-                <Text style={[styles.font, {color: darkStyle? 'white': null}]}>
+                <Text style={[styles.font, {color: theme.font}]}>
                     {firstName} {lastName}
                 </Text>
             </View>
@@ -334,14 +342,14 @@ export default function profile() {
 
             },
             titleContainer: {
-                backgroundColor: darkStyle? '#9290C3' : 'silver',
+                backgroundColor: theme.two,
                 paddingLeft: 12,
                 paddingTop: 10,
                 paddingBottom: 5
             },
             title: {
                 fontSize: 15,
-                color: darkStyle? null : '#F0FFF0'
+                color: theme.font
             },
             settings: {
 
@@ -370,14 +378,14 @@ export default function profile() {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
-                backgroundColor: darkStyle? '#1B1A55' : null,
+                backgroundColor: theme.one,
                 paddingLeft: 12,
                 paddingTop: 10,
                 paddingBottom: 10,
             },
             icon: {
                 size: 10,
-                color: darkStyle? 'white': 'black'
+                color: theme.three
             },
             iconContainer: {
                 width: 60,

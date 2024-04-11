@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { Heading, Flex, Box, Button, Link } from 'native-base'
+import { Heading, Flex, Box, Button, Link, theme } from 'native-base'
 
 import { router, useLocalSearchParams } from 'expo-router';
 import locationData from '../map/location/locationData';
@@ -16,7 +16,7 @@ export default function Index(props) {
     const query = useLocalSearchParams()
     const router = useRouter()
     const { findGym, gymPassOptionsById } = useData()
-    const { removeBackground, darkStyle } = useContext(context)
+    const { removeBackground, darkStyle, theme } = useContext(context)
     const [loading, setLoading] = useState(true)
     const [gymData, setGymData] = useState({
         address1: '',
@@ -74,7 +74,7 @@ export default function Index(props) {
     function Info() {
         const infoStyles = StyleSheet.create({
             section: {
-                borderBottomColor: 'black',
+                borderBottomColor: theme.font,
                 borderBottomWidth: 1,
                 paddingBottom: 2,
             },
@@ -87,12 +87,16 @@ export default function Index(props) {
             },
             gymName: {
                 fontSize: 24,
-                color: darkStyle? 'white': 'black',
+                color: theme.font,
                 fontWeight: 'bold',
                 marginBottom: 10,
                 textAlign: 'center',
             },
+            font: {
+                color: theme.font
+            }
         })
+
         const formatHours = (hours) => {
             return Object.entries(hours).map(([day, hours]) => `${day}: ${hours}`).join('\n')
         }
@@ -111,7 +115,7 @@ export default function Index(props) {
                 <View style={infoStyles.container}>
                     {Object.keys(infoData).map((keyName, i) => (
                         <View style={infoStyles.section}>
-                            <Text>{keyName}: {infoData[keyName]}</Text>
+                            <Text style={infoStyles.font}>{keyName}: {infoData[keyName]}</Text>
                         </View>
                     ))}
                 </View>
@@ -188,12 +192,20 @@ export default function Index(props) {
                     onPress={() => {
                         setShowInfo(true)
                         setShowPassOptions(false)
-                    }} style={[styles.tabButton, showInfo && styles.activeTabButton]} >Info</Button>
+                    }} style={[styles.tabButton, showInfo && styles.activeTabButton]}>
+                        <Text style={styles.font}>
+                            Info
+                        </Text>
+                </Button>
                 <Button title="Pass Options"
                     onPress={() => {
                         setShowInfo(false)
                         setShowPassOptions(true)
-                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]} >Pass Options</Button>
+                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]}>
+                        <Text style={styles.font}>
+                            Pass Options
+                        </Text>
+                </Button>
             </View>
         )
     }
@@ -236,11 +248,16 @@ export default function Index(props) {
             backgroundColor: '#ccc', 
             borderWidth: 1,
             borderColor: '#ccc', 
+            color: theme.font,
+            borderColor: theme.two
         },
         activeTabButton: {
-            backgroundColor: '#007bff', 
-            color: '#fff', 
+            backgroundColor: theme.one, 
+            color: theme.one, 
         },
+        font: {
+            color: theme.font
+        }
     })
 
     return (

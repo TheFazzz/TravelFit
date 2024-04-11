@@ -17,7 +17,7 @@ export default function index() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const { userPasses, currentUser } = useAuth()
-    const { removeBackground, backButton, setBackButton, setFooter } = useContext(context)
+    const { removeBackground, backButton, setBackButton, setFooter, darkStyle } = useContext(context)
 
     const [gymId, setGymId] = useState(null)
     const [qrCodePage, setQrCodePage] = useState(null)
@@ -140,6 +140,21 @@ export default function index() {
         )
     }
 
+
+    const styles = StyleSheet.create({
+        view: {
+
+        },
+        passes: {
+            paddingTop: 30,
+            display: 'flex',
+            gap: 15
+        },
+        heading: {
+            color: darkStyle? 'white' : 'black'
+        }
+    })
+
     return (
         <>
             {qrCodePage ?
@@ -166,13 +181,3 @@ export default function index() {
     )
 }
 
-const styles = StyleSheet.create({
-    view: {
-
-    },
-    passes: {
-        paddingTop: 30,
-        display: 'flex',
-        gap: 15
-    }
-})

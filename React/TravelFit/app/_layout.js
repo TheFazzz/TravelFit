@@ -1,13 +1,14 @@
 import { Slot } from 'expo-router';
 import Footer from './layout/Footer';
 import Header from './layout/Header';
-import { StyleSheet, Dimensions, Text, View, Image } from 'react-native';
+import { StyleSheet, Dimensions, Text, View, Image, TouchableNativeFeedbackComponent } from 'react-native';
 import { Box, NativeBaseProvider, ScrollView } from 'native-base';
 import nativebasetheme from './nativebasetheme';
 import { DataProvider } from '../contexts/DatabaseContext';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import React, { useState, useContext, useEffect } from 'react'
 import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
+import { dark, light } from './styles';
 
 let screenHeight = (Dimensions.get('window').height / 1);
 let paddingleftandright = 15
@@ -22,6 +23,7 @@ export default function HomeLayout() {
   const [qr, setQr] = useState(false)
   const [backButton, setBackButton] = useState([])
   const [darkStyle, setDarkStyle] = useState(false)
+  const [theme, setTheme] = useState(light)
 
   function removeBackground() {
     setBackground(null)
@@ -41,7 +43,8 @@ export default function HomeLayout() {
     backButton,
     setBackButton,
     setDarkStyle,
-    darkStyle
+    darkStyle,
+    theme
   }
 
   useEffect(() => {
@@ -51,8 +54,10 @@ export default function HomeLayout() {
   useEffect(() => {
     if (darkStyle) {
       setStatusBarStyle('light')
+      setTheme(dark)
     } else {
       setStatusBarStyle('dark')
+      setTheme(light)
     }
   }, [darkStyle])
 
@@ -63,7 +68,7 @@ export default function HomeLayout() {
       display: 'flex',
       flexDirection: 'column',
       flex: 1,
-      backgroundColor: darkStyle? '#070F2B': null,
+      backgroundColor: theme.four,
       alignItems: 'center',
       justifyContent: 'center',
     },

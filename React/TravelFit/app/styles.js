@@ -43,3 +43,19 @@ export const styles = StyleSheet.create({
         width: '100%'
     }
 });
+
+export const dark = {
+    one: '#E23E57',
+    two: '#88304E',
+    three: '#522546',
+    four: '#311D3F',
+    font: 'white'
+}
+
+export const light = {
+    one: '#F8EDE3',
+    two: '#DFD3C3',
+    three: '#D0B8A8',
+    four: '#85586F',
+    font: 'black'
+}
