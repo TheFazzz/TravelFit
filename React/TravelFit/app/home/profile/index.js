@@ -318,6 +318,9 @@ export default function profile() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
+                backgroundColor: theme.three,
+                borderWidth: 1,
+                borderColor: theme.one,
                 paddingBottom: 30,
                 paddingTop: 20,
                 gap: 13,
@@ -325,13 +328,13 @@ export default function profile() {
         })
 
         return (
-            <View style={user.container}>
+            <Box style={user.container} shadow={3}>
                 <Text style={{ fontSize: 45, color: theme.font}}>Profile</Text>
                 <AvatarIcon />
                 <Text style={[styles.font, {color: theme.font}]}>
                     {firstName} {lastName}
                 </Text>
-            </View>
+            </Box>
         )
     }
 
@@ -385,7 +388,7 @@ export default function profile() {
             },
             icon: {
                 size: 10,
-                color: theme.three
+                color: theme.two
             },
             iconContainer: {
                 width: 60,
@@ -446,7 +449,7 @@ export default function profile() {
                     start: [0, 0],
                     end: [1, 0]
                 }
-            }} p={10} rounded="xl" _text={{
+            }} p={10} rounded="xl" shadow={3} _text={{
                 fontSize: `xl`,
                 fontWeight: `medium`,
                 color: `red`,
@@ -471,10 +474,11 @@ export default function profile() {
     return (
         <View style={styles.container}>
             <User />
-
+            <Box shadow={3}>
             {Object.keys(profileSettings).map((keyName, i) => (
                 <Section title={keyName} items={profileSettings[keyName].items} />
             ))}
+            </Box>
 
             <Logout />
         </View>
@@ -485,6 +489,7 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'column',
+        gap: 25,
         // flex: 1,
         backgroundColor: '',
     },

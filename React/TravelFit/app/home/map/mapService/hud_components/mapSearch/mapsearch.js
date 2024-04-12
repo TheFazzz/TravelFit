@@ -114,6 +114,7 @@ export default function MapSearch(props) {
                 marginTop: 95,
             }}>
                 <Input
+                    shadow={3}
                     position='absolute'
                     rounded='lg'
                     ml='3'

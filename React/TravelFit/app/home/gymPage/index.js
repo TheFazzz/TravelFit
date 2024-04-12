@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { Heading, Flex, Box, Button, Link, theme } from 'native-base'
+import { Heading, Flex, Box, Button, Link, theme, ScrollView } from 'native-base'
 
 import { router, useLocalSearchParams } from 'expo-router';
 import locationData from '../map/location/locationData';
@@ -77,13 +77,23 @@ export default function Index(props) {
                 borderBottomColor: theme.font,
                 borderBottomWidth: 1,
                 paddingBottom: 2,
+                paddingRight: 5,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                gap: 10
             },
             container: {
                 display: 'flex',
-                gap: 3,
-                paddingTop: 20,
-                paddingLeft: 20,
-                marginRight: 30,
+                gap: 4,
+                marginTop: 20,
+                marginRight: 20,
+                marginLeft: 10,
+                padding: 7,
+                borderColor: 'black',
+                borderWidth: 1,
+                borderRadius: 5,
+                backgroundColor: theme.two
             },
             gymName: {
                 fontSize: 24,
@@ -94,7 +104,7 @@ export default function Index(props) {
             },
             font: {
                 color: theme.font
-            }
+            },
         })
 
         const formatHours = (hours) => {
@@ -102,23 +112,46 @@ export default function Index(props) {
         }
         //add info here
         const infoData = {
-            'Hours': formatHours(gymData.hours_of_operation),
             'City': gymData.city,
             'State': gymData.state,
             'Description': gymData.description,
             'Address': gymData.address1
         }
+        console.log(gymData.hours_of_operation)
+
         return (
             <>
                 <Text style={infoStyles.gymName}>{gymData.gym_name}</Text>
                 <SlideShow />
-                <View style={infoStyles.container}>
-                    {Object.keys(infoData).map((keyName, i) => (
-                        <View style={infoStyles.section}>
-                            <Text style={infoStyles.font}>{keyName}: {infoData[keyName]}</Text>
-                        </View>
-                    ))}
-                </View>
+                <ScrollView>
+                    <Box style={[infoStyles.container]} shadow={3}>
+                        {gymData.hours_of_operation && 
+                            <View style={infoStyles.section}>
+                                <Text style={infoStyles.font}>
+                                Hours:
+                                </Text>
+                                <View style={{display: 'flex', gap: 1}}>
+                                {Object.entries(gymData.hours_of_operation).map(([data, hours], index) => (
+                                    <View style={{display: 'flex', flexDirection: 'row', gap: 12, justifyContent: 'space-between'}}>
+                                        <Text>{data}:</Text>
+                                        <Text>{hours}</Text>
+                                    </View>
+                                ))}
+                                </View>
+                            </View>
+                        }
+                        {Object.keys(infoData).map((keyName, i) => (
+                            <View style={infoStyles.section}>
+                                <Text style={infoStyles.font}>
+                                    {keyName}: 
+                                </Text>
+                                <Text style={[infoStyles.font, {width: keyName == 'Description'? 270 : null}]}>
+                                    {infoData[keyName]}
+                                </Text>
+                            </View>
+                        ))}
+                    </Box>
+                </ScrollView>
             </>
         )
     }
@@ -193,18 +226,18 @@ export default function Index(props) {
                         setShowInfo(true)
                         setShowPassOptions(false)
                     }} style={[styles.tabButton, showInfo && styles.activeTabButton]}>
-                        <Text style={styles.font}>
-                            Info
-                        </Text>
+                    <Text style={styles.font}>
+                        Info
+                    </Text>
                 </Button>
                 <Button title="Pass Options"
                     onPress={() => {
                         setShowInfo(false)
                         setShowPassOptions(true)
                     }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]}>
-                        <Text style={styles.font}>
-                            Pass Options
-                        </Text>
+                    <Text style={styles.font}>
+                        Pass Options
+                    </Text>
                 </Button>
             </View>
         )
@@ -213,11 +246,16 @@ export default function Index(props) {
     function SlideShow() {
         const { photos } = gymData
         return (
-            <View style={styles.sliderbox}>
+            <Box style={styles.sliderbox} shadow={3}>
                 <SliderBox
                     images={photos}
+                    imageComponentStyle={{
+                        paddingRight: 20,
+                        marginRight: 20,
+                        width: 100
+                    }}
                 />
-            </View>
+            </Box>
         )
     }
 
@@ -242,18 +280,21 @@ export default function Index(props) {
         },
         sliderbox: {
             flex: 0,
+            borderWidth: 1,
+            margin: 5,
+            marginRight: 15
         },
         tabButton: {
             flex: 1,
-            backgroundColor: '#ccc', 
+            backgroundColor: '#ccc',
             borderWidth: 1,
-            borderColor: '#ccc', 
+            borderColor: '#ccc',
             color: theme.font,
             borderColor: theme.two
         },
         activeTabButton: {
-            backgroundColor: theme.one, 
-            color: theme.one, 
+            backgroundColor: theme.one,
+            color: theme.one,
         },
         font: {
             color: theme.font

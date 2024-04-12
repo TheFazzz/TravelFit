@@ -25,6 +25,7 @@ export default function HomeLayout() {
   const [darkStyle, setDarkStyle] = useState(false)
   const [theme, setTheme] = useState(light)
 
+
   function removeBackground() {
     setBackground(null)
     setQr(null)

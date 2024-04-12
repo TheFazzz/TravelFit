@@ -1,29 +1,32 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, StyleSheet, Text, Pressable, Platform, Linking } from 'react-native'
-import { Heading, Flex, Box, Button, Link } from 'native-base'
+import { Heading, Flex, Box, Button, Link, ScrollView } from 'native-base'
 import { useAuth } from '../../../contexts/AuthContext'
 import LoadingScreen from '../../layout/LoadingScreen'
 import { useRouter, useLocalSearchParams } from 'expo-router'
 import Index from '../gymPage'
 import { context } from '../../_layout'
 import QRCode from './qrCode'
+import { useFonts } from 'expo-font'
 
 export default function index() {
     const router = useRouter()
     const query = useLocalSearchParams()
 
-
     const [passes, setPasses] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const { userPasses, currentUser } = useAuth()
-    const { removeBackground, backButton, setBackButton, setFooter, darkStyle } = useContext(context)
+    const { removeBackground, backButton, setBackButton, setFooter, darkStyle, theme } = useContext(context)
 
     const [gymId, setGymId] = useState(null)
     const [qrCodePage, setQrCodePage] = useState(null)
-
     const [loaded, setLoaded] = useState(false)
 
+    const [fontsLoaded, fontError] = useFonts({
+        'CREDC': require('../../../assets/fonts/CREDC.ttf'),
+        'Merriweather-Bold': require('../../../assets/fonts/Merriweather-Bold.ttf')
+    })
 
     async function loadData() {
         setLoading(true)
@@ -68,6 +71,19 @@ export default function index() {
     }
 
     function Pass(props) {
+        const pass = StyleSheet.create({ 
+            font: {
+                color: theme.font,
+            },
+            link: {
+                borderColor: 'black',
+                borderWidth: 1,
+                shadowColor: 'black',
+                backgroundColor: theme.four,
+                padding: 2,
+            }  
+        })
+
         const { description, gym_name, id, qr_code, city, pass_name, latitude, longitude, gym_id, duration_days, is_valid } = props.data
         return (
             <View>
@@ -76,49 +92,62 @@ export default function index() {
                         {({ isHovered, isPressed }) => {
                             return (
                                 <Box
-                                    bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"}
+                                    bg={theme.one}
                                     style={{ transform: [{ scale: isPressed ? 0.96 : 1 }] }} w={400}
-                                    p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
+                                    p="5" rounded="8" shadow={3} borderWidth="1" borderColor={theme.two}> 
                                     <View style={{ display: 'flex', flexDirection: 'row', gap: 30 }}>
-                                        <View>
-                                            <Heading>
+                                        <View style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                                            <Heading style={{color: theme.font}}>
                                                 {gym_name}, {city}
                                             </Heading>
-                                            <Text mt="2" fontSize="sm" color="coolGray.700" bold>
+                                            <Text mt="2" fontSize="sm" style={{color: theme.font}} bold>
                                                 {description}
                                             </Text>
-                                            <Text mt="0" fontSize={12} fontWeight="medium" color="darkBlue.600" p="0">
+                                            <Text mt="0" fontSize={12} fontWeight="medium" p="0">
                                                 <Link style={{ display: 'flex', gap: 8 }}>
-                                                    <Button size="md" variant="link" p={-3}
-                                                        onPress={() => {
-                                                            setQrCodePage({
-                                                                image: qr_code,
-                                                                pass_name: pass_name,
-                                                                gym_name: gym_name,
-                                                                city: city
-                                                            })
-                                                        }}>
-                                                        QR Code
-                                                    </Button>
-                                                    <Button size="md" variant="link" p={-3}
-                                                        onPress={() => {
-                                                            openGPS(latitude, longitude, gym_name)
-                                                        }}>
-                                                        Directions
-                                                    </Button>
-                                                    <Button size="md" variant="link" p={-3}
-                                                        onPress={() => {
-                                                            setGymId(gym_id)
-                                                            setBackButton(backButton.concat([[setGymId, null]]))
-                                                        }}>
-                                                        Gym Info
-                                                    </Button>
+                                                    <Box shadow={3}>
+                                                        <Button style={pass.link}
+                                                            onPress={() => {
+                                                                setQrCodePage({
+                                                                    image: qr_code,
+                                                                    pass_name: pass_name,
+                                                                    gym_name: gym_name,
+                                                                    city: city
+                                                                })
+                                                            }}>
+                                                            <Text style={[pass.font]}>
+                                                                QR Code
+                                                            </Text>
+                                                        </Button>
+                                                    </Box>
+                                                    <Box shadow={3}>
+                                                        <Button style={pass.link}
+                                                            onPress={() => {
+                                                                openGPS(latitude, longitude, gym_name)
+                                                            }}>
+                                                            <Text style={[pass.font]}>
+                                                                Directions
+                                                            </Text>
+                                                        </Button>
+                                                    </Box>
+                                                    <Box shadow={3}>
+                                                        <Button style={pass.link}
+                                                            onPress={() => {
+                                                                setGymId(gym_id)
+                                                                setBackButton(backButton.concat([[setGymId, null]]))
+                                                            }}>
+                                                            <Text style={[pass.font]}>
+                                                                Gym Info
+                                                            </Text>
+                                                        </Button>
+                                                    </Box>
+
                                                 </Link>
                                             </Text>
                                         </View>
                                         <View>
-                                            <Text>{duration_days} days</Text>
-                                            {is_valid && <Text>Activated</Text>}
+                                            <Text style={pass.font}>{duration_days} days</Text>
+                                            {is_valid && <Text style={pass.font}>Activated</Text>}
                                         </View>
                                     </View>
                                 </Box>
@@ -150,8 +179,23 @@ export default function index() {
             display: 'flex',
             gap: 15
         },
+        headingContainer: {
+            borderColor: theme.two,
+            borderWidth: 1,
+            borderRadius: 6,
+            paddingTop: 10,
+            paddingBottom: 10,
+            backgroundColor: theme.one,
+            marginTop: 20,
+            shadowColor: 'black',
+            shadowRadius: 10,
+            shadowOffset: {width: 10, height: 10},
+        },
         heading: {
-            color: darkStyle? 'white' : 'black'
+            color: theme.font,
+            paddingLeft: 13,
+            fontSize: 25,
+            fontFamily: 'Merriweather-Bold'
         }
     })
 
@@ -162,9 +206,12 @@ export default function index() {
                 :
                 !loading ?
                     <View style={styles.view}>
-                        <Heading style={styles.heading} size="lg" mb={1} p={4} pl={9}>
-                            Current Passes for {currentUser.firstName}
-                        </Heading>
+                        <ScrollView>
+                        <Box style={styles.headingContainer} shadow={1}>
+                            <Text style={styles.heading}>
+                                Current Passes for {currentUser.firstName}
+                            </Text>
+                        </Box>
                         {passes.length == 0 ?
                             <Text>
                                 No passes.
@@ -172,6 +219,7 @@ export default function index() {
                             :
                             <Passes />
                         }
+                        </ScrollView>
                     </View>
                     :
                     <LoadingScreen />

@@ -11,8 +11,8 @@ export default function LoadingScreen() {
     return (
         <View style={styles.view}>
             <HStack space={3} justifyContent="center">
-                <Spinner size="lg" color={theme.one}/>
-                <Heading color={theme.one} fontSize="lg">
+                <Spinner size="lg" color={theme.three}/>
+                <Heading color={theme.three} fontSize="lg">
                     Loading
                 </Heading>
             </HStack>

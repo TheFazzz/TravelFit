@@ -112,7 +112,7 @@ export default function index() {
 
   const premium = () => {
     return (
-      <Box p={10} rounded="xl"
+      <Box p={10} rounded="xl" borderColor={theme.two} shadow={3}
       _text={{
         fontSize: `xl`,
         fontWeight: `medium`,
@@ -137,7 +137,9 @@ export default function index() {
             }
           })
         }}>
-          Try Premium Today!
+          <Text style={{color: theme.font}}>
+            Try Premium Today!
+          </Text>
         </Button>
       </Box>
     )
@@ -171,30 +173,32 @@ export default function index() {
 
   return (
     <ScrollView>
-      <View style={{flexDirection: 'row'}}>
-        <Avatar
-          size='small'
-          rounded
-          activeOpacity={0.7}
-          title={currentUser ? currentUser.firstName[0] : '?'}
-          containerStyle={{ backgroundColor: theme.three }}
-          onPress={() => {
-            setIconPress({
-              'Home': false,
-              'Profile': true,
-              'Map': false,
-              'Pass': false
-            })
-            router.replace({
-              pathname: '/home/profile'
-            })
+      <Box style={{flexDirection: 'row'}}>
+        <Box shadow={3}>
+          <Avatar
+            size='small'
+            rounded
+            activeOpacity={0.7}
+            title={currentUser ? currentUser.firstName[0] : '?'}
+            containerStyle={{ backgroundColor: theme.three }}
+            onPress={() => {
+              setIconPress({
+                'Home': false,
+                'Profile': true,
+                'Map': false,
+                'Pass': false
+              })
+              router.replace({
+                pathname: '/home/profile'
+              })
 
-          }} //Fix Path to Profile page
-        />
+            }}
+          />
+        </Box>
         <Image source={require('../../assets/Banner.png')} style={{resizeMode: 'contain', height: 25, marginLeft: -60, marginTop: 5}} />
         <Image source={require('../../assets/dumbbell-icon.png')} style={{height: 60, width: 60, marginLeft: -80, marginTop: -13, tintColor: theme.three}} />
 
-      </View>
+      </Box>
 
       {currentUser && <UserName />}
 

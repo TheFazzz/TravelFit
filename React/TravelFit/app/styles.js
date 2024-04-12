@@ -44,6 +44,8 @@ export const styles = StyleSheet.create({
     }
 });
 
+
+
 export const dark = {
     one: '#E23E57',
     two: '#88304E',
@@ -53,9 +55,9 @@ export const dark = {
 }
 
 export const light = {
-    one: '#F8EDE3',
-    two: '#DFD3C3',
-    three: '#D0B8A8',
-    four: '#85586F',
+    one: '#E3F4F4',
+    two: '#C4DFDF',
+    three: '#D2E9E9',
+    four: '#F8F6F4',
     font: 'black'
 }
