@@ -17,7 +17,7 @@ export default function index() {
     }
 
     function toggleCameraType() {
-        setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+        setType(current => (current == CameraType.back ? CameraType.front : CameraType.back));
     }
 
     return (
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     camera: {
-        flex: 1,
+       flex: 1
     },
     buttonContainer: {
         flex: 1,
