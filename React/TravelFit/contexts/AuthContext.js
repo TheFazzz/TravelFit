@@ -36,7 +36,7 @@ export function AuthProvider({ children }) {
           
           const {access_token} = tokenInfo
           const decrypted = decryptToken(access_token)
-          const userRole = 'User' //change to 'User' or 'Gym' to change roles
+          const userRole = 'Gym' //change to 'User' or 'Gym' to change roles
           
           setBearerToken(access_token)
           setCurrentUser(decrypted)
