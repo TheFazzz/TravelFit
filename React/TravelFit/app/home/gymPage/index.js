@@ -227,16 +227,17 @@ export default function Index(props) {
                     onPress={() => {
                         setShowInfo(true)
                         setShowPassOptions(false)
-                    }} style={[styles.tabButton, showInfo && styles.activeTabButton]}>
+                    }} style={[styles.tabButton, showInfo && styles.activeTabButton]} rounded={true}>
                     <Text style={styles.font}>
                         Info
                     </Text>
                 </Button>
+                <View style={{marginLeft: 10, marginRight: 10}}></View>
                 <Button title="Pass Options"
                     onPress={() => {
                         setShowInfo(false)
                         setShowPassOptions(true)
-                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]}>
+                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]}rounded={true}>
                     <Text style={styles.font}>
                         Pass Options
                     </Text>
@@ -274,7 +275,9 @@ export default function Index(props) {
             marginTop: 30,
             flexDirection: 'row',
             justifyContent: 'center',
-            marginBottom: 30
+            marginBottom: 30,
+            paddingLeft: 20,
+            paddingRight: 20,
         },
         passes: {
             display: 'flex',
@@ -292,7 +295,9 @@ export default function Index(props) {
             borderWidth: 1,
             borderColor: '#ccc',
             color: theme.font,
-            borderColor: theme.two
+            borderColor: theme.two,
+            borderRadius: 10,
+
         },
         activeTabButton: {
             backgroundColor: theme.one,
