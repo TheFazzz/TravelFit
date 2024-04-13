@@ -5,8 +5,8 @@ const storeData = async (key, value) => {
         const jsonValue = JSON.stringify(value)
         AsyncStorage.setItem(key, jsonValue)
         .then(e => {
-            console.log(key, 'stored successfully')
-            console.log(jsonValue)
+            // console.log(key, 'stored successfully')
+            // console.log(jsonValue)
             resolve(e)
         })
         .catch(e => {

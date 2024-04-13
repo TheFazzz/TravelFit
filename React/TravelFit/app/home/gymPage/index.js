@@ -15,8 +15,8 @@ import { context } from '../../_layout';
 export default function Index(props) {
     const query = useLocalSearchParams()
     const router = useRouter()
-    const { findGym, gymPassOptionsById } = useData()
-    const { removeBackground, darkStyle, theme } = useContext(context)
+    const { findGym, gymPassOptionsById, setIconPress } = useData()
+    const { removeBackground, darkStyle, theme, setBackButton } = useContext(context)
     const [loading, setLoading] = useState(true)
     const [gymData, setGymData] = useState({
         address1: '',
@@ -133,8 +133,8 @@ export default function Index(props) {
                                 <View style={{display: 'flex', gap: 1}}>
                                 {Object.entries(gymData.hours_of_operation).map(([data, hours], index) => (
                                     <View style={{display: 'flex', flexDirection: 'row', gap: 12, justifyContent: 'space-between'}}>
-                                        <Text>{data}:</Text>
-                                        <Text>{hours}</Text>
+                                        <Text style={infoStyles.font}>{data}:</Text>
+                                        <Text style={infoStyles.font}>{hours}</Text>
                                     </View>
                                 ))}
                                 </View>
@@ -203,6 +203,13 @@ export default function Index(props) {
                                                                 pass_price: data.price
                                                             }
                                                         })
+                                                        setBackButton([['route', '/home']])
+                                                        setIconPress({
+                                                            'Home': true,
+                                                            'Profile': false,
+                                                            'Map': false,
+                                                            'Pass': false
+                                                          })
                                                     }}>
                                                     Order Pass
                                                 </Button>
@@ -266,7 +273,8 @@ export default function Index(props) {
             width: '110%',
             backgroundColor: '',
             paddingTop: 90,
-            paddingBottom: 90
+            paddingBottom: 90,
+            backgroundColor: theme.four
         },
         buttons: {
             marginTop: 30,

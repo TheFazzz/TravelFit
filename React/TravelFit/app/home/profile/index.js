@@ -306,7 +306,8 @@ export default function profile() {
                 rounded
                 activeOpacity={0.7}
                 title={currentUser ? currentUser.firstName[0] : '?'}
-                containerStyle={{ backgroundColor: 'lightblue' }}
+                containerStyle={{ backgroundColor: theme.two, }}
+
             />
         )
     }

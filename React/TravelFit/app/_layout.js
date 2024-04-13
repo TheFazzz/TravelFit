@@ -69,7 +69,7 @@ export default function HomeLayout() {
       display: 'flex',
       flexDirection: 'column',
       flex: 1,
-      backgroundColor: theme.four,
+      backgroundColor: qr? theme.one : theme.four,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -99,7 +99,7 @@ export default function HomeLayout() {
       position: 'absolute',
       height: '100%',
       width: '100%'
-    }
+    },
   });
 
   return (
@@ -108,8 +108,7 @@ export default function HomeLayout() {
         <DataProvider>
           <context.Provider value={value}>
             <View style={styles.container}>
-            {background && <Image source={require(`../assets/freeweights.png`)} style={styles.backgroundImage} />}
-            {qr && <Image source={require(`../assets/qrCode-background.jpg`)} style={styles.backgroundImage} />}
+              {background && <Image source={require(`../assets/freeweights.png`)} style={styles.backgroundImage} />}
               {header && <Header />}
               <View style={[styles.body, { backgroundColor: 'none' }]}>
                 <Slot />
