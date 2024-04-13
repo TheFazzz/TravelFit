@@ -72,6 +72,7 @@ export default function Index(props) {
     useEffect(() => { console.log(gymData) }, [gymData])
 
     function Info() {
+        const {darkMode} = useContext(context)
         const infoStyles = StyleSheet.create({
             section: {
                 borderBottomColor: theme.font,
@@ -103,7 +104,10 @@ export default function Index(props) {
                 textAlign: 'center',
             },
             font: {
-                color: theme.font
+                color: theme.font,
+            },
+            hoursFont: {
+                color: darkStyle ? '#fff' : theme.font, 
             },
         })
 
@@ -127,14 +131,12 @@ export default function Index(props) {
                     <Box style={[infoStyles.container]} shadow={3}>
                         {gymData.hours_of_operation && 
                             <View style={infoStyles.section}>
-                                <Text style={infoStyles.font}>
-                                Hours:
-                                </Text>
+                                <Text style={[infoStyles.font, infoStyles.hoursFont]}>Hours:</Text> 
                                 <View style={{display: 'flex', gap: 1}}>
                                 {Object.entries(gymData.hours_of_operation).map(([data, hours], index) => (
                                     <View style={{display: 'flex', flexDirection: 'row', gap: 12, justifyContent: 'space-between'}}>
-                                        <Text style={infoStyles.font}>{data}:</Text>
-                                        <Text style={infoStyles.font}>{hours}</Text>
+                                        <Text style={infoStyles.hoursFont}>{data}:</Text> 
+                                        <Text style={infoStyles.hoursFont}>{hours}</Text> 
                                     </View>
                                 ))}
                                 </View>
@@ -232,16 +234,17 @@ export default function Index(props) {
                     onPress={() => {
                         setShowInfo(true)
                         setShowPassOptions(false)
-                    }} style={[styles.tabButton, showInfo && styles.activeTabButton]}>
+                    }} style={[styles.tabButton, showInfo && styles.activeTabButton]} rounded={true}>
                     <Text style={styles.font}>
                         Info
                     </Text>
                 </Button>
+                <View style={{marginLeft: 10, marginRight: 10}}></View>
                 <Button title="Pass Options"
                     onPress={() => {
                         setShowInfo(false)
                         setShowPassOptions(true)
-                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]}>
+                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]}rounded={true}>
                     <Text style={styles.font}>
                         Pass Options
                     </Text>
@@ -280,7 +283,9 @@ export default function Index(props) {
             marginTop: 30,
             flexDirection: 'row',
             justifyContent: 'center',
-            marginBottom: 30
+            marginBottom: 30,
+            paddingLeft: 20,
+            paddingRight: 20,
         },
         passes: {
             display: 'flex',
@@ -298,7 +303,9 @@ export default function Index(props) {
             borderWidth: 1,
             borderColor: '#ccc',
             color: theme.font,
-            borderColor: theme.two
+            borderColor: theme.two,
+            borderRadius: 10,
+
         },
         activeTabButton: {
             backgroundColor: theme.one,
