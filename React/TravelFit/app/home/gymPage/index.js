@@ -72,6 +72,7 @@ export default function Index(props) {
     useEffect(() => { console.log(gymData) }, [gymData])
 
     function Info() {
+        const {darkMode} = useContext(context)
         const infoStyles = StyleSheet.create({
             section: {
                 borderBottomColor: theme.font,
@@ -103,7 +104,10 @@ export default function Index(props) {
                 textAlign: 'center',
             },
             font: {
-                color: theme.font
+                color: theme.font,
+            },
+            hoursFont: {
+                color: darkStyle ? '#fff' : theme.font, 
             },
         })
 
@@ -127,14 +131,12 @@ export default function Index(props) {
                     <Box style={[infoStyles.container]} shadow={3}>
                         {gymData.hours_of_operation && 
                             <View style={infoStyles.section}>
-                                <Text style={infoStyles.font}>
-                                Hours:
-                                </Text>
+                                <Text style={[infoStyles.font, infoStyles.hoursFont]}>Hours:</Text> 
                                 <View style={{display: 'flex', gap: 1}}>
                                 {Object.entries(gymData.hours_of_operation).map(([data, hours], index) => (
                                     <View style={{display: 'flex', flexDirection: 'row', gap: 12, justifyContent: 'space-between'}}>
-                                        <Text>{data}:</Text>
-                                        <Text>{hours}</Text>
+                                        <Text style={infoStyles.hoursFont}>{data}:</Text> 
+                                        <Text style={infoStyles.hoursFont}>{hours}</Text> 
                                     </View>
                                 ))}
                                 </View>
