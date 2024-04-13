@@ -213,10 +213,10 @@ export default function index() {
           backgroundColor: theme.three
         }}
         theme={{
-          calendarBackground: theme.three,
-          dayTextColor: theme.four,
-          monthTextColor: theme.four,
-          textSectionTitleColor: theme.four
+          calendarBackground: theme.two,
+          dayTextColor: theme.font,
+          monthTextColor: theme.font,
+          textSectionTitleColor: theme.font
         }}
         hideExtraDays={true}
         current={currentDateString} 

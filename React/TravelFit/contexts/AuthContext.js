@@ -10,6 +10,7 @@ import {
 import { jwtDecode } from 'jwt-decode'
 import 'core-js/stable/atob'
 import { accessibilityProps } from 'react-native-web/dist/cjs/modules/forwardedProps'
+import { LogBox } from 'react-native'
 
 const AuthContext = React.createContext()
 
@@ -24,13 +25,18 @@ export function AuthProvider({ children }) {
     const [loaded, setLoaded] = useState(false)
     const [userRole, setUserRole] = useState(null)
 
+    useEffect(() => {
+      LogBox.ignoreLogs(['Asyncstorage: ...'])
+      LogBox.ignoreAllLogs()
+    }, [])
+
     async function login(email, password){
       return new Promise((resolve, reject) => {
         loginWithEmailAndPassword(email, password).then(tokenInfo => {
           
           const {access_token} = tokenInfo
           const decrypted = decryptToken(access_token)
-          const userRole = 'User' //change to 'User' or 'Gym' to change roles
+          const userRole = 'Gym' //change to 'User' or 'Gym' to change roles
           
           setBearerToken(access_token)
           setCurrentUser(decrypted)
