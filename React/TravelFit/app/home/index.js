@@ -39,7 +39,7 @@ export default function index() {
 
   function existingPasses() {
     return (
-      <Box alignItems="center">
+      <Box alignItems="center" style={{ marginBottom: 20 }}>
         <Pressable maxW="96">
           {({ isHovered, isFocused, isPressed }) => {
             return (
@@ -112,7 +112,7 @@ export default function index() {
 
   const premium = () => {
     return (
-      <Box p={10} rounded="xl" borderColor={theme.two} shadow={3}
+      <Box p={10} rounded="xl" borderColor={theme.two} shadow={3} style={{ marginBottom: 20 }}
       _text={{
         fontSize: `xl`,
         fontWeight: `medium`,
@@ -172,7 +172,7 @@ export default function index() {
   }
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
       <Box style={{flexDirection: 'row'}}>
         <Box shadow={3}>
           <Avatar
@@ -208,6 +208,7 @@ export default function index() {
           borderWidth: 3,
           borderColor: theme.two,
           height: 320,
+          marginBottom: 20
         }}
         headerStyle={{
           backgroundColor: theme.three
@@ -225,7 +226,7 @@ export default function index() {
 
       {premium()}
       {existingPasses()}
-      <VStack mb="2.5" mt="1.5" direction="column" space={4}>
+      <VStack mb="2.5" mt="1.5" direction="column" space={4}style={{ marginTop: 20 }}>
         {missionStatement()}
       </VStack>
     </ScrollView>
