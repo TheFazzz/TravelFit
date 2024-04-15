@@ -3,6 +3,11 @@ CREATE TABLE Admins (
   user_id INTEGER UNIQUE REFERENCES Users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE Gym_Admins (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER UNIQUE REFERENCES Users(id) ON DELETE CASCADE
+);
+
 CREATE TABLE Users (
   id SERIAL PRIMARY KEY,
   firstName TEXT NOT NULL,
@@ -27,6 +32,7 @@ CREATE TABLE Gyms (
   amenities TEXT[],
   hours_of_operation JSONB
 );
+SELECT * FROM Admins
 
 CREATE INDEX idx_gyms_location ON gyms USING GIST(location);
 
@@ -35,6 +41,7 @@ CREATE TABLE GymPhotos (
   gym_id INTEGER REFERENCES Gyms(id) ON DELETE CASCADE,
   photo_url TEXT NOT NULL
 );
+
 
 CREATE TABLE PassOptions (
   id SERIAL PRIMARY KEY,
@@ -65,3 +72,29 @@ CREATE TABLE Payments (
   payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+SELECT * FROM GuestPassPurchases
+
+SELECT * FROM Users
+
+
+SELECT 
+  g.id,
+  g.gym_name,
+  g.city,
+  po.pass_name,
+  po.duration_days,
+  po.description,
+  gp.qr_code,
+  gp.expiration_date,
+  gp.is_valid,
+  g.latitude,
+  g.longitude
+FROM 
+  GuestPassPurchases gp
+JOIN 
+  Gyms g ON gp.gym_id = g.id
+JOIN 
+  PassOptions po ON gp.pass_option_id = po.id
+WHERE 
+  gp.user_id = 7 AND
+  gp.is_valid = TRUE;
