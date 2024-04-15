@@ -32,7 +32,7 @@ export default function index() {
     
     if (password != confirmPassword) {
       if (confirmPassword != '') {
-        setError(<Heading>Passwords do not match!</Heading>)
+        setError(<Heading color='white' textAlign={'center'} >Passwords do not match!</Heading>)
       }
     } else {
       setError(null)
@@ -55,11 +55,11 @@ export default function index() {
 
   const signUpHandle = async ()=> {
     if (!validString(firstName)) {
-      setError('First Name Required')
+      setError(<Heading color='white' textAlign={'center'}>First Name Required</Heading>)
     } else if (!validString(lastName)) {
-      setError('Last Name Required')
+      setError(<Heading color='white' textAlign={'center'}>Last Name Required</Heading>)
     } else if (!isValidEmail(email)) {
-      setError('Email must be Valid')
+      setError(<Heading color='white' textAlign={'center'}>Email must be Valid!</Heading>)
     } else if (!error) {
       setLoading(true)
       register(firstName, lastName, email, password)
@@ -83,11 +83,13 @@ export default function index() {
   }
 
   const firstNameBX = () => {
-    return <Box bg="white" alignSelf='center' px={"-10"} >
-      <Input mx="3"
-        size = "lg"
+    return <Box bg = 'white' alignSelf='center' px={"-10"} >
+      <Input 
+        bg='white'
+        mx="3"
+        size = "md"
         placeholder="First Name"
-        w="65%"
+        w="85%"
         value={firstName}
         onChangeText={setFirstName}
         autoCapitalize = 'none'
@@ -95,13 +97,30 @@ export default function index() {
         
          />
     </Box>
+    /*return (
+    <Box  alignSelf='center' px={"-10"} >
+      <Input 
+        bg="white"
+        mx="3"
+        size="md"
+        placeholder="Email Address"
+        w="65%"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize='none'
+
+      />
+    </Box>
+    ) */
   }
   const lastNameBX = () => {
-    return <Box bg="white" alignSelf='center' px={"-10"} >
-    <Input mx="3"
-      size = "lg"
+    return <Box bg='white' alignSelf='center'  >
+    <Input 
+      mx="3"
+      w="85%"
+      size = "md"
       placeholder="Last Name"
-      w="65%"
+      style={{backgroundColor: 'white'}}
       value={lastName}
       onChangeText={setLastName}
       autoCapitalize = 'none'
@@ -113,11 +132,11 @@ export default function index() {
 
   const passwordBox = () => {
     return (
-    <Box alignSelf='center' px={"-10"} >
+    <Box alignSelf='center' px={"-10"} bg='white'>
       <Input 
         bg="white"
         mx="3"
-        w="65%"
+        w="85%"
         size="lg"
         placeholder="Password"
         id='password'
@@ -132,11 +151,11 @@ export default function index() {
 
   const confirmPassWD = () => {
     return (
-    <Box alignSelf='center' px={"-10"} >
+    <Box alignSelf='center' px={"-10"} bg='white' >
       <Input 
         bg="white"
         mx="3"
-        w="65%"
+        w="85%"
         size="lg"
         placeholder='Confirm Password' 
         id='confirmed_password'
@@ -152,19 +171,19 @@ export default function index() {
 
   //login txt
   const loginTXT = () => {
-    return <Heading size={"md"} p="2" textAlign={'center'} >
-      Registration Form!
+    return <Heading size={"md"} p="2" textAlign={'center'} color={'white'} >
+      Welcome!
     </Heading>
   }
   const emailBox = () => {
     return (
-    <Box  alignSelf='center' px={"-10"} >
+    <Box  alignSelf='center' px={"-10"} bg='white' >
       <Input 
         bg="white"
         mx="3"
         size="md"
         placeholder="Email Address"
-        w="65%"
+        w="85%"
         value={email}
         onChangeText={setEmail}
         autoCapitalize='none'
@@ -197,9 +216,10 @@ export default function index() {
             <Spinner size="lg" position={'absolute'} mt={500} ml={180}/>
             :
             <Button 
-              title='Sign Up' 
+              title='Submit' 
               onPress={signUpHandle} 
               style={styles.signUpButton}
+              color={'white'}
             >
             </Button>
           }
@@ -227,7 +247,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     // flex: 1,
-    backgroundColor: 'white',
+    
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
   },
