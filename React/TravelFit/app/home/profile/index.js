@@ -170,7 +170,7 @@ export default function profile() {
                 {popup &&
                     <View style={optionsStyle.container}>
                         <View style={optionsStyle.arrow} />
-                        <ScrollView>
+                        <ScrollView showsVerticalScrollIndicator={false} style={{overflow: 'hidden'}}>
                             <View style={optionsStyle.options}>
                                 {options.map((data, i) => (
                                     <Pressable onPress={() => {
@@ -473,16 +473,18 @@ export default function profile() {
     // }
 
     return (
-        <View style={styles.container}>
-            <User />
-            <Box shadow={3}>
-            {Object.keys(profileSettings).map((keyName, i) => (
-                <Section title={keyName} items={profileSettings[keyName].items} />
-            ))}
-            </Box>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <View style={styles.container}>
+                <User />
+                <Box shadow={3}>
+                {Object.keys(profileSettings).map((keyName, i) => (
+                    <Section title={keyName} items={profileSettings[keyName].items} />
+                ))}
+                </Box>
 
-            <Logout />
-        </View>
+                <Logout />
+            </View>
+        </ScrollView>
     )
 }
 
@@ -493,6 +495,10 @@ const styles = StyleSheet.create({
         gap: 25,
         // flex: 1,
         backgroundColor: '',
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        paddingBottom: 20,
     },
     textInput: {
         backgroundColor: 'white',
