@@ -149,7 +149,7 @@ export default function index() {
           onChange={(e) => setSaveLogin(e)}
           accessibilityLabel="This is a dummy checkbox"
         >
-          <Text style={styles.font}>
+          <Text style={{...styles.font, color: 'aqua'}}>
             Remember Me?
           </Text>
         </Checkbox>
