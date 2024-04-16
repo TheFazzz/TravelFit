@@ -27,28 +27,6 @@ export default function index() {
         )
     }
 
-    function ScannedUser(props) {
-        const {pass_name, pass_id, gym_id, user_id} = props.data
-
-        const scanneduser = StyleSheet.create({
-            container: {
-                borderRadius: 5,
-                borderColor: 'black',
-                display: 'flex',
-                flexDirection: 'row'
-            }
-        })
-
-        return(
-            <Box shadow={3} style={scanneduser.container}>
-                <Text>Pass Name: {pass_name}</Text>
-                <Text>pass id: {pass_id}</Text>
-                <Text>gym id: {gym_id}</Text>
-                <Text>user id: {user_id}</Text>
-            </Box>
-        )
-    }
-
     function Column(props) {
         const {title, data} = props
         const column = StyleSheet.create({

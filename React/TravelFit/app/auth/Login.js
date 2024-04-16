@@ -46,12 +46,12 @@ export default function index() {
           await storeData('login-data', { email, password, userRole })
         }
         console.log('logged in')
-        if (userRole == 'User') {
+        if (userRole == 'user') {
           setFooter(true)
           setHeader(true)
           router.replace('/home')
         }
-        else if (userRole == 'Gym') router.replace('/gym_user')
+        else if (userRole == 'gym') router.replace('/gym_user')
       } catch (error) {
         setError(error)
       } finally {

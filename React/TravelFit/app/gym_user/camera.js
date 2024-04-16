@@ -4,11 +4,13 @@ import { Button, StyleSheet, Text, TouchableOpacity, View, Box } from 'react-nat
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { useGym } from '../../contexts/GymContext';
 import { router, useRouter } from 'expo-router';
+import LoadingScreen from '../layout/LoadingScreen';
 
 export default function index() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-    const { setLog } = useGym()
+    const { setLog, VerifyPass } = useGym()
+    const [loading, setLoading] = useState(null)
     const router = useRouter()
 
     useEffect(() => {
@@ -21,9 +23,7 @@ export default function index() {
     }, []);
 
     const handleBarCodeScanned = ({ type, data }) => {
-        setScanned(true);
-
-        console.log(data)
+        setLoading(true)
 
         const dataObject = data.split(/,\s*/).reduce((obj, pair) => {
             const index = pair.indexOf(':');
@@ -33,10 +33,18 @@ export default function index() {
             return obj;
         }, {});
 
-        console.log(dataObject)
+        VerifyPass(dataObject).then((data) => {
+            const {message} = data
 
-        setLog(prevState => ([...prevState, dataObject]))
-        router.replace('/gym_user')
+            alert(`Pass has been verified successfully. Message: ${message}`)
+            setLog(prevState => ([...prevState, dataObject]))
+            router.replace('/gym_user')
+        }).catch((error) => {
+            console.log(error)
+
+            alert(`Pass not verified, please try again. Error: ${error}`)
+            router.replace('/gym_user')
+        })
     };
 
     if (hasPermission === null) {
@@ -69,12 +77,15 @@ export default function index() {
 
     return (
         <View style={styles.container}>
+            {loading? <LoadingScreen/> :
+            <>
             <BarCodeScanner
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
                 />
-            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
             <QRCodeArea/>
+            </>
+            }
         </View>
     );
 }

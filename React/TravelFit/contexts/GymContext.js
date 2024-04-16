@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
+import { PostVerifyPass } from './GymConnection'
 
 const AuthContext = React.createContext()
 
@@ -23,9 +24,14 @@ export function GymProvider({ children }) {
         "user_id": 7
     }])
 
+    function VerifyPass({pass_id, user_id, gym_id, pass_name, duration}) {
+        return PostVerifyPass(pass_id, user_id, gym_id, pass_name, duration)
+    }
+
     const value = {
         log,
-        setLog
+        setLog,
+        VerifyPass
     }
 
     return (
