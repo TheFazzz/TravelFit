@@ -4,6 +4,7 @@ import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { Link } from 'expo-router';
 import {mapstylelight, mapstyledark} from './mapstyle';
 import MapHUD from './mapHUD';
+import { Box } from 'native-base';
 
 class MapDisplay extends Component {
 
@@ -78,6 +79,7 @@ class MapDisplay extends Component {
           >
             {this.props.allLocations ? this.props.allLocations.map((marker, index) => (
               <Marker
+                pinColor={this.props.theme.four}
                 key={marker.id}
                 coordinate={marker.coordinate}
                 title={marker.gym_name}
@@ -87,8 +89,8 @@ class MapDisplay extends Component {
                   this.setState({ currentLocation: {...marker, time: Date.now()} })
                 }}
               >
-                <Callout>
-                  <Text>{marker.gym_name}</Text>
+                <Callout style={{backgroundColor: null}}>
+                    <Text>{marker.gym_name}</Text>
                 </Callout>
               </Marker>
             )) : <></>}

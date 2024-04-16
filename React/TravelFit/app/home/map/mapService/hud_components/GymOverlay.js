@@ -10,7 +10,7 @@ export default function GymOverlay(props) {
     const { findGym, userLocation } = useData()
     const [distance, setDistance] = useState()
     const [loading, setLoading] = useState(false)
-    const { setBackButton, backButton } = useContext(context)
+    const { setBackButton, backButton, theme } = useContext(context)
     const [gymData, setGymData] = useState({
         address1: '',
         address2: '',
@@ -36,7 +36,7 @@ export default function GymOverlay(props) {
             if (props.currentMarker) setDistance(calcDistance(userLocation, props.currentMarker.coordinate))
         }
     }
-    
+
 
     useEffect(() => {
         gatherData()
@@ -54,14 +54,14 @@ export default function GymOverlay(props) {
         var lon2 = dist2.longitude
 
         var R = 6371; // km
-        var dLat = toRad(lat2-lat1);
-        var dLon = toRad(lon2-lon1);
+        var dLat = toRad(lat2 - lat1);
+        var dLon = toRad(lon2 - lon1);
         lat1 = toRad(lat1);
         lat2 = toRad(lat2);
 
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var d = R * c;
         return d;
     }
@@ -70,77 +70,58 @@ export default function GymOverlay(props) {
         return deg * (Math.PI / 180)
     }
 
+    const font = StyleSheet.create({
+        color: theme.font,
+    })
+
     return (
         <>
-            {loading && <Spinner size="lg" position={'absolute'} mt={240} ml={120} />}
+            {loading && <Spinner size="lg" position={'absolute'} mt={240} ml={120}  color={theme.two}/>}
             {props.currentMarker && !loading && <View style={styles.view}>
                 <Box
                     alignItems="center"
                 >
-                    <Pressable maxW="96">
-                        {({ isHovered, isFocused, isPressed }) => {
-                            return (
-                                <Box
-                                    bg={"coolGray.100"}
-                                    p="5"
-                                    rounded="8"
-                                    shadow={3}
-                                    borderWidth="1"
-                                    borderColor="coolGray.300">
-                                    <Heading>
-                                        {gymData.gym_name}
-                                    </Heading>
-                                    <Text
-                                        mt="2"
-                                        fontSize="sm"
-                                        color="coolGray.700"
-                                        bold>
-                                        {gymData.city} , {gymData.state}
-                                    </Text>
-                                    <Text
-                                        mt="2"
-                                        fontSize="sm"
-                                        color="coolGray.700"
-                                        bold>
-                                        {distance? `${distance.toFixed(1)} Km` : ''}
-                                    </Text>
-                                    <Flex>
-                                        {isFocused ?
-                                            <Text
-                                                mt="2"
-                                                fontSize={12}
-                                                fontWeight="medium"
-                                                textDecorationLine="underline"
-                                                color="darkBlue.600"
-                                                alignSelf="flex-start">
-                                                3 passes
-                                            </Text>
-                                            :
-                                            <Text
-                                                mt="0"
-                                                fontSize={12}
-                                                fontWeight="medium"
-                                                color="darkBlue.600"
-                                                p="2">
+                    <Box
+                        bg={theme.four}
+                        p="6"
+                        rounded="8"
+                        shadow={3}
+                        borderColor="coolGray.300"
+                        gap={3}
+                        >
+                        <Text style={{color: theme.font, fontSize: 35, fontWeight: 'bold'}}>
+                            {gymData.gym_name}
+                        </Text>
+                        <Text
+                            mt="2"
+                            fontSize="sm"
+                            style={{color: theme.font, fontSize: 20}}
+                            bold
+                            >
+                            {gymData.city} , {gymData.state}
+                        </Text>
+                        <Text
+                            mt="2"
+                            fontSize="sm"
+                            style={{color: theme.font, fontSize: 20}}
+                            bold>
+                            {distance ? `${distance.toFixed(1)} Km` : ''}
+                        </Text>
+                        <Button
+                            size="md"
+                            variant="link"
+                            style={{backgroundColor: theme.three}}
 
-                                                <Button
-                                                    size="md"
-                                                    variant="link"
-                                                    onPress={() => {
-                                                        props.setGymId(gymData.id)
-                                                        setBackButton(backButton.concat([[props.setGymId, null]]))
-                                                    }}
-                                                >
-                                                    More Info
-                                                </Button>
-
-                                            </Text>
-                                        }
-                                    </Flex>
-                                </Box>
-                            )
-                        }}
-                    </Pressable>
+                            onPress={() => {
+                                props.setGymId(gymData.id)
+                                setBackButton(backButton.concat([[props.setGymId, null]]))
+                            }}
+                        >
+                            <Text style={{color: theme.font}}>
+                                More Info
+                            </Text>
+                        </Button>
+                    </Box>
                 </Box>
             </View>}
         </>)

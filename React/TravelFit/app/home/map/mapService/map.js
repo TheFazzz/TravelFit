@@ -17,7 +17,7 @@ export default function Map(props) {
         perferedCity
     } = useData()
 
-    const {darkStyle} = useContext(context)
+    const {darkStyle, theme} = useContext(context)
 
     const [loading, setLoading] = useState(true)
     const [first, setFirst] = useState(true)
@@ -78,6 +78,7 @@ export default function Map(props) {
                 loadData={loadData}
                 userLocation={userLocation}
                 darkStyle={darkStyle}
+                theme={theme}
             />}
         </View>
     )

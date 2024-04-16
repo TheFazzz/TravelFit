@@ -72,7 +72,7 @@ export default function Index(props) {
     useEffect(() => { console.log(gymData) }, [gymData])
 
     function Info() {
-        const {darkMode} = useContext(context)
+        const { darkMode } = useContext(context)
         const infoStyles = StyleSheet.create({
             section: {
                 borderBottomColor: theme.font,
@@ -91,24 +91,35 @@ export default function Index(props) {
                 marginRight: 20,
                 marginLeft: 10,
                 padding: 7,
-                borderColor: 'black',
-                borderWidth: 1,
+         
                 borderRadius: 5,
                 backgroundColor: theme.two
             },
             gymName: {
-                fontSize: 24,
+                fontSize: 28,
                 color: theme.font,
                 fontWeight: 'bold',
                 marginBottom: 10,
                 textAlign: 'center',
+                shadowColor: 'black',
+                shadowOpacity: 0.2,
             },
             font: {
                 color: theme.font,
+                fontSize: 16
             },
             hoursFont: {
-                color: darkStyle ? '#fff' : theme.font, 
+                color: darkStyle ? '#fff' : theme.font,
             },
+            gymNameContainer: {
+                backgroundColor: theme.three,
+                borderRadius: 5,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+                padding: 10,
+                marginLeft: 20,
+                marginRight: 20
+            }
         })
 
         const formatHours = (hours) => {
@@ -118,40 +129,48 @@ export default function Index(props) {
         const infoData = {
             'City': gymData.city,
             'State': gymData.state,
-            'Description': gymData.description,
-            'Address': gymData.address1
+            'Address': gymData.address1,
         }
-        console.log(gymData.hours_of_operation)
 
         return (
             <>
-                <Text style={infoStyles.gymName}>{gymData.gym_name}</Text>
+                <Box shadow={3} style={infoStyles.gymNameContainer}>
+                    <Text style={infoStyles.gymName}>{gymData.gym_name}, {gymData.city}</Text>
+                </Box>
                 <SlideShow />
                 <ScrollView>
                     <Box style={[infoStyles.container]} shadow={3}>
-                        {gymData.hours_of_operation && 
+                        {gymData.hours_of_operation &&
                             <View style={infoStyles.section}>
-                                <Text style={[infoStyles.font, infoStyles.hoursFont]}>Hours:</Text> 
-                                <View style={{display: 'flex', gap: 1}}>
-                                {Object.entries(gymData.hours_of_operation).map(([data, hours], index) => (
-                                    <View style={{display: 'flex', flexDirection: 'row', gap: 12, justifyContent: 'space-between'}}>
-                                        <Text style={infoStyles.hoursFont}>{data}:</Text> 
-                                        <Text style={infoStyles.hoursFont}>{hours}</Text> 
-                                    </View>
-                                ))}
+                                <Text style={[infoStyles.font, infoStyles.hoursFont]}>Hours:</Text>
+                                <View style={{ display: 'flex', gap: 1 }}>
+                                    {Object.entries(gymData.hours_of_operation).map(([data, hours], index) => (
+                                        <View style={{ display: 'flex', flexDirection: 'row', gap: 12, justifyContent: 'space-between' }}>
+                                            <Text style={infoStyles.hoursFont}>{data}:</Text>
+                                            <Text style={infoStyles.hoursFont}>{hours}</Text>
+                                        </View>
+                                    ))}
                                 </View>
                             </View>
                         }
                         {Object.keys(infoData).map((keyName, i) => (
                             <View style={infoStyles.section}>
                                 <Text style={infoStyles.font}>
-                                    {keyName}: 
+                                    {keyName}:
                                 </Text>
-                                <Text style={[infoStyles.font, {width: keyName == 'Description'? 270 : null}]}>
+                                <Text style={[infoStyles.font, { width: keyName == 'Description' ? 270 : null }]}>
                                     {infoData[keyName]}
                                 </Text>
                             </View>
                         ))}
+                        {gymData.description && 
+                        <View style={infoStyles.section}>
+                            <Text style={infoStyles.font}>
+                                {gymData.description}
+                            </Text>
+                        </View>
+                        }
+                        
                     </Box>
                 </ScrollView>
             </>
@@ -160,96 +179,129 @@ export default function Index(props) {
 
     function Passes() {
         return (
-            <View>
-                <View style={styles.passes}>
-                    {passOption.map((data, index) => (
-                        <Pass data={data} />
-                    ))}
+            <ScrollView>
+                <View>
+                    <View style={styles.passes}>
+                        {passOption.map((data, index) => (
+                            <Pass data={data} />
+                        ))}
+                    </View>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 
     function Pass(props) {
         const { data } = props
+        const pass = StyleSheet.create({
+            font: {
+                color: theme.font
+            }
+        })
+
         return (
             <View>
                 <Box alignItems="center">
-                    <Pressable maxW="96">
-                        {({ isHovered, isPressed }) => {
-                            return (
-                                <Box
-                                    bg={isPressed ? "coolGray.200" : isHovered ? "coolGray.200" : "coolGray.100"}
-                                    style={{ transform: [{ scale: isPressed ? 0.96 : 1 }] }} w={400} pl={70}
-                                    p="5" rounded="8" shadow={3} borderWidth="1" borderColor="coolGray.300">
-                                    <Heading>
-                                        {data.pass_name} - ${data.price}
-                                    </Heading>
-                                    <Text mt="2" fontSize="sm" color="coolGray.700" bold>
-                                        {data.description}
+                    <Box bg={theme.two} w={400} pl={10} p="3" rounded="8" shadow={3} >
+                        <Flex flexDirection={'row'} justifyContent={'space-between'}>
+                            <Box gap={1}>
+                                <Heading style={pass.font}>
+                                    {data.pass_name}
+                                </Heading>
+                                <Text mt="2" fontSize="sm" color="coolGray.700" bold style={pass.font}>
+                                    {data.description}
+                                </Text>
+                                <Button backgroundColor={theme.three} shadow={1} paddingTop={1} marginTop={3}
+                                    onPress={() => {
+                                        router.replace({
+                                            pathname: '/purchase/purchaseScreen',
+                                            params: {
+                                                city: gymData.city,
+                                                gym_name: gymData.gym_name,
+                                                gym_id: gymData.id,
+                                                pass_id: data.id,
+                                                pass_name: data.pass_name,
+                                                pass_description: data.description,
+                                                pass_price: data.price
+                                            }
+                                        })
+                                        setBackButton([['route', '/home']])
+                                        setIconPress({
+                                            'Home': true,
+                                            'Profile': false,
+                                            'Map': false,
+                                            'Pass': false
+                                        })
+                                    }}>
+                                    <Text style={{color: theme.font}}>
+                                        Order Pass
                                     </Text>
-                                    <Flex>
-                                        <Text mt="0" fontSize={12} fontWeight="medium" color="darkBlue.600" p="2">
-                                            <Link href="https://google.com">
-                                                <Button size="md" variant="link" p={-3}
-                                                    onPress={() => {
-                                                        router.replace({
-                                                            pathname: '/purchase/purchaseScreen',
-                                                            params: {
-                                                                city: gymData.city,
-                                                                gym_name: gymData.gym_name,
-                                                                gym_id: gymData.id,
-                                                                pass_id: data.id,
-                                                                pass_name: data.pass_name,
-                                                                pass_description: data.description,
-                                                                pass_price: data.price
-                                                            }
-                                                        })
-                                                        setBackButton([['route', '/home']])
-                                                        setIconPress({
-                                                            'Home': true,
-                                                            'Profile': false,
-                                                            'Map': false,
-                                                            'Pass': false
-                                                          })
-                                                    }}>
-                                                    Order Pass
-                                                </Button>
-                                            </Link>
-                                        </Text>
-                                    </Flex>
-                                </Box>
-                            )
-                        }}
-                    </Pressable>
+                                </Button>
+                            </Box>
+                            <Box 
+                                bgColor={theme.one}
+                                style={{
+                                    padding: 23,
+                                    width: 125
+                                }}
+                                shadow={1}
+                                borderColor={theme.three}
+                                >
+                                    <Text style={{
+                                        color: theme.font,
+                                        fontSize: 40,
+                                        fontFamily: 'Rowdies',
+                                        shadowColor: 'black',
+                                        shadowOpacity: 0.4
+                                    }}
+                                    >
+                                        ${data.price}
+                                    </Text>
+                            </Box>
+                        </Flex>
+                    </Box>
                 </Box>
             </View>
         )
     }
 
     function Tabs() {
+        const override = 140
+        const tabs = StyleSheet.create({
+            container: {
+                width: '98%',
+                position: 'absolute',
+                backgroundColor: theme.two,
+                top: -override / 2,
+                paddingTop: override,
+                paddingBottom: 20,
+                borderBottomRightRadius: 10,
+                borderBottomLeftRadius: 10
+            }
+        })
+
         return (
-            <View style={styles.buttons}>
+            <Box style={[styles.buttons, tabs.container]} shadow={3}>
                 <Button title="Info"
                     onPress={() => {
                         setShowInfo(true)
                         setShowPassOptions(false)
                     }} style={[styles.tabButton, showInfo && styles.activeTabButton]} rounded={true}>
-                    <Text style={styles.font}>
+                    <Text style={[styles.font, {fontSize: showInfo? 25 : 19}]}>
                         Info
                     </Text>
                 </Button>
-                <View style={{marginLeft: 10, marginRight: 10}}></View>
+                <View style={{ marginLeft: 10, marginRight: 10 }}></View>
                 <Button title="Pass Options"
                     onPress={() => {
                         setShowInfo(false)
                         setShowPassOptions(true)
-                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]}rounded={true}>
-                    <Text style={styles.font}>
+                    }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]} rounded={true}>
+                    <Text style={[styles.font, {fontSize: showPassOptions? 25 : 19}]}>
                         Pass Options
                     </Text>
                 </Button>
-            </View>
+            </Box>
         )
     }
 
@@ -275,7 +327,7 @@ export default function Index(props) {
             height: '120%',
             width: '110%',
             backgroundColor: '',
-            paddingTop: 90,
+            paddingTop: 190,
             paddingBottom: 90,
             backgroundColor: theme.four
         },
@@ -289,13 +341,13 @@ export default function Index(props) {
         },
         passes: {
             display: 'flex',
-            gap: 10
+            gap: 20
         },
         sliderbox: {
             flex: 0,
-            borderWidth: 1,
             margin: 5,
-            marginRight: 15
+            marginRight: 15,
+            marginTop: 0
         },
         tabButton: {
             flex: 1,
@@ -312,20 +364,23 @@ export default function Index(props) {
             color: theme.one,
         },
         font: {
-            color: theme.font
+            color: theme.font,
+            fontFamily: 'Jersey15',
+
         }
     })
 
     return (
-        <View style={styles.display}>
-            {!loading &&
-                <>
+        <>
+        {!loading &&
+            <View style={styles.display}>
                     <Tabs />
                     {showInfo && <Info />}
                     {showPassOptions && <Passes />}
-                </>}
-            {loading && <LoadingScreen />}
-        </View>
+            </View>
+        }
+        {loading && <LoadingScreen />}
+        </>
     )
 }
 
