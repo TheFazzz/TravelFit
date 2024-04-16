@@ -6,9 +6,11 @@ import { Box, NativeBaseProvider, ScrollView } from 'native-base';
 import nativebasetheme from './nativebasetheme';
 import { DataProvider } from '../contexts/DatabaseContext';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
+import { GymProvider } from '../contexts/GymContext';
 import React, { useState, useContext, useEffect } from 'react'
 import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
 import { dark, light } from './styles';
+import { useFonts } from 'expo-font';
 
 let screenHeight = (Dimensions.get('window').height / 1);
 let paddingleftandright = 15
@@ -24,6 +26,13 @@ export default function HomeLayout() {
   const [backButton, setBackButton] = useState([])
   const [darkStyle, setDarkStyle] = useState(false)
   const [theme, setTheme] = useState(light)
+
+  const [fontsLoaded, fontError] = useFonts({
+    'Rowdies': require('../assets/fonts/Rowdies-Regular.ttf'),
+    'RobotoSlab': require('../assets/fonts/RobotoSlab.ttf'),
+    'Jersey15': require('../assets/fonts/Jersey15.ttf'),
+    'Merriweather': require('../assets/fonts/Merriweather-Regular.ttf')
+  })
 
 
   function removeBackground() {
@@ -106,16 +115,18 @@ export default function HomeLayout() {
     <NativeBaseProvider>
       <AuthProvider>
         <DataProvider>
-          <context.Provider value={value}>
-            <View style={styles.container}>
-              {background && <Image source={require(`../assets/freeweights.png`)} style={styles.backgroundImage} />}
-              {header && <Header />}
-              <View style={[styles.body, { backgroundColor: 'none' }]}>
-                <Slot />
+          <GymProvider>
+            <context.Provider value={value}>
+              <View style={styles.container}>
+                {background && <Image source={require(`../assets/freeweights.png`)} style={styles.backgroundImage} />}
+                {header && <Header />}
+                <View style={[styles.body, { backgroundColor: 'none' }]}>
+                  <Slot />
+                </View>
+                {footer && <Footer />}
               </View>
-              {footer && <Footer />}
-            </View>
-          </context.Provider>
+            </context.Provider>
+          </GymProvider>
         </DataProvider>
       </AuthProvider>
     </NativeBaseProvider>

@@ -24,6 +24,7 @@ export function AuthProvider({ children }) {
     const [bearerToken, setBearerToken] = useState(null)
     const [loaded, setLoaded] = useState(false)
     const [userRole, setUserRole] = useState(null)
+    const [userGymId, setUserGymId] = useState(null)
 
     useEffect(() => {
       LogBox.ignoreLogs(['Asyncstorage: ...'])
@@ -34,14 +35,18 @@ export function AuthProvider({ children }) {
       return new Promise((resolve, reject) => {
         loginWithEmailAndPassword(email, password).then(tokenInfo => {
           
-          const {access_token} = tokenInfo
+          const {access_token, role, gym_id} = tokenInfo
+
           const decrypted = decryptToken(access_token)
-          const userRole = 'User' //change to 'User' or 'Gym' to change roles
-          
+
+          if (role=='gym'){
+            setUserGymId(gym_id)
+          }
+
           setBearerToken(access_token)
           setCurrentUser(decrypted)
-          setUserRole(userRole)
-          resolve(userRole)
+          setUserRole(role)
+          resolve(role)
         }).catch(error => reject(error))
       })
     }

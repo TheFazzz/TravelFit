@@ -3,10 +3,12 @@ import { View, Text, Pressable, StyleSheet } from 'react-native'
 import { Avatar, Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack } from 'native-base'
 import { useRouter } from "expo-router";
 import { context } from "../_layout";
+import { useGym } from "../../contexts/GymContext";
 
 export default function index() {
     const router = useRouter()
     const { theme, setHeader, setBackButton } = useContext(context)
+    const { log } = useGym()
 
     useEffect(() => {
         setHeader(true)
@@ -25,12 +27,55 @@ export default function index() {
         )
     }
 
+    function Column(props) {
+        const {title, data} = props
+        const column = StyleSheet.create({
+            container: {
+                display: 'flex',
+                flexDirection: 'column'
+            },
+            item: {
+                borderWidth: 1,
+                borderColor: 'black',
+                paddingRight: 22
+            }
+        })
+
+        return(
+            <Box style={column.container}>
+                <View style={column.item}>
+                    <Text>{title}</Text>
+                </View>
+                {data.map((item, index) => (
+                    <View style={column.item}>
+                        <Text>{item}</Text>
+                    </View>
+                ))}
+            </Box>
+        )
+    }
+
     function ScannedUsers() {
+        const scannedusers = StyleSheet.create({
+            log: {
+                display: 'flex',
+                flexDirection: 'row',
+                backgroundColor: theme.three,
+            }
+        })
+
         return (
-            <Box bg={theme.one} p="5" rounded={8} shadow={3} borderWidth={1} borderColor={theme.two}>
-                <Text>
-                    This is should be the list of users scanned:
-                </Text>
+            <Box bg={theme.one} p="2" rounded={8} shadow={3} borderWidth={1} borderColor={theme.two}>
+                 
+                <Box style={scannedusers.log}>
+                {/* {log.map((data, index) => (
+                    <ScannedUser data={data}/>
+                ))} */}
+                    <Column title={'Pass Name'} data={log.map(data => data.pass_name)}/>
+                    <Column title={'Pass Id'} data={log.map(data => data.pass_id)}/>
+                    <Column title={'Gym Id'} data={log.map(data => data.gym_id)}/>
+                    <Column title={'User Id'} data={log.map(data => data.user_id)}/>
+                </Box>
             </Box>
         )
     }

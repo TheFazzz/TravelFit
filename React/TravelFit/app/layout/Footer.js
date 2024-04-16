@@ -30,7 +30,7 @@ export default function Footer() {
   const router = useRouter()
 
   useEffect(() => {
-    if (userRole == 'User') setFooter(true)
+    if (userRole == 'user') setFooter(true)
     else setFooter(false)
   }, [userRole])
 

@@ -31,12 +31,12 @@ export default function index(props) {
                 const { email, password } = loginData
                 try {
                     const userRole = await login(email, password)
-                    if (userRole == 'User') {
+                    if (userRole == 'user') {
                         setHeader(true)
                         setFooter(true)
                         router.replace('/home')
                     }
-                    else if (userRole == 'Gym') router.replace('/gym_user')
+                    else if (userRole == 'gym') router.replace('/gym_user')
                 } catch (error) {
                     console.error('error logging in')
                     storeData('login-data', null)
