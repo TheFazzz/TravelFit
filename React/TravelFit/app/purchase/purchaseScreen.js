@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet, Text, TextInput, View, Alert, Image } from 'react-native';
-import { Input, Button, theme } from 'native-base';
+import { Platform, StyleSheet, Text, TextInput, View, Alert, Image, Keyboard } from 'react-native';
+import { Input, Button, theme, ScrollView } from 'native-base';
 import { useContext, useRef } from 'react'
 import { useFonts } from 'expo-font'
 import { useAuth } from '../../contexts/AuthContext';
@@ -24,10 +24,22 @@ export default function purchaseScreen() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false)
 
-  const {darkStyle, theme} = useContext(context)
+  const [cardNameFocus, setCardNameFocus] = useState(false)
+  const [cardNumberFocus, setCardNumberFocus] = useState(false)
+  const [cvvFocus, setCvvFocus] = useState(false)
+
+  const { darkStyle, theme } = useContext(context)
 
   const { purchasePass } = useAuth()
   const { city, gym_name, gym_id, pass_id, pass_description, pass_name, pass_price } = query
+
+  useEffect(() => {
+    const keyboardListener = Keyboard.addListener('keyboardDidHide', () => {
+      setCardNameFocus(false)
+      setCardNumberFocus(false)
+      setCvvFocus(false)
+    })
+  }, [])
 
   function validString(string) {
     if (string.length == 0)
@@ -46,10 +58,13 @@ export default function purchaseScreen() {
       setError('Expiration Date is required')
     else {
       try {
+        setLoading(true)
         const returnStatement = await purchasePass(gym_id, pass_id)
         Alert.alert('Purchase Confirmed');
       } catch (error) {
-        console.error(error)
+        Alert.alert(`${error}`)
+      } finally {
+        setLoading(false)
       }
       router.replace('../home')
     }
@@ -79,14 +94,14 @@ export default function purchaseScreen() {
       }
     })
 
-    return(
-      <View style={card.view}> 
-        <Image source={require('../../assets/card-chip.png')} style={card.chip}/>
+    return (
+      <View style={card.view}>
+        <Image source={require('../../assets/card-chip.png')} style={card.chip} />
         <Text style={card.numbers}>0000 0000 0000 0000</Text>
       </View>
     )
   }
-  
+
   function Error() {
     return (
       <>
@@ -98,22 +113,22 @@ export default function purchaseScreen() {
       </>
     )
   }
-  
+
   function Header() {
     const header = StyleSheet.create({
       checkout: {
         fontSize: 30,
-        color: darkStyle? 'white' : 'black',
+        color: darkStyle ? 'white' : 'black',
       },
       subTitle: {
-        color: darkStyle? 'white' : 'black',
+        color: darkStyle ? 'white' : 'black',
       },
       container: {
         display: 'flex',
         gap: 3
       }
     })
-    
+
     return (
       <View style={header.container}>
         <Text style={header.checkout}>
@@ -125,7 +140,7 @@ export default function purchaseScreen() {
       </View>
     )
   }
-  
+
   function ConfirmButton() {
     const button = StyleSheet.create({
       container: {
@@ -137,20 +152,21 @@ export default function purchaseScreen() {
         fontSize: 20
       }
     })
-    
-    return(
+
+    return (
       <Button
-      onPress={() => { handlePurchase() }}
-      style={button.container}
-      bgColor={theme.two}
+        onPress={() => { handlePurchase() }}
+        style={button.container}
+        bgColor={theme.two}
+        disabled={loading}
       >
-          <Text style={button.text}>
-            Pay now
-          </Text>
-        </Button>
+        <Text style={button.text}>
+          Pay now
+        </Text>
+      </Button>
     )
   }
-  
+
   function TotalAmount() {
     const amount = StyleSheet.create({
       view: {
@@ -168,10 +184,10 @@ export default function purchaseScreen() {
         fontSize: 27,
       }
     })
-    
+
     const price = parseInt(`${pass_price}`).toFixed(2)
-    
-    return(
+
+    return (
       <View style={amount.view}>
         <Text style={amount.text}>
           Total Amount
@@ -184,10 +200,13 @@ export default function purchaseScreen() {
   }
 
   const form = StyleSheet.create({
+    all: {
+      bottom: (cardNameFocus? 100: (cardNumberFocus? 200 : (cvvFocus?  300 : 0)))
+    },
     container: {
       paddingTop: 40,
       display: 'flex',
-      gap: 30
+      gap: 30,
     },
     userinput: {
       overflow: 'hidden',
@@ -215,83 +234,108 @@ export default function purchaseScreen() {
       color: theme.font
     }
   })
-  
+
   return (
-    <View style={styles.container}>
+    <ScrollView>
+      <View style={[styles.container, form.all]}>
 
-      <Header/>
-      <Card/>
+        <Header />
+        <Card />
 
-      <View style={form.container}>
-        <View style={form.section}>
-          <Text style={form.header}>Cardholder Name</Text>
-          <Input
-            placeholder='John Doe'
-            id='cardName'
-            variant={'underlined'}
-            value={cardName}
-            onChangeText={setCardName}
-            style={form.userinput}
-            autoCapitalize='none'
-            
-            >
-          </Input>
-        </View>
-
-        <View style={form.section}>
-          <Text style={form.header}>Card number</Text>
-          <Input
-            placeholder='0000 0000 0000 0000'
-            id='creditNum'
-            value={creditNum}
-            variant={'underlined'}
-            onChangeText={setCreditNum}
-            style={form.userinput}
-            keyboardType='numeric'
-            autoCapitalize='none'
-            
-            >
-          </Input>
-        </View>
-
-        <View style={form.subSection}>
+        <View style={form.container}>
           <View style={form.section}>
-            <Text style={form.header}>Exp date </Text>
+            <Text style={form.header}>Cardholder Name</Text>
             <Input
-              placeholder='MM/YY'
-              id='expDate'
+              placeholder='John Doe'
+              id='cardName'
               variant={'underlined'}
-              value={expire}
-              onChangeText={setExpire}
+              value={cardName}
+              onChangeText={setCardName}
               style={form.userinput}
               autoCapitalize='none'
-              keyboardType='numeric'
-              >
+              onFocus={() => {
+                setCardNameFocus(true)
+                setCardNumberFocus(false)
+                setCvvFocus(false)
+              }}
+              isFocused={cardNameFocus}
+            >
             </Input>
           </View>
 
           <View style={form.section}>
-            <Text style={form.header}>CVV </Text>
+            <Text style={form.header}>Card number</Text>
             <Input
-              placeholder='123'
-              id='cvv'
-              value={cvv}
+              placeholder='0000 0000 0000 0000'
+              id='creditNum'
+              value={creditNum}
               variant={'underlined'}
-              onChangeText={setCvv}
+              onChangeText={setCreditNum}
               style={form.userinput}
               keyboardType='numeric'
               autoCapitalize='none'
-              >
+              onFocus={() => {
+                setCardNameFocus(false)
+                setCardNumberFocus(true)
+                setCvvFocus(false)
+              }}
+              isFocused={cardNumberFocus}
+            >
             </Input>
           </View>
+
+          <View style={form.subSection}>
+            <View style={form.section}>
+              <Text style={form.header}>Exp date </Text>
+              <Input
+                placeholder='MM/YY'
+                id='expDate'
+                variant={'underlined'}
+                value={expire}
+                onChangeText={setExpire}
+                style={form.userinput}
+                autoCapitalize='none'
+                keyboardType='numeric'
+                onFocus={() => {
+                  setCardNameFocus(false)
+                  setCardNumberFocus(false)
+                  setCvvFocus(true)
+                }}
+                isFocused={cvvFocus}
+              >
+              </Input>
+            </View>
+
+            <View style={form.section}>
+              <Text style={form.header}>CVV </Text>
+              <Input
+                placeholder='123'
+                id='cvv'
+                value={cvv}
+                variant={'underlined'}
+                onChangeText={setCvv}
+                style={form.userinput}
+                keyboardType='numeric'
+                autoCapitalize='none'
+                onFocus={() => {
+                  setCardNameFocus(false)
+                  setCardNumberFocus(false)
+                  setCvvFocus(true)
+                }}
+                isFocused={cvvFocus}
+              >
+              </Input>
+            </View>
+          </View>
         </View>
+
+        <TotalAmount />
+        <ConfirmButton />
+        <Error />
+
       </View>
+    </ScrollView>
 
-      <TotalAmount/>
-      <ConfirmButton/>
-      <Error />
-
-    </View>
   );
 }
 

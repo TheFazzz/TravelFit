@@ -11,6 +11,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
 import { dark, light } from './styles';
 import { useFonts } from 'expo-font';
+import { AdminProvider } from '../contexts/AdminContext';
 
 let screenHeight = (Dimensions.get('window').height / 1);
 let paddingleftandright = 15
@@ -116,6 +117,8 @@ export default function HomeLayout() {
       <AuthProvider>
         <DataProvider>
           <GymProvider>
+            <AdminProvider>
+
             <context.Provider value={value}>
               <View style={styles.container}>
                 {background && <Image source={require(`../assets/freeweights.png`)} style={styles.backgroundImage} />}
@@ -126,6 +129,8 @@ export default function HomeLayout() {
                 {footer && <Footer />}
               </View>
             </context.Provider>
+            
+            </AdminProvider>
           </GymProvider>
         </DataProvider>
       </AuthProvider>

@@ -77,14 +77,20 @@ export async function purchaseGymPassByIdandPassOptionId(gym_id, pass_option_id,
         const url = `${URL}/gyms/${gym_id}/guest-passes/purchase?pass_option_id=${pass_option_id}`
 
         fetch(url, requestOptions)
-        .then(response => response.json())
+        .then(response => {
+            console.log(response)
+            return response.json()
+        })
         .then(data => {
+            console.log(data)
+
             if (data.detail) {
                 reject(data.detail)
             }
             resolve(data)
         })
         .catch(error => {
+            console.log(error)
             reject(error)
         })
     })

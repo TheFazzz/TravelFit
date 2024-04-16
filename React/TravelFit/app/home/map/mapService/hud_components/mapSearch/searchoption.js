@@ -7,7 +7,7 @@ export default function SearchOption({data, handleSearchPress}) {
     console.log(data)
 
     const {gym_name, id} = data
-    const {setSearchFocus} = useContext(context)
+    const {setSearchFocus, theme} = useContext(context)
 
     function handlePress(e) {
         handleSearchPress(data)
@@ -22,6 +22,7 @@ export default function SearchOption({data, handleSearchPress}) {
             width={300}
             height={10}
             paddingLeft={-40}
+            bgColor={theme.one}
         >
             {format}
         </Button>

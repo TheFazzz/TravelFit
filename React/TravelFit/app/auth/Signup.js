@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { StyleSheet, Text, TextInput, View, Image, } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Image, Keyboard } from 'react-native';
 import { useRouter } from 'expo-router';
 // import * as Keychain from 'react-native-keychain'
 import { ScrollView, Checkbox, HStack, Spinner, Box, Input, VStack, Center, Link, Heading, Button } from 'native-base';
@@ -23,10 +23,31 @@ export default function index() {
 
   const [loading, setLoading] = useState(false)
 
+  const [formFocus, setFormFocus] = useState({
+    firstName: false,
+    lastName: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  })
+
+  const [bottom, setBottom] = useState(0)
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   }
+
+  useEffect(() => {
+    const keyboardListener = Keyboard.addListener('keyboardDidHide', () => {
+      setFormFocus({
+        firstName: false,
+        lastName: false,
+        email: false,
+        password: false,
+        confirmPassword: false,
+      })
+    })
+  }, [])
 
   useEffect(() => {
 
@@ -95,6 +116,16 @@ export default function index() {
         autoCapitalize='none'
         id='first_name'
         style={{ backgroundColor: 'white' }}
+        onFocus={() => {
+          setFormFocus({
+            firstName: true,
+            lastName: false,
+            email: false,
+            password: false,
+            confirmPassword: false,
+          })
+        }}
+        isFocused={formFocus.firstName}
       />
     </Box>
     /*return (
@@ -125,6 +156,17 @@ export default function index() {
         onChangeText={setLastName}
         autoCapitalize='none'
         id='last_name'
+        onFocus={() => {
+          setFormFocus({
+            firstName: false,
+            lastName: true,
+            email: false,
+            password: false,
+            confirmPassword: false,
+          })
+        }}
+        isFocused={formFocus.lastName}
+
       />
     </Box>
   }
@@ -144,6 +186,17 @@ export default function index() {
           autoCapitalize='none'
           secureTextEntry={true}
           style={{ backgroundColor: 'white' }}
+          onFocus={() => {
+            setFormFocus({
+              firstName: false,
+              lastName: false,
+              email: false,
+              password: true,
+              confirmPassword: false,
+            })
+          }}
+          isFocused={formFocus.password}
+
         />
       </Box>
     )
@@ -165,6 +218,17 @@ export default function index() {
           autoCapitalize='none'
           secureTextEntry={true}
           style={{ backgroundColor: 'white' }}
+          onFocus={() => {
+            setFormFocus({
+              firstName: false,
+              lastName: false,
+              email: false,
+              password: false,
+              confirmPassword: true,
+            })
+          }}
+          isFocused={formFocus.confirmPassword}
+
         />
       </Box>
     )
@@ -172,9 +236,13 @@ export default function index() {
 
   //login txt
   const loginTXT = () => {
-    return <Heading size={"md"} p="2" textAlign={'center'} color={'white'} >
-      Welcome to TravelFit!
-    </Heading>
+    return (
+      <Box bgColor={'primary.500'} shadow={3} borderRadius={7}>
+        <Heading size={"lg"} p="2" textAlign={'center'} color={'white'} shadow={5}>
+          Register New User
+        </Heading>
+      </Box>
+    )
   }
   const emailBox = () => {
     return (
@@ -189,16 +257,44 @@ export default function index() {
           onChangeText={setEmail}
           autoCapitalize='none'
           style={{ backgroundColor: 'white' }}
+          onFocus={() => {
+            setFormFocus({
+              firstName: false,
+              lastName: false,
+              email: true,
+              password: false,
+              confirmPassword: false,
+            })
+          }}
+          isFocused={formFocus.email}
 
         />
       </Box>
     )
   }
 
+  useEffect(() => {
+    let bottom
+    if (formFocus.firstName) {
+      bottom = 0
+    } else if (formFocus.lastName) {
+      bottom = 50
+    } else if (formFocus.email) {
+      bottom = 100
+    } else if (formFocus.password) {
+      bottom = 150
+    } else if (formFocus.confirmPassword) {
+      bottom = 200
+    } else {
+      bottom = 0
+    }
+    setBottom(bottom)
+
+  }, [formFocus])
+
   return (
-    <View >
-      <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{ flexGrow: 1 }}>
-        <Image style={styles.imageSize} source={require('../../assets/travelfitlogo.png')}></Image>
+    <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={{ bottom: bottom }}>
 
         <View style={styles.container}>
           <VStack space={3} style={styles.forms}>
@@ -232,7 +328,23 @@ export default function index() {
               </Text>
             </Button>
           }
+
+          <View style={styles.signup}>
+            <Text style={styles.font}>
+              Already have an account?
+            </Text>
+            <Link style={styles.signupLink} onPress={() => {
+              router.replace('/auth/Login')
+            }}>
+              <Text style={styles.font}>
+                Log in
+              </Text>
+            </Link>
+          </View>
+
         </View>
+
+
 
 
 
@@ -247,8 +359,8 @@ export default function index() {
             {message}
           </Text>
         </View>}
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -303,5 +415,14 @@ const styles = StyleSheet.create({
   forms: {
     display: 'flex',
     gap: 7
-  }
+  },
+  signup: {
+    marginTop: 100,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5
+  },
+  signupLink: {
+    bottom: 2,
+  },
 });

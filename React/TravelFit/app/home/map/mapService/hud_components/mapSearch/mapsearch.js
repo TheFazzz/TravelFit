@@ -66,6 +66,7 @@ export default function MapSearch(props) {
                         setSearchPreference('ByLocation')
                         setCityOptionChosen(false)
                     }}
+                    bgColor={theme.one}
                 >
                     Search By Current Location
                 </Button>
@@ -75,6 +76,7 @@ export default function MapSearch(props) {
                     onPress={() => {
                         setCityOptionChosen(true)
                     }}
+                    bgColor={theme.one}
                 >
                     Search By City
                 </Button>

@@ -44,7 +44,6 @@ export default function Index(props) {
         } catch (error) {
             console.log(error)
         } finally {
-            console.log(passOption)
             setLoading(false)
         }
     }
@@ -69,7 +68,6 @@ export default function Index(props) {
         })
     }, [])
 
-    useEffect(() => { console.log(gymData) }, [gymData])
 
     function Info() {
         const { darkMode } = useContext(context)
@@ -82,7 +80,7 @@ export default function Index(props) {
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                gap: 10
+                gap: 10,
             },
             container: {
                 display: 'flex',
@@ -90,10 +88,11 @@ export default function Index(props) {
                 marginTop: 20,
                 marginRight: 20,
                 marginLeft: 10,
+                marginBottom: 265,
                 padding: 7,
-         
+
                 borderRadius: 5,
-                backgroundColor: theme.two
+                backgroundColor: theme.two,
             },
             gymName: {
                 fontSize: 28,
@@ -138,8 +137,8 @@ export default function Index(props) {
                     <Text style={infoStyles.gymName}>{gymData.gym_name}, {gymData.city}</Text>
                 </Box>
                 <SlideShow />
-                <ScrollView>
-                    <Box style={[infoStyles.container]} shadow={3}>
+                <Box style={[infoStyles.container]} shadow={3}>
+                    <ScrollView>
                         {gymData.hours_of_operation &&
                             <View style={infoStyles.section}>
                                 <Text style={[infoStyles.font, infoStyles.hoursFont]}>Hours:</Text>
@@ -163,16 +162,15 @@ export default function Index(props) {
                                 </Text>
                             </View>
                         ))}
-                        {gymData.description && 
-                        <View style={infoStyles.section}>
-                            <Text style={infoStyles.font}>
-                                {gymData.description}
-                            </Text>
-                        </View>
+                        {gymData.description &&
+                            <View style={infoStyles.section}>
+                                <Text style={infoStyles.font}>
+                                    {gymData.description}
+                                </Text>
+                            </View>
                         }
-                        
-                    </Box>
-                </ScrollView>
+                    </ScrollView>
+                </Box>
             </>
         )
     }
@@ -233,12 +231,12 @@ export default function Index(props) {
                                             'Pass': false
                                         })
                                     }}>
-                                    <Text style={{color: theme.font}}>
+                                    <Text style={{ color: theme.font }}>
                                         Order Pass
                                     </Text>
                                 </Button>
                             </Box>
-                            <Box 
+                            <Box
                                 bgColor={theme.one}
                                 style={{
                                     padding: 23,
@@ -246,17 +244,17 @@ export default function Index(props) {
                                 }}
                                 shadow={1}
                                 borderColor={theme.three}
+                            >
+                                <Text style={{
+                                    color: theme.font,
+                                    fontSize: 40,
+                                    fontFamily: 'Rowdies',
+                                    shadowColor: 'black',
+                                    shadowOpacity: 0.4
+                                }}
                                 >
-                                    <Text style={{
-                                        color: theme.font,
-                                        fontSize: 40,
-                                        fontFamily: 'Rowdies',
-                                        shadowColor: 'black',
-                                        shadowOpacity: 0.4
-                                    }}
-                                    >
-                                        ${data.price}
-                                    </Text>
+                                    ${data.price}
+                                </Text>
                             </Box>
                         </Flex>
                     </Box>
@@ -287,7 +285,7 @@ export default function Index(props) {
                         setShowInfo(true)
                         setShowPassOptions(false)
                     }} style={[styles.tabButton, showInfo && styles.activeTabButton]} rounded={true}>
-                    <Text style={[styles.font, {fontSize: showInfo? 25 : 19}]}>
+                    <Text style={[styles.font, { fontSize: showInfo ? 25 : 19 }]}>
                         Info
                     </Text>
                 </Button>
@@ -297,7 +295,7 @@ export default function Index(props) {
                         setShowInfo(false)
                         setShowPassOptions(true)
                     }} style={[styles.tabButton, showPassOptions && styles.activeTabButton]} rounded={true}>
-                    <Text style={[styles.font, {fontSize: showPassOptions? 25 : 19}]}>
+                    <Text style={[styles.font, { fontSize: showPassOptions ? 25 : 19 }]}>
                         Pass Options
                     </Text>
                 </Button>
@@ -372,14 +370,14 @@ export default function Index(props) {
 
     return (
         <>
-        {!loading &&
-            <View style={styles.display}>
+            {!loading &&
+                <View style={styles.display}>
                     <Tabs />
                     {showInfo && <Info />}
                     {showPassOptions && <Passes />}
-            </View>
-        }
-        {loading && <LoadingScreen />}
+                </View>
+            }
+            {loading && <LoadingScreen />}
         </>
     )
 }
