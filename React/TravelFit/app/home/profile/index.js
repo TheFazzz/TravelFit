@@ -28,7 +28,7 @@ export default function profile() {
         language,
         setLanguage
     } = useData()
-    const { removeBackground, setDarkStyle, darkStyle, theme } = useContext(context)
+    const { removeBackground, setDarkStyle, darkStyle, theme, setBackButton } = useContext(context)
     const { currentUser } = useAuth()
     const { firstName, lastName } = currentUser
 
@@ -58,7 +58,7 @@ export default function profile() {
                     type: {
                         function: Route,
                         render: Arrow,
-                        params: { route: '/home/profile' }
+                        params: { route: '/home/favorite_gyms' }
                     },
                 }
             ]
@@ -291,12 +291,15 @@ export default function profile() {
     }
 
     function Route({ route }) {
+        setBackButton([['route', '/home/profile']])
         router.replace({
             pathname: route,
             params: {
                 back: '/home/profile'
             }
         })
+        
+        
     }
 
     function AvatarIcon() {

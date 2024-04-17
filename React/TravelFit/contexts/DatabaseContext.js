@@ -79,8 +79,9 @@ export function DataProvider({ children }) {
 
     async function requestLocationPermission() {
         return getLocationPermission()
-
     }
+
+    
 
     const value = {
         allLocations,

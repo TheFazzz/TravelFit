@@ -121,3 +121,69 @@ export async function getUserPasses(accessToken, user_id) {
         })
     })
 }
+
+export async function addFavoriteGym(accessToken, user_id, gym_id) {
+    return new Promise((resolve, reject) => {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            }
+        }
+        const url = `${URL}/users/${user_id}/favorites?gym_id=${gym_id}`
+
+        fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            resolve(data)
+        })
+        .catch(error => {
+            reject(error)
+        })
+    })
+}
+
+export async function getFavoriteGyms(accessToken) {
+    return new Promise((resolve, reject) => {
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            }
+        }
+        const url = `${URL}/users/favorites`
+
+        fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            resolve(data)
+        })
+        .catch(error => {
+            reject(error)
+        })
+    })
+}
+
+export async function removeFavoriteGym(accessToken, gym_id) {
+    return new Promise((resolve, reject) => {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            }
+        }
+        const url = `${URL}/users/favorites/${gym_id}`
+
+        fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            resolve(data)
+        })
+        .catch(error => {
+            reject(error)
+        })
+    })
+}

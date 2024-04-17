@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { Heading, Flex, Box, Button, Link, theme, ScrollView } from 'native-base'
+import { Heading, Flex, Box, Button, Link, theme, ScrollView, IconButton, Icon } from 'native-base'
 
 import { router, useLocalSearchParams } from 'expo-router';
 import locationData from '../map/location/locationData';
@@ -10,11 +10,15 @@ import { useRouter } from 'expo-router';
 
 import { SliderBox } from "react-native-image-slider-box";
 import { context } from '../../_layout';
+import { useAuth } from '../../../contexts/AuthContext';
+
+import { MaterialCommunityIcons} from '@expo/vector-icons'
 
 
 export default function Index(props) {
     const query = useLocalSearchParams()
     const router = useRouter()
+    const { userAddFavoriteGym, userRemoveFavoriteGym, favoriteGyms } = useAuth()
     const { findGym, gymPassOptionsById, setIconPress } = useData()
     const { removeBackground, darkStyle, theme, setBackButton } = useContext(context)
     const [loading, setLoading] = useState(true)
@@ -36,15 +40,42 @@ export default function Index(props) {
     const [showPassOptions, setShowPassOptions] = useState(false)
     const [passOption, setPassOptions] = useState([])
 
+    const [favorite, setFavorite] = useState(false)
+    const [favoriteLoading, setFavoriteLoading] = useState(false)
+
     async function gatherData(id) {
         setLoading(true)
         try {
+            setFavorite(favoriteGyms.some(subArray => subArray[0] == id))
             setGymData(await findGym(id))
             setPassOptions(await gymPassOptionsById(id))
         } catch (error) {
             console.log(error)
         } finally {
             setLoading(false)
+        }
+    }
+
+    async function handleFavorite() {
+        if (!favorite) {
+            setFavoriteLoading(true)
+            try {
+                await userAddFavoriteGym(gymData.id, gymData.gym_name)
+                setFavorite(prevState => (!prevState))
+            } catch (error){
+                console.error(error)
+            } finally {
+                setFavoriteLoading(false)
+            }
+        } else {
+            try {
+                await userRemoveFavoriteGym(gymData.id)
+                setFavorite(prevState => (!prevState))
+            } catch (error){
+                console.error(error)
+            } finally {
+                setFavoriteLoading(false)
+            }
         }
     }
 
@@ -95,6 +126,7 @@ export default function Index(props) {
                 backgroundColor: theme.two,
             },
             gymName: {
+                paddingTop: 7,
                 fontSize: 28,
                 color: theme.font,
                 fontWeight: 'bold',
@@ -133,7 +165,21 @@ export default function Index(props) {
 
         return (
             <>
-                <Box shadow={3} style={infoStyles.gymNameContainer}>
+                <Box shadow={3} style={infoStyles.gymNameContainer} flexDirection={'row'} >
+                    <IconButton
+                        icon={
+                            favorite?
+                            <Icon as={MaterialCommunityIcons} name='cards-heart' size='8' />
+                            :
+                            <Icon as={MaterialCommunityIcons} name='cards-heart-outline' size='8' />
+                        }
+                        onPress={() => {
+                            handleFavorite()
+                        }}
+                        style={''}
+                        disabled={favoriteLoading}
+                        shadow={3}
+                    />
                     <Text style={infoStyles.gymName}>{gymData.gym_name}, {gymData.city}</Text>
                 </Box>
                 <SlideShow />

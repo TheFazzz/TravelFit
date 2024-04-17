@@ -4,7 +4,10 @@ import {
   registerNewUser,
   getAllUsers,
   purchaseGymPassByIdandPassOptionId,
-  getUserPasses
+  getUserPasses,
+  addFavoriteGym,
+  getFavoriteGyms,
+  removeFavoriteGym
 } from './AuthConnection'
 
 import { jwtDecode } from 'jwt-decode'
@@ -25,11 +28,16 @@ export function AuthProvider({ children }) {
     const [loaded, setLoaded] = useState(false)
     const [userRole, setUserRole] = useState(null)
     const [userGymId, setUserGymId] = useState(null)
+    const [favoriteGyms, setFavoriteGyms] = useState([])
 
     useEffect(() => {
       LogBox.ignoreLogs(['Asyncstorage: ...'])
       LogBox.ignoreAllLogs()
     }, [])
+
+    useEffect(() => {
+      if (bearerToken) userFavoriteGyms()
+    }, [bearerToken])
 
     async function login(email, password){
       return new Promise((resolve, reject) => {
@@ -47,9 +55,12 @@ export function AuthProvider({ children }) {
           setCurrentUser(decrypted)
           setUserRole(role)
           resolve(role)
+
         }).catch(error => reject(error))
       })
     }
+
+    
 
     async function register(first_name, last_name, email, password){
       return registerNewUser(first_name, last_name, email, password)
@@ -78,6 +89,40 @@ export function AuthProvider({ children }) {
       const {sub} = currentUser
       return getUserPasses(bearerToken, sub)
     }
+
+    async function userFavoriteGyms() {
+      return new Promise((resolve, reject) => {
+        getFavoriteGyms(bearerToken).then((data) => {
+          setFavoriteGyms(data.favorites)
+          resolve(data)
+        }).catch((error) => {
+          reject(error)
+        })
+      })
+    }
+
+    async function userAddFavoriteGym(gym_id, gym_name) {
+      const {sub} = currentUser
+      return new Promise((resolve, reject) => {
+        addFavoriteGym(bearerToken, sub, gym_id).then((data) => {
+          setFavoriteGyms(prevState => ([...prevState, [gym_id, gym_name]]))
+          resolve(data)
+        }).catch((error) => {
+          reject(error)
+        })
+      })
+    }
+
+    function userRemoveFavoriteGym(gym_id) {
+      return new Promise((resolve, reject) => {
+        removeFavoriteGym(bearerToken, gym_id).then((data) => {
+          setFavoriteGyms(prevState => (prevState.filter(subArray => subArray[0] != gym_id)))
+          resolve(data)
+        }).catch((error) => {
+          reject(error)
+        })
+      })
+    }
     
     const value = {
       currentUser,
@@ -90,7 +135,10 @@ export function AuthProvider({ children }) {
       loaded,
       setLoaded,
       purchasePass,
-      userPasses
+      userPasses,
+      userAddFavoriteGym,
+      userRemoveFavoriteGym,
+      favoriteGyms
     }
 
     return (

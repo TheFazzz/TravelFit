@@ -89,7 +89,7 @@ export default function Footer() {
 
         <IconButton 
           icon={<Icon as={MaterialCommunityIcons} name='arm-flex' style={icon.icon} size='8' />}
-          onPress={() => {handleRoute('Pass', '/home/gymPage', {id: 6})}}
+          onPress={() => {handleRoute('Pass', '/home/purchased_passes')}}
           disabled={iconPress['Pass']}
           style={iconPress['Pass'] ? icon.buttonDisabled : icon.button}
           shadow={iconPress['Pass'] ? 3 : 0}
