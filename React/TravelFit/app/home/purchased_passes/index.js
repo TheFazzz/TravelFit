@@ -45,11 +45,11 @@ export default function index() {
 
     useEffect(() => {
         const {back} = query
+        if (back) setBackButton([['route', back]])
 
         if (!loaded) loadData()
         removeBackground()
         setFooter(true)
-        setBackButton([['route', back]])
     }, [])
     
     useEffect(() => {

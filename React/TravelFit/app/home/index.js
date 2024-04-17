@@ -1,14 +1,15 @@
 import React, { useContext, useEffect } from 'react'
 
-import { Pressable, StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import { styles } from '../styles'
-import { useData } from '../../contexts/DatabaseContext';
-import { Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack } from 'native-base'
+import { useData } from '../../contexts/DatabaseContext'
+import { Center, Heading, Flex, Alert, Box, Button, NativeBaseProvider, VStack, Link, HStack, Icon, Pressable } from 'native-base'
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { context } from '../_layout';
 import { Avatar } from 'react-native-elements'
 import { Calendar, CalendarList } from 'react-native-calendars'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 export default function index() {
   const {
@@ -113,31 +114,31 @@ export default function index() {
   const premium = () => {
     return (
       <Box p={10} rounded="xl" borderColor={theme.two} shadow={3} style={{ marginBottom: 20 }}
-      _text={{
-        fontSize: `xl`,
-        fontWeight: `medium`,
-        color: `emerald.50`,
-        textAlign: `center`,
-        lineHeight: `60px`
-      }}>
-
-        <Button 
-        bg={theme.three}
-        onPress={() => {
-          router.replace({
-            pathname: '/purchase/purchaseScreen',
-            params: {
-              city: 'Fullerton',
-              gym_name: 'Chuze Fitness',
-              gym_id: 6,
-              pass_id: 7,
-              pass_name: 'Day Pass',
-              pass_description: 'Day Pass for Chuze Fitness',
-              pass_price: 10
-            }
-          })
+        _text={{
+          fontSize: `xl`,
+          fontWeight: `medium`,
+          color: `emerald.50`,
+          textAlign: `center`,
+          lineHeight: `60px`
         }}>
-          <Text style={{color: theme.font}}>
+
+        <Button
+          bg={theme.three}
+          onPress={() => {
+            router.replace({
+              pathname: '/purchase/purchaseScreen',
+              params: {
+                city: 'Fullerton',
+                gym_name: 'Chuze Fitness',
+                gym_id: 6,
+                pass_id: 7,
+                pass_name: 'Day Pass',
+                pass_description: 'Day Pass for Chuze Fitness',
+                pass_price: 10
+              }
+            })
+          }}>
+          <Text style={{ color: theme.font }}>
             Try Premium Today!
           </Text>
         </Button>
@@ -163,7 +164,7 @@ export default function index() {
     return (
       <Center>
         <VStack>
-          <Heading size="lg" mb={4} p={8} color={darkStyle ? 'white' : 'black'}>
+          <Heading size="lg" mb={4} p={8} pt={5} pb={5} color={darkStyle ? 'white' : 'black'}>
             Welcome {user}
           </Heading>
         </VStack>
@@ -171,9 +172,92 @@ export default function index() {
     );
   }
 
+  const options = [
+    {
+      title: 'Gym Passes',
+      icon: 'wallet-membership',
+      route: '/home/purchased_passes'
+    },
+    {
+      title: 'Favorite Gyms',
+      icon: 'cards-heart-outline',
+      route: '/home/favorite_gyms'
+    },
+    {
+      title: 'Map',
+      icon: 'google-maps',
+      route: '/home/map'
+    },
+    {
+      title: 'Profile',
+      icon: 'account',
+      route: '/home/profile'
+    },
+    {
+      title: 'Featured Gym',
+      icon: 'weight-lifter',
+      route: '/home/featured_gym'
+    },
+  ]
+
+  function Navigation() {
+    const navigation = StyleSheet.create({
+      container: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 19
+      },
+      box: {
+        display: 'flex',
+        flexDirection: 'column-reverse',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: 120,
+        height: 120,
+        borderWidth: 2,
+        borderColor: theme.three,
+        backgroundColor: theme.two,
+        borderRadius: 15
+      },
+      font: {
+        color: theme.font,
+        fontSize: 18,
+        textAlign: 'center',
+        paddingBottom: 25,
+        shadowOpacity: 1,
+        shadowColor: 'black'
+      },
+      icon: {
+        paddingTop: 25,
+        height: 80,
+        
+      }
+    })
+
+    return (
+      <Box style={navigation.container}>
+        {options.map((item, index) => (
+          <Pressable onPress={() => {
+            //add router here
+            router.replace(item.route)
+            setBackButton([['route', '/home']])
+          }}>
+            {({isHovered, isPressed}) => (
+            <Box style={[navigation.box, {transform: [{scale: isPressed ? 0.96 : 1}]}]} shadow={3} >
+              <Text style={navigation.font}>{item.title}</Text>
+              <Icon as={MaterialCommunityIcons} name={item.icon} size={'3xl'} color={theme.four} style={navigation.icon} shadow={3}/>
+            </Box>
+            )}
+          </Pressable>
+        ))}
+      </Box>
+    )
+  }
+
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-      <Box style={{flexDirection: 'row'}}>
+      <Box style={{ flexDirection: 'row', paddingTop: 10, paddingLeft: 8 }} bgColor={theme.two} borderRadius={25} shadow={3}>
         <Box shadow={3}>
           <Avatar
             size='small'
@@ -195,14 +279,14 @@ export default function index() {
             }}
           />
         </Box>
-        <Image source={require('../../assets/Banner.png')} style={{resizeMode: 'contain', height: 25, marginLeft: -60, marginTop: 5}} />
-        <Image source={require('../../assets/dumbbell-icon.png')} style={{height: 60, width: 60, marginLeft: -80, marginTop: -13, tintColor: theme.three}} />
+        <Image source={require('../../assets/Banner.png')} style={{ resizeMode: 'contain', height: 25, marginLeft: -60, marginTop: 5 }} disabled/>
+        <Image source={require('../../assets/dumbbell-icon.png')} style={{ height: 60, width: 60, marginLeft: -80, marginTop: -13, tintColor: theme.three }} disabled/>
 
       </Box>
 
       {currentUser && <UserName />}
 
-      <Calendar 
+      <Calendar
         style={{
           backgroundColor: theme.three,
           borderWidth: 3,
@@ -220,13 +304,11 @@ export default function index() {
           textSectionTitleColor: theme.font
         }}
         hideExtraDays={true}
-        current={currentDateString} 
+        current={currentDateString}
       >
       </Calendar>
-
-      {premium()}
-      {existingPasses()}
-      <VStack mb="2.5" mt="1.5" direction="column" space={4}style={{ marginTop: 20 }}>
+      <Navigation />
+      <VStack mb="2.5" mt="1.5" direction="column" space={4} style={{ marginTop: 20 }}>
         {missionStatement()}
       </VStack>
     </ScrollView>

@@ -101,7 +101,7 @@ export default function Index(props) {
                 marginBottom: 10,
                 textAlign: 'center',
                 shadowColor: 'black',
-                shadowOpacity: 0.2,
+                shadowOpacity: 0.1,
             },
             font: {
                 color: theme.font,
@@ -250,7 +250,7 @@ export default function Index(props) {
                                     fontSize: 40,
                                     fontFamily: 'Rowdies',
                                     shadowColor: 'black',
-                                    shadowOpacity: 0.4
+                                    shadowOpacity: 0.1
                                 }}
                                 >
                                     ${data.price}

@@ -22,9 +22,11 @@ export default function SearchOption({data, handleSearchPress}) {
             width={300}
             height={10}
             paddingLeft={-40}
-            bgColor={theme.one}
+            bgColor={theme.two}
         >
-            {format}
+            <Text style={{color: theme.font}}>
+                {format}
+            </Text>
         </Button>
     )
 }

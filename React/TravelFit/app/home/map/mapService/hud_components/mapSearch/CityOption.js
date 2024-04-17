@@ -17,9 +17,11 @@ export default function CityOption({data, handleSearchPress}) {
             onPress={handlePress}
             width={300}
             height={10}
-            bgColor={theme.one}
+            bgColor={theme.two}
         >
-            {format}
+            <Text style={{color: theme.font}}>
+                {format}
+            </Text>
         </Button>
     )
 }
