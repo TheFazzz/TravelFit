@@ -225,8 +225,8 @@ export default function index() {
         fontSize: 18,
         textAlign: 'center',
         paddingBottom: 25,
-        shadowOpacity: 1,
-        shadowColor: 'black'
+        shadowOpacity: 0.1,
+        shadowColor: darkMode? 'white': 'black'
       },
       icon: {
         paddingTop: 25,
