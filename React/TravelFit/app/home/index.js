@@ -282,7 +282,7 @@ export default function index() {
           />
         </Box>
         <Image source={require('../../assets/Banner.png')} style={{ resizeMode: 'contain', height: 25, marginLeft: -60, marginTop: 5 }} disabled/>
-        <Image source={require('../../assets/dumbbell-icon.png')} style={{ height: 60, width: 60, marginLeft: -80, marginTop: -13, tintColor: theme.three }} disabled/>
+        <Image source={require('../../assets/dumbbell-icon.png')} style={{ height: 60, width: 60, marginLeft: -80, marginTop: -13, tintColor: theme.four }} disabled/>
 
       </Box>
 
@@ -310,9 +310,9 @@ export default function index() {
       >
       </Calendar>
       <Navigation />
-      <VStack mb="2.5" mt="1.5" direction="column" space={4} style={{ marginTop: 20 }}>
+      {/* <VStack mb="2.5" mt="1.5" direction="column" space={4} style={{ marginTop: 20 }}>
         {missionStatement()}
-      </VStack>
+      </VStack> */}
     </ScrollView>
 
   );
