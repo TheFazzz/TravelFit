@@ -60,12 +60,12 @@ export default function Footer() {
       color: theme.four
     },
     button: {
-      width: 110,
+      width: 115,
       borderRadius: 0,
       backgroundColor: theme.three
     },
     buttonDisabled : {
-      width: 110,
+      width: 115,
       borderRadius: 0,
       backgroundColor: theme.two
     }
