@@ -60,7 +60,7 @@ export default function Index(props) {
         if (!favorite) {
             setFavoriteLoading(true)
             try {
-                await userAddFavoriteGym(gymData.id, gymData.gym_name)
+                await userAddFavoriteGym(gymData.id, gymData.gym_name, gymData.city)
                 setFavorite(prevState => (!prevState))
             } catch (error){
                 console.error(error)

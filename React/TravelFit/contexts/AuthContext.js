@@ -101,11 +101,11 @@ export function AuthProvider({ children }) {
       })
     }
 
-    async function userAddFavoriteGym(gym_id, gym_name) {
+    async function userAddFavoriteGym(gym_id, gym_name, gym_city) {
       const {sub} = currentUser
       return new Promise((resolve, reject) => {
         addFavoriteGym(bearerToken, sub, gym_id).then((data) => {
-          setFavoriteGyms(prevState => ([...prevState, [gym_id, gym_name]]))
+          setFavoriteGyms(prevState => ([...prevState, [gym_id, gym_name, gym_city]]))
           resolve(data)
         }).catch((error) => {
           reject(error)
