@@ -181,7 +181,8 @@ export default function index() {
     {
       title: 'Favorite Gyms',
       icon: 'cards-heart-outline',
-      route: '/home/favorite_gyms'
+      route: '/home/favorite_gyms',
+    
     },
     {
       title: 'Map',
@@ -196,7 +197,7 @@ export default function index() {
     {
       title: 'Featured Gym',
       icon: 'weight-lifter',
-      route: '/home/featured_gym'
+      route: '/home/featured_gym',
     },
   ]
 
@@ -222,16 +223,15 @@ export default function index() {
       },
       font: {
         color: theme.font,
-        fontSize: 18,
+        fontSize: 17,
         textAlign: 'center',
-        paddingBottom: 25,
+        paddingBottom: 20,
         shadowOpacity: 0.1,
         shadowColor: darkMode? 'white': 'black'
       },
       icon: {
         paddingTop: 25,
         height: 80,
-        
       }
     })
 
@@ -240,13 +240,15 @@ export default function index() {
         {options.map((item, index) => (
           <Pressable onPress={() => {
             //add router here
-            router.replace(item.route)
+            router.replace({
+              pathname: item.route,
+            })
             setBackButton([['route', '/home']])
           }}>
             {({isHovered, isPressed}) => (
             <Box style={[navigation.box, {transform: [{scale: isPressed ? 0.96 : 1}]}]} shadow={3} >
               <Text style={navigation.font}>{item.title}</Text>
-              <Icon as={MaterialCommunityIcons} name={item.icon} size={'3xl'} color={theme.four} style={navigation.icon} shadow={3}/>
+              <Icon as={MaterialCommunityIcons} name={item.icon} size={'5xl'} color={theme.four} style={navigation.icon} shadow={3}/>
             </Box>
             )}
           </Pressable>
