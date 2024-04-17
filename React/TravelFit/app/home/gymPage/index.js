@@ -169,14 +169,13 @@ export default function Index(props) {
                     <IconButton
                         icon={
                             favorite?
-                            <Icon as={MaterialCommunityIcons} name='cards-heart' size='8' />
+                            <Icon as={MaterialCommunityIcons} name='cards-heart' size='8' color={theme.two}/>
                             :
-                            <Icon as={MaterialCommunityIcons} name='cards-heart-outline' size='8' />
+                            <Icon as={MaterialCommunityIcons} name='cards-heart-outline' size='8' color={theme.two}/>
                         }
                         onPress={() => {
                             handleFavorite()
                         }}
-                        style={''}
                         disabled={favoriteLoading}
                         shadow={3}
                     />
