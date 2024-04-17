@@ -246,8 +246,8 @@ export default function Index(props) {
             <View>
                 <Box alignItems="center">
                     <Box bg={theme.two} w={400} pl={10} p="3" rounded="8" shadow={3} >
-                        <Flex flexDirection={'row'} justifyContent={'space-between'}>
-                            <Box gap={1}>
+                        <Flex flexDirection={'row'} justifyContent={'flex-start'} alignItems={'flex-start'} gap={19}>
+                            <Box gap={1} width={180}>
                                 <Heading style={pass.font}>
                                     {data.pass_name}
                                 </Heading>
@@ -284,21 +284,25 @@ export default function Index(props) {
                             <Box
                                 bgColor={theme.one}
                                 style={{
-                                    padding: 23,
-                                    width: 125
+                                    padding: 18,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center'
                                 }}
                                 shadow={1}
                                 borderColor={theme.three}
                             >
                                 <Text style={{
                                     color: theme.font,
-                                    fontSize: 40,
+                                    fontSize: 27,
                                     fontFamily: 'Rowdies',
                                     shadowColor: 'black',
-                                    shadowOpacity: 0.1
+                                    shadowOpacity: 0.1,
+                                    whiteSpace: 'nowrap',
+                                    overflow:'hidden'
                                 }}
                                 >
-                                    ${data.price}
+                                    ${data.price.toFixed(2)}
                                 </Text>
                             </Box>
                         </Flex>
