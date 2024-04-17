@@ -56,6 +56,7 @@ export default function index() {
                 backgroundColor: theme.one,
                 padding: 14,
                 borderRadius: 15,
+                marginTop: 32,
             }
         })
 
@@ -98,8 +99,27 @@ export default function index() {
         )
     }
 
+    function Header() {
+        const header = StyleSheet.create({
+            container: {
+                position: 'absolute',
+                backgroundColor: theme.two,
+                height: 105,
+                width: '108%',
+                borderRadius: 20
+            }
+        })
+
+        return (
+            <Box style={header.container} shadow={3}>
+
+            </Box>
+        )
+    }
+
     return (
     <>
+        <Header/>
         <Gyms/>
     </>
     )
