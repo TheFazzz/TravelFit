@@ -53,7 +53,7 @@ export default function index() {
 
     if (password != confirmPassword) {
       if (confirmPassword != '') {
-        setError(<Heading color='white' textAlign={'center'} >Passwords do not match!</Heading>)
+        setError(<Heading color='red' textAlign={'center'} >Passwords do not match!</Heading>)
       }
     } else {
       setError(null)
@@ -70,17 +70,19 @@ export default function index() {
     return regex.test(email)
   }
 
+  
+
   useEffect(() => {
     setError(null)
   }, [firstName, lastName, email])
 
   const signUpHandle = async () => {
     if (!validString(firstName)) {
-      setError(<Heading color='white' textAlign={'center'}>First Name Required</Heading>)
+      setError(<Heading color='red' textAlign={'center'}>First Name Required</Heading>)
     } else if (!validString(lastName)) {
-      setError(<Heading color='white' textAlign={'center'}>Last Name Required</Heading>)
+      setError(<Heading color='red' textAlign={'center'}>Last Name Required</Heading>)
     } else if (!isValidEmail(email)) {
-      setError(<Heading color='white' textAlign={'center'}>Email must be Valid!</Heading>)
+      setError(<Heading color='red' textAlign={'center'}>Email must be Valid!</Heading>)
     } else if (!error) {
       setLoading(true)
       register(firstName, lastName, email, password)
@@ -295,15 +297,41 @@ export default function index() {
   return (
     <ScrollView keyboardShouldPersistTaps="never" contentContainerStyle={{ flexGrow: 1 }}>
       <View style={{ bottom: bottom }}>
-
+        
         <View style={styles.container}>
-          <VStack space={3} style={styles.forms}>
+          <VStack space={3} style={styles.forms} t>
             {loginTXT()}
+            
+            {/* Display error for first name */}
+            {error && !validString(firstName) && (
+              <Heading style={errorTextStyle} p={3}>First Name Required</Heading>
+            )}
             {firstNameBX()}
+            
+            {/* Display error for last name */}
+            {error && !validString(lastName) && (
+              <Heading style={errorTextStyle} p={3}>Last Name Required</Heading>
+            )}
             {lastNameBX()}
+
+            {/* Display error for email */}
+            {error && !isValidEmail(email) && (
+              <Heading style={errorTextStyle} p={3}>Email must be Valid!</Heading>
+            )}
             {emailBox()}
+
+            {/* Display error for password */}
+            {error && !validString(password) && (
+              <Heading style={errorTextStyle} p={3} >Password Required</Heading>
+            )}
             {passwordBox()}
+
+            {/* Display error for password confirmation */}
+            {error && password !== confirmPassword && (
+              <Heading style={errorTextStyle} p={3}>Passwords do not match</Heading>
+            )}
             {confirmPassWD()}
+            
           </VStack >
           {/* </View> */}
 
@@ -348,11 +376,7 @@ export default function index() {
 
 
 
-        {error && <View>
-          <Text>
-            {error}
-          </Text>
-        </View>}
+        
 
         {message && <View>
           <Text>
@@ -363,7 +387,10 @@ export default function index() {
     </ScrollView>
   )
 }
-
+const errorTextStyle = {
+  color: 'lightpink', // Change color to light pink
+  fontSize: 14, // Change font size to smaller text
+};
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
