@@ -307,44 +307,51 @@ export default function index() {
             {loginTXT()}
             
             {/* Display error for first name */}
+            
             <View style={{width : '100%'}}>
+            {firstNameBX()}
               {error && !validString(firstName) && (
-                <Text style={errorTextStyle}>First Name Required</Text>
+                <Text style={errorTextStyle}>First Name Required*</Text>
               )}
-              {firstNameBX()}
+              
             </View>
             
             <View style={{width : '100%'}}>
               {/* Display error for last name */}
-              {error && !validString(lastName) && (
-                <Text style={errorTextStyle}>Last Name Required</Text>
-              )}
               {lastNameBX()}
+              {error && !validString(lastName) && (
+                <Text style={errorTextStyle}>Last Name Required*</Text>
+              )}
+              
             </View>
 
             <View style={{width : '100%'}}>
+              {emailBox()}
               {/* Display error for email */}
               {error && !isValidEmail(email) && (
-                <Text style={errorTextStyle}>Email must be Valid!</Text>
+                <Text style={errorTextStyle}>Email must be Valid!*</Text>
               )}
-              {emailBox()}
+              
             </View>
 
             <View style={{width : '100%'}}>
               {/* Display error for password */}
-              {error && !validString(password) && (
-                <Text style={errorTextStyle}>Password Required</Text>
-              )}
               {passwordBox()}
+              {error && !validString(password) && (
+                <Text style={errorTextStyle}>Password Required*</Text>
+              )}
+              
             </View>
 
             <View style={{width : '100%'}}>
               {/* Display error for password confirmation */}
-              {error && password !== confirmPassword && (
-                <Text style={errorTextStyle} pl={3} pb={1}>Passwords do not match</Text>
-              )}
               {confirmPassWD()}
+              {error && password !== confirmPassword && (
+                <Text style={errorTextStyle} pl={3} pb={1}>Passwords do not match*</Text>
+              )}
+              
             </View>
+            
           </VStack >
           {/* </View> */}
 
@@ -401,8 +408,8 @@ export default function index() {
   )
 }
 const errorTextStyle = {
-  color: 'lightpink', // Change color to light pink
-  fontSize: 14, // Change font size to smaller text
+  color: 'red', // Change color to light pink
+  fontSize: 13, // Change font size to smaller text
   paddingBottom: 5,
   paddingLeft: 15
 };
