@@ -31,6 +31,10 @@ export default function index() {
     confirmPassword: false,
   })
 
+  useEffect(() => {
+    setBottom(0)
+  }, [bottom])
+
   const [bottom, setBottom] = useState(0)
 
   const toggleShowPassword = () => {
@@ -299,39 +303,48 @@ export default function index() {
       <View style={{ bottom: bottom }}>
         
         <View style={styles.container}>
-          <VStack space={3} style={styles.forms} t>
+          <VStack space={3} style={styles.forms} >
             {loginTXT()}
             
             {/* Display error for first name */}
-            {error && !validString(firstName) && (
-              <Heading style={errorTextStyle} p={3}>First Name Required</Heading>
-            )}
-            {firstNameBX()}
+            <View style={{width : '100%'}}>
+              {error && !validString(firstName) && (
+                <Text style={errorTextStyle}>First Name Required</Text>
+              )}
+              {firstNameBX()}
+            </View>
             
-            {/* Display error for last name */}
-            {error && !validString(lastName) && (
-              <Heading style={errorTextStyle} p={3}>Last Name Required</Heading>
-            )}
-            {lastNameBX()}
+            <View style={{width : '100%'}}>
+              {/* Display error for last name */}
+              {error && !validString(lastName) && (
+                <Text style={errorTextStyle}>Last Name Required</Text>
+              )}
+              {lastNameBX()}
+            </View>
 
-            {/* Display error for email */}
-            {error && !isValidEmail(email) && (
-              <Heading style={errorTextStyle} p={3}>Email must be Valid!</Heading>
-            )}
-            {emailBox()}
+            <View style={{width : '100%'}}>
+              {/* Display error for email */}
+              {error && !isValidEmail(email) && (
+                <Text style={errorTextStyle}>Email must be Valid!</Text>
+              )}
+              {emailBox()}
+            </View>
 
-            {/* Display error for password */}
-            {error && !validString(password) && (
-              <Heading style={errorTextStyle} p={3} >Password Required</Heading>
-            )}
-            {passwordBox()}
+            <View style={{width : '100%'}}>
+              {/* Display error for password */}
+              {error && !validString(password) && (
+                <Text style={errorTextStyle}>Password Required</Text>
+              )}
+              {passwordBox()}
+            </View>
 
-            {/* Display error for password confirmation */}
-            {error && password !== confirmPassword && (
-              <Heading style={errorTextStyle} p={3}>Passwords do not match</Heading>
-            )}
-            {confirmPassWD()}
-            
+            <View style={{width : '100%'}}>
+              {/* Display error for password confirmation */}
+              {error && password !== confirmPassword && (
+                <Text style={errorTextStyle} pl={3} pb={1}>Passwords do not match</Text>
+              )}
+              {confirmPassWD()}
+            </View>
           </VStack >
           {/* </View> */}
 
@@ -390,7 +403,10 @@ export default function index() {
 const errorTextStyle = {
   color: 'lightpink', // Change color to light pink
   fontSize: 14, // Change font size to smaller text
+  paddingBottom: 5,
+  paddingLeft: 15
 };
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
