@@ -18,6 +18,8 @@ import io
 import qrcode
 from qrcode.image.pil import PilImage
 import logging
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 app = FastAPI()
 app.include_router(routes.auth.router)
@@ -83,6 +85,7 @@ def add_gym_listing(
 ):
     if user['role'] not in ['admin']:
             raise HTTPException(status_code=403, detail="Access denied: Unauthorized role")
+
 
     connection, cursor = db
         # Construct the address string
@@ -193,6 +196,13 @@ def update_gym_info(
     user = Depends(get_current_user),  
     db: tuple = Depends(get_db_connection)
 ):
+    # check user roles
+    if user['role'] not in ['admin', 'gym']:
+            raise HTTPException(status_code=403, detail="Access denied: Unauthorized role")
+
+    if user['role'] == 'gym' and user['gym_id'] != gym_id:
+        raise HTTPException(status_code=403, detail="Access denied: Cannot update other gyms")
+
     connection, cursor = db
     try:
         # Check if the gym exists
@@ -200,14 +210,6 @@ def update_gym_info(
         gym = cursor.fetchone()
         if not gym:
             raise HTTPException(status_code=404, detail="Gym not found")
-
-        # Explicit role checks
-        if user['role'] not in ['admin', 'gym']:
-            raise HTTPException(status_code=403, detail="Access denied: Unauthorized role")
-
-        # Further check for 'gym' role to ensure they can only update their assigned gym
-        if user['role'] == 'gym' and user['gym_id'] != gym_id:
-            raise HTTPException(status_code=403, detail="Access denied: Cannot update other gyms")
 
          # Serialize hours_of_operation to JSON string
         if update_request.hours_of_operation:
@@ -284,15 +286,12 @@ def add_guest_pass_options(
     user = Depends(get_current_user),  # get the current user
     db: tuple = Depends(get_db_connection)
 ):
-    # Explicit role checks
     if user['role'] not in ['admin', 'gym']:
         raise HTTPException(status_code=403, detail="Access denied: Unauthorized role")
 
-    # Further check for 'gym' role to ensure they can only update their assigned gym
     if user['role'] == 'gym' and user['gym_id'] != gym_id:
         raise HTTPException(status_code=403, detail="Access denied: Cannot add passes to other gyms")
-
-    
+   
     connection, cursor = db
     try:
         # Construct the SQL query
@@ -374,11 +373,9 @@ def delete_guest_pass_option(
     user = Depends(get_current_user),
     db: tuple = Depends(get_db_connection)
 ):
-    # Explicit role checks
     if user['role'] not in ['admin', 'gym']:
         raise HTTPException(status_code=403, detail="Access denied: Unauthorized role")
 
-    # Further check for 'gym' role to ensure they can only update their assigned gym
     if user['role'] == 'gym' and user['gym_id'] != gym_id:
         raise HTTPException(status_code=403, detail="Access denied: Cannot update other gyms")
 
@@ -476,8 +473,7 @@ def purchase_guest_pass(
 ):
     if user['role'] not in ['user']:
             raise HTTPException(status_code=403, detail="Access denied: Unauthorized role")
-    if user['role'] == 'user' and user['sub'] != user_id:
-        raise HTTPException(status_code=403, detail="Access denied: User doesn't match for purchase")
+    
     
     connection, cursor = db
     try:
@@ -506,8 +502,7 @@ def purchase_guest_pass(
         # Generate QR code
         qr_code_data = (
             f"pass_id:{purchase_id},user_id:{user_id},gym_id:{gym_id}, "
-            f"pass_name:{pass_info[0]}, duration:{pass_info[1]}, "
-            "scan_url:http://127.0.0.1:8000/verify-pass"
+            f"duration:{pass_info[1]} "
         )
         qr_code = qrcode.make(qr_code_data, image_factory=PilImage)
 
@@ -781,8 +776,37 @@ async def verify_pass(
 
             connection.commit()
 
+        cursor.execute(
+            """
+            SELECT firstName
+            FROM Users
+            WHERE id = %s
+            """,
+            (scanned_data.user_id,)
+        )
+        user_result = cursor.fetchone()
+        user_name = user_result[0] if user_result else "User"
+
+        cursor.execute(
+            """
+            SELECT gym_name, city
+            FROM Gyms
+            WHERE id = %s
+            """,
+            (scanned_data.gym_id,)
+        )
+        gym_result = cursor.fetchone()
+        gym_name = gym_result[0] if gym_result else "Gym"
+        gym_city = gym_result[1] if gym_result else "City"
+
         if is_valid:
-            return {"message": "Pass is valid"}
+            usage_date = datetime.now(ZoneInfo("UTC"))
+            cursor.execute(
+                "INSERT INTO PassUsage (purchase_id, user_id, gym_id, usage_date, gym_name) VALUES (%s, %s, %s, %s, %s, %s)",
+                (scanned_data.pass_id, scanned_data.user_id, scanned_data.gym_id, usage_date, gym_name, gym_city)
+            )
+            connection.commit()
+            return {"message": f"Welcome {user_name} to {gym_name}, Enjoy your workout!"}
         else:
             raise HTTPException(status_code=400, detail="Pass is not valid")
         
@@ -790,4 +814,101 @@ async def verify_pass(
         connection.rollback()
         raise HTTPException(status_code=500, detail="Failed to fetch guest pass from QR code")    
 
+@app.post("/users/{user_id}/favorites")
+async def add_favorite_gym(
+    gym_id: int, 
+    user = Depends(get_current_user),
+    db: tuple = Depends(get_db_connection)
+):
+    connection, cursor = db
+    try:
+        user_id = user['sub']
+        cursor.execute(
+            """
+            INSERT INTO UserFavorites (user_id, gym_id) 
+            VALUES (%s, %s) ON CONFLICT DO NOTHING
+            """, 
+            (user_id, gym_id)
+        )
+        connection.commit()
+        return {"message": "Gym added to favorites successfully"}
+    except Exception as e:
+        connection.rollback()
+        raise HTTPException(status_code=500, detail="Failed to add gym to favorites")
+    finally:
+        cursor.close()
+        connection.close()   
+
+@app.get("/users/favorites")
+async def get_favorite_gyms(
+    user = Depends(get_current_user), 
+    db: tuple = Depends(get_db_connection)
+):
+    connection, cursor = db
+    try:
+        user_id = user['sub']
+        cursor.execute(
+            """
+            SELECT g.id, g.gym_name, g.city FROM Gyms g
+            JOIN UserFavorites uf ON uf.gym_id = g.id
+            WHERE uf.user_id = %s
+            """, 
+            (user_id,)
+        )
+        favorites = cursor.fetchall()
+        return {"favorites": favorites}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to retrieve users favorites.")
+    finally:
+        cursor.close()
+        connection.close()
+ 
+@app.delete("/users/favorites/{gym_id}")
+async def remove_favorite_gym(
+    gym_id: int, 
+    user = Depends(get_current_user), 
+    db: tuple = Depends(get_db_connection)
+):
+    connection, cursor = db
+    try:
+        user_id = user['sub']
+        cursor.execute("DELETE FROM UserFavorites WHERE user_id = %s AND gym_id = %s", (user_id, gym_id))
+        connection.commit()
+        return {"message": "Gym removed from favorites successfully"}
+    except Exception as e:
+        connection.rollback()
+        raise HTTPException(status_code=500, detail="Failed to delete gym from favorites.")
+    finally:
+        cursor.close()
+        connection.close()
+
+@app.get("/users/pass-usage")
+async def get_user_pass_usages(
+    user: dict = Depends(get_current_user),
+    db: tuple = Depends(get_db_connection)
+):
+    connection, cursor = db    
     
+    try:
+        
+        user_id = int(user["sub"])
+    
+        cursor.execute(
+            """
+            SELECT gym_id, usage_date, gym_name, gym_city
+            FROM PassUsage WHERE user_id = %s
+            """,
+            (user_id,)
+        )
+        pass_usages = cursor.fetchall()
+
+        return [{"gym_id": pass_use[0], "usage_date": pass_use[1], "gym_name": pass_use[2],
+                 "gym_city": pass_use[3]} 
+                 for pass_use in pass_usages]
+        
+    except Exception as e:
+        connection.rollback()
+        raise HTTPException(status_code=500, detail="Failed to fetch guest passes")
+    finally:
+        cursor.close()
+        connection.close()
